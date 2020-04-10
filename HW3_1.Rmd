@@ -112,7 +112,9 @@ Stepwise_selection <- c(34407.55, 68, '3min 5sec')
 stepwise_result = data.frame(v, Forward_selection, Backward_selection, Stepwise_selection)
 
 kable(stepwise_result) %>% kable_styling("striped")
+```
 
+```{r 3.1.4.1, echo=FALSE, include=FALSE}
 # Do additional stepwise selection based on model1
 step(model1, scope = list(lower= null, upper=full), dir="both")
 # No more progress! so we can say model1 is the best model when we use a stepwise selection
@@ -245,7 +247,7 @@ varImpPlot(model3_train)
 
 ### Tree - Random Forest Model
 Now, we fit a random forest model to predict rent price using our base_line model which we've seen in our tree bagging model. And we did K-fold cross validation when K=10, which is same as before. 
-Here is the basic information of our random forest model. The whole computational process took less than 3 minutes, and our RMSE is `round(r sqrt(mean(err_save4)), 2)` which is the lowest of all models so far.
+Here is the basic information of our random forest model. The whole computational process took less than 3 minutes, and our RMSE is `r round(sqrt(mean(err_save4)), 2)` which is the lowest of all models so far.
 
 ```{r 3.1.13, echo=FALSE, include=FALSE}
 err_save4 = rep(0, K)
