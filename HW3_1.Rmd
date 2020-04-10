@@ -24,7 +24,7 @@ library(kableExtra)
 library(randomForest)
 library(gbm)
 
-greenbuildings <- read.csv("C:/Users/yaint/OneDrive/desktop/data mining/exercises/hw3/greenbuildings.csv")
+greenbuildings = read.csv(url("https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/greenbuildings.csv"))
 
 # data cleaning
 colSums(is.na(greenbuildings))
