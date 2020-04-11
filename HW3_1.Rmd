@@ -119,8 +119,6 @@ Here's our best predictive stepwise selection model with 84 variables obtained b
 model1
 ```
 
-Finally, we did K-fold cross validation to check RMSE when K is 10. We built a train-test split and repeated the step from 1 to K repetitions by running a loop. When we calculate RMSE for the backward selection model, it turned out to be `r round(sqrt(mean(err_save)),2)`.
-
 ```{r 3.1.5, echo=FALSE}
 # Now do K-fold cross validation to check RMSE when K=10
 
@@ -141,6 +139,8 @@ for(i in 1:K){
 }
 
 ```
+Finally, we did K-fold cross validation to check RMSE when K is 10. We built a train-test split and repeated the step from 1 to K repetitions by running a loop. When we calculate RMSE for the backward selection model, it turned out to be `r round(sqrt(mean(err_save)),2)`.
+
 ```{r 3.1.5.1, echo=TRUE}
 #RMSE
 sqrt(mean(err_save))
@@ -176,9 +176,6 @@ sum(grb_beta!=0)
 
 ```
  
-Then we did K-fold cross validation on our lasso regression model as well. We found that the root mean squared error for our lasso model is `r round(sqrt(mean(err_save2)),2)`, which was a lot higher than for our stepwise selection model, so we can say that the stepwise selection model shows better performance than the lasso regression model. 
-However, the lasso model takes almost 0 seconds to compute all the procedures to derive its best model whereas the stepwise method takes more than 10 minutes to do the same thing. Therefore, we can say the lasso model is computationally more efficient than the stepwise selection model. 
-
 ```{r 3.1.9, echo=FALSE}
 p1 <- dimnames(grb_beta)[[1]]
 p2 <- c()
@@ -207,7 +204,12 @@ for(i in 1:K){
   yhat_test2 = predict(model2_train, newdata = grb[-train_set2,])
   err_save2[i] = mean((y_test2-yhat_test2)^2)
 }
-```
+``` 
+
+Then we did K-fold cross validation on our lasso regression model as well. We found that the root mean squared error for our lasso model is `r round(sqrt(mean(err_save2)),2)`, which was a lot higher than for our stepwise selection model, so we can say that the stepwise selection model shows better performance than the lasso regression model. 
+However, the lasso model takes almost 0 seconds to compute all the procedures to derive its best model whereas the stepwise method takes more than 10 minutes to do the same thing. Therefore, we can say the lasso model is computationally more efficient than the stepwise selection model. 
+
+
 
 ```{r 3.1.9.1, echo=TRUE}
 #RMSE
@@ -216,20 +218,20 @@ sqrt(mean(err_save2))
 
 ### Tree - Bagging Model
 
-To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess its performance. We used our base model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicity in tree regressions.
-We set the number of trees to be 300 times and run the regression. It took more than 7 minutes to compute the whole procedure, however, the RMSE for our bagging model was `r round(sqrt(mean(err_save3)), 2)` which was much lower than those of our previous models.
-
-
-```{r 3.1.10, echo=FALSE, warning = FALSE, cache=TRUE}
+```{r 3.1.10, echo=FALSE, warning = FALSE, include=FALSE, cache=TRUE}
 err_save3 = rep(0, K)
-for(i in 1:K){
+system.time(for(i in 1:K){
   train_set3 = which(fold_id != i)
   y_test3 = grb$Rent[-train_set3]
   model3_train = randomForest(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster), data=grb[train_set3,], mtry = 17)
   yhat_test3 = predict(model3_train, newdata = grb[-train_set3,])
   err_save3[i] = mean((y_test3-yhat_test3)^2)
-}
+})
 ```
+
+To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess its performance. We used our base model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicity in tree regressions.
+We set the number of trees to be 300 times and run the regression. It took more than 7 minutes to compute the whole procedure, however, the RMSE for our bagging model was `r round(sqrt(mean(err_save3)), 2)` which was much lower than those of our previous models.
+
  
 ```{r 3.1.10.1, echo=TRUE}
 #RMSE
