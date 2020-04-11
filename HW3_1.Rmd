@@ -33,13 +33,13 @@ grb$size = grb$size/1000 # lower the scale of size in order to get around limits
 # We see an error occurs when doing a lasso regression if we don't lower the scale
 ```
 
-In this exercise, we analyzed a dataset on green buildings to build the best predictive pricing model. We started with cleaning the data. First we detected all the null values that were missing and deleted them. As we are running a lasso regression, in order to comply with  the limits of computation, we also lowered the scale of the variable 'size'.
+In this exercise, we analyzed a dataset on green buildings to build the best predictive pricing model. We started with cleaning the data. First we detected all the null values that were missing and deleted them. As we are running a lasso regression, in order to comply with  the limits of computation, we scaled down 'size' variable from 'square footage' to '(square footage)/1000'.
 
-Next, we built a base model and used step-wise selection. From the insights we gathered while cleaning up the data, we decided to delete the variable 'CS_PropertyID' as it was just a unique identity number and contributed nothing to our model. We also deleted another variable 'total_dd_07' due to the nature of its collinearity with the variables 'cd_total_07' and 'hd_total07'. The latter two variables add up to become 'total_dd_07' so we decided to remove the dependant variable out of the three. Lastly, we also deleted the variable 'cluster' from our model as it was recognized as a numerical variable even though it was a categorical variable.
+Next, we built a base model and used step-wise selection. From the insights we gathered while cleaning up the data, we decided to delete the variable 'CS_PropertyID' as it was just a unique identity number and contributed nothing to our model. We also deleted another variable 'total_dd_07' due to the nature of its collinearity with the variables 'cd_total_07' and 'hd_total07'(total_dd_07 = cd_total_07 + hd_total07). Lastly, we also deleted the variable 'cluster' from our model as it was recognized as a numerical variable even though it was a categorical variable.
 
 Finally, in order to check if a building is a green building, we used only 'green_rating' as our dummy variable and didn't  consider 'LEED' and 'EnergyStar' separately.
 
-```{r 3.1.1, echo= FALSE, warning = FALSE, include = FALSE}
+```{r 3.1.1, echo= FALSE, warning = FALSE, include = FALSE, cache = TRUE}
 base_model = lm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster), data=grb)
 full = lm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster)^2, data=grb)
 null = lm(Rent~1, data=grb)
@@ -61,7 +61,7 @@ To find the best predictive model possible for price, we built 5 different model
 
 ### Stepwise Selection Model
 First, we used stepwise regression method to find the model with the best performance. 
-We built i) forward selection model, ii) backward selection model and iii) stepwise selection model. i) Forward selection model starts with a model having no variables, and add all possible one-variable additions to it including every interaction. ii) Backward selection model starts with the full model that has all the variables including interactions in it, then improves its performance by deleting each variable. iii) Stepwise selection model starts with our base model 'lm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster)' and we considered all possible one-variable addtions or deletions including interactions. 
+We built forward selection model, backward selection model and stepwise selection model. i) Forward selection model starts with a model having no variables, and add all possible one-variable additions to it including every interaction. ii) Backward selection model starts with the full model that has all the variables including all of interactions, then improves its performance by deleting each variable. iii) Stepwise selection model starts with our base model 'lm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster)' and we considered all possible one-variable addtions or deletions including interactions. 
 
 ```{r 3.1.2, echo=FALSE, include = FALSE}
 # Pick the backward selection model as our best model
@@ -96,15 +96,10 @@ step(model1, scope = list(lower= null, upper=full), dir="both")
 # No more progress! so we can say model1 is the best model when we use stepwise selection
 ```
 
-Here's our best predictive stepwise selection model with 84 variables obtained by backward selection.
+The table below shows the performance measured by AIC, elapsed time and the number of variables of each model. As we can see, the backward selection model gives us the minimum AIC of 34372.28 with 84 variables, but it took very long time to compute all these procedures. 
+In terms of AIC, we concluded that the backward selection model showed the best performance among three and ran an additional stepwise selection based on it to check if we could get any improvements. Since we didn't witness a further minimized AIC, we concluded that the backward selection model is out best model when we used stepwise selection. 
 
-```{r 3.1.3, echo=TRUE}
-model1
-```
-
-The table below shows performance measured by AIC, elapsed time and variables of each model. As we can see, the backward selection model gave us our minimum AIC of 34372.28 with 84 variables, although it took the longest time for computation. We did an additional stepwise selection based on this model to check if we could get improvements, but we didn't witness a further minimized AIC. So we concluded that the backward selection model is out best model when we used stepwise selection. 
-
-```{r 3.1.4, echo=FALSE, warning=FALSE}
+```{r 3.1.3, echo=FALSE, warning=FALSE}
 v <- c('AIC', 'Variables', 'Elapsed Time')
 Forward_selection <- c(34512.51, 50, '36sec')
 Backward_selection <- c(34372.28, 84, '13min 58sec')
@@ -112,13 +107,21 @@ Stepwise_selection <- c(34407.55, 68, '3min 5sec')
 stepwise_result = data.frame(v, Forward_selection, Backward_selection, Stepwise_selection)
 
 kable(stepwise_result) %>% kable_styling("striped")
-```
 
-```{r 3.1.4.1, echo=FALSE, include=FALSE}
 # Do additional stepwise selection based on model1
 step(model1, scope = list(lower= null, upper=full), dir="both")
 # No more progress! so we can say model1 is the best model when we use a stepwise selection
+```
 
+Here's our best predictive stepwise selection model with 84 variables obtained by backward selection.
+
+```{r 3.1.4, echo=FALSE}
+model1
+```
+
+Finally, we did K-fold cross validation to check RMSE when K is 10. We built a train-test split and repeated the step from 1 to K repetitions by running a loop. When we calculate RMSE for the backward selection model, it turned out to be `r round(sqrt(mean(err_save)),2)`.
+
+```{r 3.1.5, echo=FALSE}
 # Now do K-fold cross validation to check RMSE when K=10
 
 # Create a vector of fold indicators
@@ -136,19 +139,17 @@ for(i in 1:K){
   yhat_test = predict(model1_train, newdata = grb[-train_set,])
   err_save[i] = mean((y_test-yhat_test)^2)
 }
+
 ```
-
-Finally, we did K-fold cross validation to check RMSE when K is 10. When we calculate RMSE for the backward selection model, it turned out to be `r round(sqrt(mean(err_save)),2)`.
-
-```{r 3.1.5, echo=FALSE}
-
+```{r 3.1.5.1, echo=TRUE}
 #RMSE
-sqrt(mean(err_save))#RMSE for our stepwise selection model: 9.100184
+sqrt(mean(err_save))
+
 ```
 
 ### Lasso Regression Model
-After this, we fit a lasso regression model to attempt to assemble the best predictive model. We used our full model including all the variables and interactions except some features(CS_PropertyID, LEED, Energystar, total_dd_07, cluster) like we did in the stepwise selection.
-Running the lasso regression model, the path plot appeared to be the diagram below.
+After this, we fit a lasso regression model to attempt to assemble the best predictive model. We used our full model including all the variables and interactions except some variable that we mentioned above - CS_PropertyID, LEED, Energystar, total_dd_07, cluster.
+Running the lasso regression model, the path plot is shown on the diagram below.
 
 ```{r 3.1.6, echo=FALSE}
 grb_x = sparse.model.matrix(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster)^2, data=grb)[, -1]
@@ -157,7 +158,7 @@ grblasso = gamlr(grb_x, grb_y)
 plot(grblasso) 
 ```
 
-When we measured AICcs of all the segments, the 100th segment has the lowest AIC value of 34644.64. 
+When we measure AICcs of all the segments, the 100th segment has the lowest AIC value of 34644.64. 
 
 ```{r 3.1.7, echo=TRUE, warning=FALSE}
 
@@ -165,13 +166,20 @@ min(AICc(grblasso))
 which.min(AICc(grblasso))
 ```
 
-Our optimal value of lambda turned out to be -2.17 in log scale, and at the optimal lambda, our lasso regression model has 25 variables and intercept.Here are the coefficients of our optimal lasso regression model.
+Our optimal value of lambda turns out to be -2.17 in log scale, and at the optimal lambda, our lasso regression model has 25 variables with an intercept.The result below shows the coefficients of grb_beta, the minimum lambda in log scale, and the total number of variables including an intercept.
 
 ```{r 3.1.8, echo=FALSE}
 grb_beta = coef(grblasso) 
 grb_beta
 log(grblasso$lambda[which.min(AICc(grblasso))])
 sum(grb_beta!=0)
+
+```
+ 
+Then we did K-fold cross validation on our lasso regression model as well. We found that the root mean squared error for our lasso model is `r round(sqrt(mean(err_save2)),2)`, which was a lot higher than for our stepwise selection model, so we can say that the stepwise selection model shows better performance than the lasso regression model. 
+However, the lasso model takes almost 0 seconds to compute all the procedures to derive its best model whereas the stepwise method takes more than 10 minutes to do the same thing. Therefore, we can say the lasso model is computationally more efficient than the stepwise selection model. 
+
+```{r 3.1.9, echo=FALSE}
 p1 <- dimnames(grb_beta)[[1]]
 p2 <- c()
 for (i in c(1:length(grb_beta))){
@@ -199,15 +207,20 @@ for(i in 1:K){
   yhat_test2 = predict(model2_train, newdata = grb[-train_set2,])
   err_save2[i] = mean((y_test2-yhat_test2)^2)
 }
-
 ```
- 
-Then we followed identical steps for our lasso regression model as well. We built a train-test split and repeated the step from 1 to K repetitions by running a loop. We found that the root mean squared error for our lasso model is `r round(sqrt(mean(err_save2)),2)`, which was a lot higher than for out stepwise selection model, so we can say that stepwise selection model shows better performance than the lasso regression model. 
-However, the lasso model takes 0 seconds to compute all the procedures to derive its optimal model whereas the stepwise method takes several minutes to do the same thing. Therefore, we can say the lasso model is computationally more efficient than the stepwise selection model. 
 
-```{r 3.1.9, echo=FALSE}
-
+```{r 3.1.9.1, echo=TRUE}
+#RMSE
 sqrt(mean(err_save2))
+```
+
+### Tree - Bagging Model
+
+To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess its performance. We used our base model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicity in tree regressions.
+We set the number of trees to be 300 times and run the regression. It took more than 7 minutes to compute the whole procedure, however, the RMSE for our bagging model was `r round(sqrt(mean(err_save3)), 2)` which was much lower than those of our previous models.
+
+
+```{r 3.1.10, echo=FALSE, warning = FALSE, cache=TRUE}
 err_save3 = rep(0, K)
 for(i in 1:K){
   train_set3 = which(fold_id != i)
@@ -217,39 +230,26 @@ for(i in 1:K){
   err_save3[i] = mean((y_test3-yhat_test3)^2)
 }
 ```
-
-### Tree - Bagging Model
-
-To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess the performance for each model. We repeated similiar steps we previously did for our stepwise selection and lasso models and ran a loop from 1 to K.
-We used our base_line model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicity in tree regressions.
-We set the number of trees 300 times and run the regression and it took more than 7 minutes to compute the whole procedure. However, the RMSE for our bagging model was `r round(sqrt(mean(err_save3)), 2)` which is much lower than our those of our previous models.
-
-
-```{r 3.1.10, echo=FALSE, warning = FALSE}
-
+ 
+```{r 3.1.10.1, echo=TRUE}
+#RMSE
 sqrt(mean(err_save3))
 ```
  
-Below, we constructed a plot that shows the error in the variables. Judging by the relation between the error and the number of trees, 300 number of trees that we used in our model is enough to reduce our errors.
+Below, we constructed a plot that shows the error in the variables. Judging by the relation between the error and the number of trees, 300 trees which we used in our model is large enough to reduce our errors.
 
 
 ```{r 3.1.11, echo=FALSE, warning = FALSE}
 plot(model3_train) 
-
 ```
 
-In addition, we can see from our variable importance plot that "cluster_rent" variable has the most important impact on rent in our tree bagging model followed by 'size' and 'age'.
+In addition, the graph below shows a variable importance plot. We can see that "cluster_rent" variable has the most important impact on decideing the rent price in our tree bagging model.
 
 ```{r 3.1.12, echo=FALSE}
 varImpPlot(model3_train)
-
 ```
 
-### Tree - Random Forest Model
-Now, we fit a random forest model to predict rent price using our base_line model which we've seen in our tree bagging model. And we did K-fold cross validation when K=10, which is same as before. 
-Here is the basic information of our random forest model. The whole computational process took less than 3 minutes, and our RMSE is `r round(sqrt(mean(err_save4)), 2)` which is the lowest of all models so far.
-
-```{r 3.1.13, echo=FALSE, include=FALSE}
+```{r 3.1.13, echo=FALSE, include=FALSE, cache=TRUE}
 err_save4 = rep(0, K)
 system.time(for(i in 1:K){
   train_set4 = which(fold_id != i)
@@ -258,29 +258,35 @@ system.time(for(i in 1:K){
   yhat_test4 = predict(model4_train, newdata = grb[-train_set4,])
   err_save4[i] = mean((y_test4-yhat_test4)^2)
 })
-
 ```
 
-```{r 3.1.14, echo=FALSE}
+### Tree - Random Forest Model
+Now, we fit a random forest model to predict rent price using our base model and also did K-fold cross validation. 
+Here is the basic information of our random forest model. The whole computational process took less than 3 minutes, and our RMSE is `round(r sqrt(mean(err_save4)), 2)` which is the lowest of all models so far.
+
+
+```{r 3.1.13.1, echo=FALSE}
 model4_train
+```
+
+```{r 3.1.13.2, echo=TRUE}
 #RMSE
 sqrt(mean(err_save4))
-#RMSE for our randomforest model: 6.188415, elapsed time 2 min 41sec
 ```
 
 We can see two plots below.
-The first one shows that 300 trees with which we ran the random forest is enough. The second one is the variable importance plot. It shows a similar result in a sense that 'cluster_rent' and 'size' variables are the two most influential variables on our dependent variable, but it also shows a difference because the third one is 'Electricity costs' unlike 'age' in bagging.
+The first plot assures that 300 trees, the number of trees with which we ran the random forest, is large enough to reduce errors.  
 
-```{r 3.1.15, echo=FALSE}
+The second plot is the variable importance plot. We can see that 'cluster_rent' is the most important variable influencing rent price, which is the same result as we saw in bagging model. But it reveals a slight difference in that the third influential variable is 'Electricity costs', which is 'age' in bagging.
+
+```{r 3.1.14, echo=FALSE}
 plot(model4_train)
 # 300 ntrees are enough!
 varImpPlot(model4_train)
 ```
 
 ### Tree - Boosting
-
-
-```{r 3.1.16, echo=FALSE, warning=FALSE, include=FALSE}
+```{r 3.1.15, echo=FALSE, warning=FALSE, include=FALSE, cache=TRUE}
 err_save5 = rep(0, K)
 
 system.time(for(i in 1:K){
@@ -293,16 +299,17 @@ system.time(for(i in 1:K){
 
 ```
 
-Finally, we fit a boosting model to derive the best predictive model. As we've done before, we used our base_line model.The result of our K-fold cross validation shows that the RMSE is `r round(sqrt(mean(err_save5)),2)` which is slightly higher than that of our random forest model. However, it took only 15 seconds to compute all these procedures.
+Finally, we fit a boosting model to derive the best predictive model. As we've done before, we use our base model to begin with. The result of our K-fold cross validation shows that the RMSE is `r round(sqrt(mean(err_save5)),2)` which is slightly higher than that of our random forest model. However, it took only 15 seconds to compute all these procedures.
 
-```{r 3.1.17, echo=FALSE}
+
+```{r 3.1.16, echo=TRUE}
 #RMSE
 sqrt(mean(err_save5))
 ```
 
 Here is the summary of our boosting model which shows the relative influences of all variables. It appears to be 'cluster_rent', 'size', 'leasing_rate' are three most influential variables on our dependent variable. This result is similar with previous results that we've seen above, but the third influential variable is slightly different, too.
 
-```{r 3.1.18, echo=FALSE}
+```{r 3.1.17, echo=TRUE}
 summary(model5_train)
 ```
 
@@ -314,10 +321,12 @@ We can see that the Randomforest Model shows the lowest RMSE which means the bes
 Lasso and Boosting methods have advantages of quick computation but their performance were worse than our random forest model. Besides, Stepwise selection and Bagging methods took more computational time than the random forest and their performances didn't outdo the random forest model.
 Therefore, we can conclude that the random forest shows the best performance.
 
-```{r 3.1.19, echo=FALSE, warning=FALSE}
+```{r 3.1.18, echo=FALSE, warning=FALSE}
 Model <- c('Stepwise', 'Lasso','Bagging','Randomforest','Boosting')
 RMSE <- c(round(sqrt(mean(err_save)),2), round(sqrt(mean(err_save2)),2),round(sqrt(mean(err_save3)),2),round(sqrt(mean(err_save4)),2),round(sqrt(mean(err_save5)),2))
 RMSE_result = data.frame(Model,RMSE)
 RMSE_result = t(RMSE_result)
 kable(RMSE_result) %>% kable_styling("striped")
 ```
+
+Anybody let me know how to get a partial effect of green_rating on rent in our random forest model. Whenever I try to use "partial" function in Dr.Scott's Rscript named "partial_dependence", it repeatedy shows only errors. I googled a long time but feel helpless now:(
