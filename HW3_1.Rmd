@@ -242,13 +242,13 @@ Below, we constructed a plot that shows the error in the variables. Judging by t
 
 
 ```{r 3.1.11, echo=FALSE, warning = FALSE}
-plot(model3_train) 
+plot(model3_train, main = 'Boosting Model') 
 ```
 
 In addition, the graph below shows a variable importance plot. We can see that "cluster_rent" variable has the most important impact on decideing the rent price in our tree bagging model.
 
 ```{r 3.1.12, echo=FALSE}
-varImpPlot(model3_train)
+varImpPlot(model3_train, main='Boosting Model')
 ```
 
 ```{r 3.1.13, echo=FALSE, include=FALSE, cache=TRUE}
@@ -282,9 +282,9 @@ The first plot assures that 300 trees, the number of trees with which we ran the
 The second plot is the variable importance plot. We can see that 'cluster_rent' is the most important variable influencing rent price, which is the same result as we saw in bagging model. But it reveals a slight difference in that the third influential variable is 'Electricity costs', which is 'age' in bagging.
 
 ```{r 3.1.14, echo=FALSE}
-plot(model4_train)
+plot(model4_train, main = 'Random Forest Model')
 # 300 ntrees are enough!
-varImpPlot(model4_train)
+varImpPlot(model4_train, main = 'Random Forest Model')
 ```
 
 ### Tree - Boosting
@@ -315,6 +315,8 @@ Here is the summary of our boosting model which shows the relative influences of
 summary(model5_train)
 ```
 
+Why is this diagram so ugly?
+Why doesn't written results show up here unlike r scrpit?
 
 ### Which model shows the best performance?
 
