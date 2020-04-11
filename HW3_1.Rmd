@@ -316,7 +316,6 @@ summary(model5_train)
 ```
 
 Why is this diagram so ugly?
-Why doesn't written results show up here unlike r scrpit?
 
 ### Which model shows the best performance?
 
