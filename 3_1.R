@@ -194,7 +194,7 @@ sqrt(mean(err_save4))
 
 plot(model4_train)
 # 300 ntrees are enough!
-varImpPlot(model3_train)
+varImpPlot(model4_train)
 
 # tree-Boosting with K-fold validation
 
