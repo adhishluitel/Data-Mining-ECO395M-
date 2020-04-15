@@ -3,6 +3,7 @@ library(tidyverse)
 library(kableExtra)
 library(randomForest)
 library(gbm)
+library(pdp)
 
 greenbuildings <- read.csv("C:/Users/yaint/OneDrive/desktop/data mining/exercises/hw3/greenbuildings.csv")
 
@@ -193,7 +194,18 @@ sqrt(mean(err_save4))
 #RMSE for our randomforest model: 6.188415, elapsed time 2 min 41sec
 
 plot(model4_train)
-# 300 ntrees are enough!
+# stops decreasing much after 50, so we can reduce ntree to 100 for computational efficiency
+
+err_save4 = rep(0, K)
+system.time(for(i in 1:K){
+  train_set4 = which(fold_id != i)
+  y_test4 = grb$Rent[-train_set4]
+  model4_train = randomForest(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster), data=grb[train_set4,], ntree=100)
+  yhat_test4 = predict(model4_train, newdata = grb[-train_set4,])
+  err_save4[i] = mean((y_test4-yhat_test4)^2)
+})
+# Computational time has been reduced to 1/3, 51 seconds!
+
 varImpPlot(model4_train)
 
 # tree-Boosting with K-fold validation
@@ -203,10 +215,12 @@ err_save5 = rep(0, K)
 system.time(for(i in 1:K){
   train_set5 = which(fold_id != i)
   y_test5 = grb$Rent[-train_set5]
-  model5_train <- gbm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster), data=grb[train_set5,], interaction.depth=4, n.trees = 100, shrinkage =.05)
+  model5_train <- gbm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster), data=grb[train_set5,], interaction.depth=4, n.trees = 300, shrinkage =.05)
   yhat_test5 = predict(model5_train, newdata = grb[-train_set5,], n.trees = 300)
   err_save5[i] = mean((y_test5-yhat_test5)^2)
 })
+
+gbm.perf(model5_train)
 
 #RMSE
 sqrt(mean(err_save5))
@@ -224,3 +238,8 @@ kable(RMSE_result) %>% kable_styling("striped")
 
 # Conclusion: Random forest turns out to be the best model which shows the best performance.
 #             although it takes some time for computation, it is relatively shorter than the stepwise selection or the boosting method.
+
+
+partial(model4_train, pred.var = 'green_rating', n.trees=100)
+29.07784-28.50924
+# the average change in rental income per square foot associated with green certification, holding other features of the building constant
