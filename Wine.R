@@ -103,4 +103,5 @@ table5 = xtabs(~cluster_pca1$cluster + wine$quality)
 print(table5)
 ggplot(wine)+ geom_density(aes(x = cluster_pca1$cluster, col = factor(wine$quality), fill = factor(wine$quality)), alpha = 0.5)
 
+#Very hard differentiate quality of wine from chemical features 
 
