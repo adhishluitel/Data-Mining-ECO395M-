@@ -56,7 +56,7 @@ summary(pca) #note the proportion of variance. PC1-PC3 look pretty significant.
 
 # PCA for clustering
 cluster_pca = kmeans(z_std[,1:4], 2, nstart=25) # Ran k-means with 2 clusters and 25 starts
-qplot(z_std[,1], z_std[,2], color=factor(wine$color), shape=factor(cluster_pca$cluster), xlab='Component 1', ylab='Component 2')
+qplot(z_std[,1], z_std[,2], data=wine, color=factor(cluster_pca$cluster))
 
 # PCA confusion matrix table
 table3 = xtabs(~cluster_pca$cluster + wine$color) 
