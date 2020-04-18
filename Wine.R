@@ -19,7 +19,7 @@ z_std = z
 mu = attr(z_std,"scaled:center")
 sigma = attr(z_std,"scaled:scale")
 res <- cor(z_std)
-corrplot(res, method = "color", tl.cex = 0.5, tl.col="black")
+corrplot(res, method = "color", tl.cex = 0.7, tl.col="red")
 
 # distribution plot
 xy = subset(wine,select = c("fixed.acidity","chlorides","volatile.acidity","sulphates")) 
