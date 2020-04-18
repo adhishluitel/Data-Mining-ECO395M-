@@ -14,12 +14,12 @@ head(wine)
 # Center and scale the data, data visualization
 z = wine[,1:11]
 z = scale(z, center=TRUE, scale=TRUE)
-#z_std = scale(z)
+z_std = scale(z)
 z_std = z
 mu = attr(z_std,"scaled:center")
 sigma = attr(z_std,"scaled:scale")
 res <- cor(z_std)
-corrplot(res, method = "color", tl.cex = 0.7, tl.col="red")
+
 
 # distribution plot
 xy = subset(wine,select = c("fixed.acidity","chlorides","volatile.acidity","sulphates")) 
@@ -47,6 +47,10 @@ table2 = xtabs(~cluster_kpp$cluster + wine$color) ###
 print(table2)
 #Same as Kmeans clustering. No improvement
 
+#What elements in what cluster?
+cluster_kpp$center[1,]*sigma + mu
+cluster_kpp$center[2,]*sigma + mu
+
 #Now, PCA
 pca = prcomp(z_std, scale=TRUE)
 summary(pca) #note the proportion of variance. PC1-PC3 look pretty significant. 
@@ -55,7 +59,7 @@ summary(pca) #note the proportion of variance. PC1-PC3 look pretty significant.
 #loadings = pca$rotation
 
 # PCA for clustering
-cluster_pca = kmeans(z_std[,1:4], 2, nstart=25) # Ran k-means with 2 clusters and 25 starts
+cluster_pca = kmeans(z_std[,1:3], 2, nstart=25) # Ran k-means with 2 clusters and 25 starts
 qplot(z_std[,1], z_std[,2], data=wine, color=factor(cluster_pca$cluster))
 
 # PCA confusion matrix table
@@ -63,11 +67,12 @@ table3 = xtabs(~cluster_pca$cluster + wine$color)
 print(table3)
 #accuracy rate K-means=2 is (4,635+938)/6,497 = 82.7%. Pretty accurate but worse than clustering
 
+
 #But does this technique also seem capable of sorting the higher from the lower quality wines?
 #Now we have to distinguish the quality of wine. Scale of 1-10, so we have 10 categories
-#However there are only 7 qualities 
+#So we will try to cluster into 10 categories
 # kmeans clustering
-cluster2 = kmeans(z_std, 7, nstart=25)
+cluster2 = kmeans(z_std, 10, nstart=25)
 
 #Confusion martix
 table4 = xtabs(~cluster2$cluster + wine$quality)
@@ -90,8 +95,8 @@ summary(pca2)
 loadings = pca2$rotation
 scores = pca2$z_std
 # PCA for clustering
-cluster_pca1 = kmeans(z_std[,1:4], 7, nstart=25)
-qplot(z_std[,1], z_std[,2], color=factor(wine$color), shape=factor(cluster_pca1$cluster), xlab='Component 1', ylab='Component 2')
+cluster_pca1 = kmeans(z_std[,1:4], 10, nstart=25)
+qplot(z_std[,1], z_std[,2], data=wine, color=factor(cluster_pca1$cluster), xlab='Component 1', ylab='Component 2')
 
 #Confusion matrix for PCA
 table5 = xtabs(~cluster_pca1$cluster + wine$quality)
