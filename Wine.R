@@ -28,13 +28,10 @@ ggpairs(xy,aes(col = wine$color, alpha = 0.7))
 
 
 #Clustering
-#Start with K means 2 as we have two basic categories (Red/White)
-cluster1 = kmeans(z_std, 2, nstart=25)
-#Comparing fixed acidity with chlorides first
-#nstart=20 because
-qplot(wine$fixed.acidity,wine$chlorides, data=wine, shape=factor(cluster1$cluster), col=factor(wine$color))
-#Then compare volatile acidity with sulphates
-#qplot(wine$volatile.acidity,wine$sulphates, data=wine, shape=factor(cluster1$cluster), col=factor(wine$color))
+#Start with K means 2 as we have two basic categories (Red/White) and 25 starts
+cluster1 = kmeans(z_std, 2, nstart=25) 
+#Comparing fixed acidity with chlorides 
+qplot(fixed.acidity, chlorides, data=wine, color=factor(cluster1$cluster))
 
 
 #Confusion matrix
@@ -50,9 +47,8 @@ summary(pca) #note the proportion of variance. PC1-PC3 look pretty significant.
 
 loadings = pca$rotation
 
-
 # PCA for clustering
-cluster_pca = kmeans(z_std[,1:4], 2, nstart=25)
+cluster_pca = kmeans(z_std[,1:4], 2, nstart=25) # Ran k-means with 2 clusters and 25 starts
 qplot(z_std[,1], z_std[,2], color=factor(wine$color), shape=factor(cluster_pca$cluster), xlab='Component 1', ylab='Component 2')
 
 # PCA confusion matrix table
