@@ -73,7 +73,6 @@ print(table3)
 #Now we have to distinguish the quality of wine. Scale of 1-10, so we have 10 categories
 #So we will try to cluster into 10 categories
 # kmeans clustering
-x = wine[,1:12]
 z = scale(z, center=TRUE, scale=TRUE)
 z_std = scale(z)
 z_std = z
