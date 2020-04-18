@@ -37,26 +37,34 @@ qplot(fixed.acidity, chlorides, data=wine, color=factor(cluster1$cluster))
 #Confusion matrix
 table1 = xtabs(~cluster1$cluster + wine$color) ###
 print(table1)
-#accuracy rate K-means=2 is (4,830+1,575)/6,497 = 98.6%. Pretty accurate
+#accuracy rate is (4,830+1,575)/6,497 = 98.6%. Pretty accurate
 
+# Using kmeans++ clustering
+cluster_kpp = kmeanspp(z_std[,1:4], k=2, nstart=25)
+qplot(fixed.acidity, chlorides, data=wine, color=factor(cluster_kpp$cluster))
+#Confusion matrix
+table2 = xtabs(~cluster_kpp$cluster + wine$color) ###
+print(table2)
+#accuracy rate is (263+621)/6,497 = 13.6%. Not accurate at all. Kmeans++ clustering performed very poorly
 
 #Now, PCA
 pca = prcomp(z_std, scale=TRUE)
 summary(pca) #note the proportion of variance. PC1-PC3 look pretty significant. 
 #Combined they form 0.6436/1 = 64.3% of the total variance in the dataset
 
-loadings = pca$rotation
+#loadings = pca$rotation
 
 # PCA for clustering
 cluster_pca = kmeans(z_std[,1:4], 2, nstart=25) # Ran k-means with 2 clusters and 25 starts
 qplot(z_std[,1], z_std[,2], color=factor(wine$color), shape=factor(cluster_pca$cluster), xlab='Component 1', ylab='Component 2')
 
 # PCA confusion matrix table
-table2 = xtabs(~cluster_pca$cluster + wine$color) 
-print(table2)
+table3 = xtabs(~cluster_pca$cluster + wine$color) 
+print(table3)
 #accuracy rate K-means=2 is (4,635+938)/6,497 = 82.7%. Pretty accurate but worse than clustering
 
 #But does this technique also seem capable of sorting the higher from the lower quality wines?
+#Now we have to distinguish the quality of wine
 
 
 
