@@ -29,7 +29,7 @@ ggpairs(xy,aes(col = wine$color, alpha = 0.7))
 
 #Clustering
 #Start with K means 2 as we have two basic categories (Red/White)
-cluster1 = kmeans(z_std, 2, nstart=20)
+cluster1 = kmeans(z_std, 2, nstart=25)
 #Comparing fixed acidity with chlorides first
 #nstart=20 because
 qplot(wine$fixed.acidity,wine$chlorides, data=wine, shape=factor(cluster1$cluster), col=factor(wine$color))
@@ -52,7 +52,7 @@ loadings = pca$rotation
 
 
 # PCA for clustering
-cluster_pca = kmeans(z_std[,1:4], 2, nstart=20)
+cluster_pca = kmeans(z_std[,1:4], 2, nstart=25)
 qplot(z_std[,1], z_std[,2], color=factor(wine$color), shape=factor(cluster_pca$cluster), xlab='Component 1', ylab='Component 2')
 
 # PCA confusion matrix table
