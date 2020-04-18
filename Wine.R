@@ -59,8 +59,5 @@ print(table2)
 #But does this technique also seem capable of sorting the higher from the lower quality wines?
 
 
-###Distinguishing the quality
-#First we need to cluster into 7 categories
-
 
 
