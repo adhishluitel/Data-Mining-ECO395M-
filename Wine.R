@@ -48,31 +48,37 @@ print(table2)
 #Same as Kmeans clustering. No improvement
 
 #What elements in what cluster?
-cluster_kpp$center[1,]*sigma + mu
-cluster_kpp$center[2,]*sigma + mu
+#cluster_kpp$center[1,]*sigma + mu
+#cluster_kpp$center[2,]*sigma + mu
 
 #Now, PCA
 pca = prcomp(z_std, scale=TRUE)
 summary(pca) #note the proportion of variance. PC1-PC3 look pretty significant. 
 #Combined they form 0.6436/1 = 64.3% of the total variance in the dataset
 
-#loadings = pca$rotation
+scores = pca$x
+loadings = pca$rotation
 
 # PCA for clustering
-cluster_pca = kmeans(z_std[,1:3], 2, nstart=25) # Ran k-means with 2 clusters and 25 starts
-qplot(z_std[,1], z_std[,2], data=wine, color=factor(cluster_pca$cluster))
+cluster_pca = kmeans(scores[,1:3], 2, nstart=25) # Ran k-means with 2 clusters and 25 starts
+qplot(scores[,1], scores[,2], data=wine, color=factor(cluster_pca$cluster))
 
 # PCA confusion matrix table
 table3 = xtabs(~cluster_pca$cluster + wine$color) 
 print(table3)
-#accuracy rate K-means=2 is (4,635+938)/6,497 = 82.7%. Pretty accurate but worse than clustering
+#accuracy rate K-means=2 is 6391/6497 = 98.3%. Pretty accurate but slightly worse than clustering
 
 
 #But does this technique also seem capable of sorting the higher from the lower quality wines?
 #Now we have to distinguish the quality of wine. Scale of 1-10, so we have 10 categories
 #So we will try to cluster into 10 categories
 # kmeans clustering
-cluster2 = kmeans(z_std, 10, nstart=25)
+x = wine[,1:12]
+z = scale(z, center=TRUE, scale=TRUE)
+z_std = scale(z)
+z_std = z
+
+cluster2 = kmeans(z_std, 7, nstart=25)
 
 #Confusion martix
 table4 = xtabs(~cluster2$cluster + wine$quality)
