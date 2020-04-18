@@ -40,12 +40,12 @@ print(table1)
 #accuracy rate is (4,830+1,575)/6,497 = 98.6%. Pretty accurate
 
 # Using kmeans++ clustering
-cluster_kpp = kmeanspp(z_std[,1:4], k=2, nstart=25)
+cluster_kpp = kmeanspp(z_std, k=2, nstart=25)
 qplot(fixed.acidity, chlorides, data=wine, color=factor(cluster_kpp$cluster))
 #Confusion matrix
 table2 = xtabs(~cluster_kpp$cluster + wine$color) ###
 print(table2)
-#accuracy rate is (263+621)/6,497 = 13.6%. Not accurate at all. Kmeans++ clustering performed very poorly
+#Same as Kmeans clustering. No improvement
 
 #Now, PCA
 pca = prcomp(z_std, scale=TRUE)
@@ -64,8 +64,38 @@ print(table3)
 #accuracy rate K-means=2 is (4,635+938)/6,497 = 82.7%. Pretty accurate but worse than clustering
 
 #But does this technique also seem capable of sorting the higher from the lower quality wines?
-#Now we have to distinguish the quality of wine
+#Now we have to distinguish the quality of wine. Scale of 1-10, so we have 10 categories
+#However there are only 7 qualities 
+# kmeans clustering
+cluster2 = kmeans(z_std, 7, nstart=25)
 
+#Confusion martix
+table4 = xtabs(~cluster2$cluster + wine$quality)
+print(table4)
 
+#Density plots
+ggplot(wine)+ geom_density(aes(x = cluster2$cluster, col = factor(wine$quality), fill = factor(wine$quality)), alpha = 0.4)
+ggplot(wine)+ geom_density(aes(x = wine$quality, col = factor(wine$quality), fill = factor(wine$quality)), alpha = 0.4)
+
+# kmeans++ clustering
+cluster_kpp2 = kmeanspp(z_std, 7, nstart=25)
+
+#Confusion martix
+table4 = xtabs(~cluster_kpp2$cluster + wine$quality)
+print(table4)
+
+# Now PCA
+pca2 = prcomp(z_std, scale=TRUE)
+summary(pca2)
+loadings = pca2$rotation
+scores = pca2$z_std
+# PCA for clustering
+cluster_pca1 = kmeans(z_std[,1:4], 7, nstart=25)
+qplot(z_std[,1], z_std[,2], color=factor(wine$color), shape=factor(cluster_pca1$cluster), xlab='Component 1', ylab='Component 2')
+
+#Confusion matrix for PCA
+table5 = xtabs(~cluster_pca1$cluster + wine$quality)
+print(table5)
+ggplot(wine)+ geom_density(aes(x = cluster_pca1$cluster, col = factor(wine$quality), fill = factor(wine$quality)), alpha = 0.5)
 
 
