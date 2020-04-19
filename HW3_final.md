@@ -66,97 +66,100 @@ Here's our best predictive stepwise selection model with 84 variables
 obtained by backward selection.
 
     ## 
-    ## <table style="text-align:center"><tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td><em>Dependent variable:</em></td></tr>
-    ## <tr><td></td><td colspan="1" style="border-bottom: 1px solid black"></td></tr>
-    ## <tr><td style="text-align:left"></td><td>Rent</td></tr>
-    ## <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">size</td><td>-0.003 (0.007)</td></tr>
-    ## <tr><td style="text-align:left">empl_gr</td><td>-1.409<sup>**</sup> (0.571)</td></tr>
-    ## <tr><td style="text-align:left">leasing_rate</td><td>-0.112<sup>**</sup> (0.051)</td></tr>
-    ## <tr><td style="text-align:left">stories</td><td>-0.252<sup>**</sup> (0.120)</td></tr>
-    ## <tr><td style="text-align:left">age</td><td>0.124<sup>***</sup> (0.023)</td></tr>
-    ## <tr><td style="text-align:left">renovated</td><td>-8.201<sup>***</sup> (2.130)</td></tr>
-    ## <tr><td style="text-align:left">class_a</td><td>26.769<sup>***</sup> (3.914)</td></tr>
-    ## <tr><td style="text-align:left">class_b</td><td>23.912<sup>***</sup> (3.657)</td></tr>
-    ## <tr><td style="text-align:left">green_rating</td><td>1.276 (0.918)</td></tr>
-    ## <tr><td style="text-align:left">net</td><td>-1.210 (1.804)</td></tr>
-    ## <tr><td style="text-align:left">amenities</td><td>-3.703<sup>**</sup> (1.681)</td></tr>
-    ## <tr><td style="text-align:left">cd_total_07</td><td>-0.011<sup>***</sup> (0.003)</td></tr>
-    ## <tr><td style="text-align:left">hd_total07</td><td>-0.005<sup>**</sup> (0.002)</td></tr>
-    ## <tr><td style="text-align:left">Precipitation</td><td>0.733<sup>***</sup> (0.200)</td></tr>
-    ## <tr><td style="text-align:left">Gas_Costs</td><td>-2,335.441 (1,459.125)</td></tr>
-    ## <tr><td style="text-align:left">Electricity_Costs</td><td>-305.448 (198.790)</td></tr>
-    ## <tr><td style="text-align:left">cluster_rent</td><td>0.638<sup>***</sup> (0.087)</td></tr>
-    ## <tr><td style="text-align:left">size:leasing_rate</td><td>0.0001<sup>***</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">size:stories</td><td>-0.0000<sup>*</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">size:age</td><td>-0.0001<sup>***</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">size:renovated</td><td>0.007<sup>***</sup> (0.001)</td></tr>
-    ## <tr><td style="text-align:left">size:class_a</td><td>-0.021<sup>***</sup> (0.005)</td></tr>
-    ## <tr><td style="text-align:left">size:class_b</td><td>-0.017<sup>***</sup> (0.005)</td></tr>
-    ## <tr><td style="text-align:left">size:cd_total_07</td><td>-0.0000<sup>***</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">size:hd_total07</td><td>0.0000<sup>**</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">size:Electricity_Costs</td><td>0.496<sup>***</sup> (0.152)</td></tr>
-    ## <tr><td style="text-align:left">size:cluster_rent</td><td>0.001<sup>***</sup> (0.0001)</td></tr>
-    ## <tr><td style="text-align:left">empl_gr:age</td><td>0.001 (0.001)</td></tr>
-    ## <tr><td style="text-align:left">empl_gr:class_b</td><td>-0.086<sup>***</sup> (0.033)</td></tr>
-    ## <tr><td style="text-align:left">empl_gr:Gas_Costs</td><td>128.739<sup>***</sup> (48.062)</td></tr>
-    ## <tr><td style="text-align:left">leasing_rate:cd_total_07</td><td>0.0000<sup>**</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">leasing_rate:hd_total07</td><td>0.0000<sup>*</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">leasing_rate:Precipitation</td><td>0.002<sup>***</sup> (0.001)</td></tr>
-    ## <tr><td style="text-align:left">leasing_rate:Gas_Costs</td><td>-10.734<sup>***</sup> (4.138)</td></tr>
-    ## <tr><td style="text-align:left">leasing_rate:Electricity_Costs</td><td>2.846<sup>**</sup> (1.280)</td></tr>
-    ## <tr><td style="text-align:left">leasing_rate:cluster_rent</td><td>0.002<sup>**</sup> (0.001)</td></tr>
-    ## <tr><td style="text-align:left">stories:age</td><td>0.004<sup>***</sup> (0.001)</td></tr>
-    ## <tr><td style="text-align:left">stories:renovated</td><td>-0.215<sup>***</sup> (0.036)</td></tr>
-    ## <tr><td style="text-align:left">stories:class_a</td><td>0.411<sup>***</sup> (0.090)</td></tr>
-    ## <tr><td style="text-align:left">stories:class_b</td><td>0.380<sup>***</sup> (0.082)</td></tr>
-    ## <tr><td style="text-align:left">stories:amenities</td><td>0.092<sup>***</sup> (0.026)</td></tr>
-    ## <tr><td style="text-align:left">stories:cd_total_07</td><td>0.0001<sup>***</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">stories:Precipitation</td><td>-0.003<sup>**</sup> (0.001)</td></tr>
-    ## <tr><td style="text-align:left">stories:Electricity_Costs</td><td>-5.517<sup>**</sup> (2.689)</td></tr>
-    ## <tr><td style="text-align:left">stories:cluster_rent</td><td>-0.005<sup>**</sup> (0.002)</td></tr>
-    ## <tr><td style="text-align:left">age:class_a</td><td>-0.039<sup>**</sup> (0.017)</td></tr>
-    ## <tr><td style="text-align:left">age:class_b</td><td>-0.049<sup>***</sup> (0.012)</td></tr>
-    ## <tr><td style="text-align:left">age:green_rating</td><td>0.040<sup>*</sup> (0.023)</td></tr>
-    ## <tr><td style="text-align:left">age:cd_total_07</td><td>-0.0000<sup>***</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">age:hd_total07</td><td>-0.0000<sup>***</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">age:cluster_rent</td><td>-0.003<sup>***</sup> (0.0005)</td></tr>
-    ## <tr><td style="text-align:left">renovated:cd_total_07</td><td>0.001<sup>***</sup> (0.0003)</td></tr>
-    ## <tr><td style="text-align:left">renovated:hd_total07</td><td>0.001<sup>***</sup> (0.0002)</td></tr>
-    ## <tr><td style="text-align:left">renovated:Precipitation</td><td>0.086<sup>***</sup> (0.033)</td></tr>
-    ## <tr><td style="text-align:left">renovated:Gas_Costs</td><td>-434.347<sup>**</sup> (178.191)</td></tr>
-    ## <tr><td style="text-align:left">renovated:Electricity_Costs</td><td>183.731<sup>***</sup> (55.852)</td></tr>
-    ## <tr><td style="text-align:left">renovated:cluster_rent</td><td>0.067<sup>**</sup> (0.031)</td></tr>
-    ## <tr><td style="text-align:left">class_a:amenities</td><td>-1.017<sup>*</sup> (0.571)</td></tr>
-    ## <tr><td style="text-align:left">class_a:cd_total_07</td><td>-0.002<sup>***</sup> (0.001)</td></tr>
-    ## <tr><td style="text-align:left">class_a:hd_total07</td><td>-0.002<sup>***</sup> (0.0004)</td></tr>
-    ## <tr><td style="text-align:left">class_a:Precipitation</td><td>-0.281<sup>***</sup> (0.054)</td></tr>
-    ## <tr><td style="text-align:left">class_a:Gas_Costs</td><td>1,412.093<sup>***</sup> (299.902)</td></tr>
-    ## <tr><td style="text-align:left">class_a:Electricity_Costs</td><td>-645.902<sup>***</sup> (80.989)</td></tr>
-    ## <tr><td style="text-align:left">class_b:cd_total_07</td><td>-0.001<sup>***</sup> (0.0005)</td></tr>
-    ## <tr><td style="text-align:left">class_b:hd_total07</td><td>-0.001<sup>***</sup> (0.0003)</td></tr>
-    ## <tr><td style="text-align:left">class_b:Precipitation</td><td>-0.267<sup>***</sup> (0.049)</td></tr>
-    ## <tr><td style="text-align:left">class_b:Gas_Costs</td><td>990.606<sup>***</sup> (298.506)</td></tr>
-    ## <tr><td style="text-align:left">class_b:Electricity_Costs</td><td>-539.698<sup>***</sup> (72.489)</td></tr>
-    ## <tr><td style="text-align:left">green_rating:amenities</td><td>-2.097<sup>**</sup> (0.837)</td></tr>
-    ## <tr><td style="text-align:left">net:cd_total_07</td><td>0.001<sup>*</sup> (0.0004)</td></tr>
-    ## <tr><td style="text-align:left">net:cluster_rent</td><td>-0.084 (0.055)</td></tr>
-    ## <tr><td style="text-align:left">amenities:Precipitation</td><td>-0.074<sup>**</sup> (0.033)</td></tr>
-    ## <tr><td style="text-align:left">amenities:Gas_Costs</td><td>376.176<sup>**</sup> (172.712)</td></tr>
-    ## <tr><td style="text-align:left">amenities:Electricity_Costs</td><td>109.023<sup>***</sup> (40.951)</td></tr>
-    ## <tr><td style="text-align:left">amenities:cluster_rent</td><td>-0.064<sup>**</sup> (0.029)</td></tr>
-    ## <tr><td style="text-align:left">cd_total_07:Gas_Costs</td><td>0.531<sup>**</sup> (0.225)</td></tr>
-    ## <tr><td style="text-align:left">cd_total_07:Electricity_Costs</td><td>0.152<sup>***</sup> (0.031)</td></tr>
-    ## <tr><td style="text-align:left">hd_total07:Precipitation</td><td>-0.0000<sup>***</sup> (0.0000)</td></tr>
-    ## <tr><td style="text-align:left">hd_total07:Gas_Costs</td><td>0.374<sup>**</sup> (0.170)</td></tr>
-    ## <tr><td style="text-align:left">hd_total07:Electricity_Costs</td><td>0.115<sup>***</sup> (0.025)</td></tr>
-    ## <tr><td style="text-align:left">Precipitation:Gas_Costs</td><td>-23.045 (15.536)</td></tr>
-    ## <tr><td style="text-align:left">Precipitation:Electricity_Costs</td><td>-5.407 (3.406)</td></tr>
-    ## <tr><td style="text-align:left">Electricity_Costs:cluster_rent</td><td>7.812<sup>***</sup> (2.045)</td></tr>
-    ## <tr><td style="text-align:left">Constant</td><td>22.997 (17.403)</td></tr>
-    ## <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Observations</td><td>7,820</td></tr>
-    ## <tr><td style="text-align:left">Adjusted R<sup>2</sup></td><td>0.648</td></tr>
-    ## <tr><td colspan="2" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"><em>Note:</em></td><td style="text-align:right"><sup>*</sup>p<0.1; <sup>**</sup>p<0.05; <sup>***</sup>p<0.01</td></tr>
-    ## </table>
+    ## ===========================================================
+    ##                                     Dependent variable:    
+    ##                                 ---------------------------
+    ##                                            Rent            
+    ## -----------------------------------------------------------
+    ## size                                  -0.003 (0.007)       
+    ## empl_gr                              -1.409** (0.571)      
+    ## leasing_rate                         -0.112** (0.051)      
+    ## stories                              -0.252** (0.120)      
+    ## age                                  0.124*** (0.023)      
+    ## renovated                            -8.201*** (2.130)     
+    ## class_a                              26.769*** (3.914)     
+    ## class_b                              23.912*** (3.657)     
+    ## green_rating                           1.276 (0.918)       
+    ## net                                   -1.210 (1.804)       
+    ## amenities                            -3.703** (1.681)      
+    ## cd_total_07                          -0.011*** (0.003)     
+    ## hd_total07                           -0.005** (0.002)      
+    ## Precipitation                        0.733*** (0.200)      
+    ## Gas_Costs                         -2,335.441 (1,459.125)   
+    ## Electricity_Costs                   -305.448 (198.790)     
+    ## cluster_rent                         0.638*** (0.087)      
+    ## size:leasing_rate                   0.0001*** (0.0000)     
+    ## size:stories                         -0.0000* (0.0000)     
+    ## size:age                            -0.0001*** (0.0000)    
+    ## size:renovated                       0.007*** (0.001)      
+    ## size:class_a                         -0.021*** (0.005)     
+    ## size:class_b                         -0.017*** (0.005)     
+    ## size:cd_total_07                    -0.0000*** (0.0000)    
+    ## size:hd_total07                      0.0000** (0.0000)     
+    ## size:Electricity_Costs               0.496*** (0.152)      
+    ## size:cluster_rent                    0.001*** (0.0001)     
+    ## empl_gr:age                            0.001 (0.001)       
+    ## empl_gr:class_b                      -0.086*** (0.033)     
+    ## empl_gr:Gas_Costs                   128.739*** (48.062)    
+    ## leasing_rate:cd_total_07             0.0000** (0.0000)     
+    ## leasing_rate:hd_total07              0.0000* (0.0000)      
+    ## leasing_rate:Precipitation           0.002*** (0.001)      
+    ## leasing_rate:Gas_Costs              -10.734*** (4.138)     
+    ## leasing_rate:Electricity_Costs        2.846** (1.280)      
+    ## leasing_rate:cluster_rent             0.002** (0.001)      
+    ## stories:age                          0.004*** (0.001)      
+    ## stories:renovated                    -0.215*** (0.036)     
+    ## stories:class_a                      0.411*** (0.090)      
+    ## stories:class_b                      0.380*** (0.082)      
+    ## stories:amenities                    0.092*** (0.026)      
+    ## stories:cd_total_07                 0.0001*** (0.0000)     
+    ## stories:Precipitation                -0.003** (0.001)      
+    ## stories:Electricity_Costs            -5.517** (2.689)      
+    ## stories:cluster_rent                 -0.005** (0.002)      
+    ## age:class_a                          -0.039** (0.017)      
+    ## age:class_b                          -0.049*** (0.012)     
+    ## age:green_rating                      0.040* (0.023)       
+    ## age:cd_total_07                     -0.0000*** (0.0000)    
+    ## age:hd_total07                      -0.0000*** (0.0000)    
+    ## age:cluster_rent                    -0.003*** (0.0005)     
+    ## renovated:cd_total_07                0.001*** (0.0003)     
+    ## renovated:hd_total07                 0.001*** (0.0002)     
+    ## renovated:Precipitation              0.086*** (0.033)      
+    ## renovated:Gas_Costs                -434.347** (178.191)    
+    ## renovated:Electricity_Costs         183.731*** (55.852)    
+    ## renovated:cluster_rent                0.067** (0.031)      
+    ## class_a:amenities                     -1.017* (0.571)      
+    ## class_a:cd_total_07                  -0.002*** (0.001)     
+    ## class_a:hd_total07                  -0.002*** (0.0004)     
+    ## class_a:Precipitation                -0.281*** (0.054)     
+    ## class_a:Gas_Costs                 1,412.093*** (299.902)   
+    ## class_a:Electricity_Costs          -645.902*** (80.989)    
+    ## class_b:cd_total_07                 -0.001*** (0.0005)     
+    ## class_b:hd_total07                  -0.001*** (0.0003)     
+    ## class_b:Precipitation                -0.267*** (0.049)     
+    ## class_b:Gas_Costs                  990.606*** (298.506)    
+    ## class_b:Electricity_Costs          -539.698*** (72.489)    
+    ## green_rating:amenities               -2.097** (0.837)      
+    ## net:cd_total_07                       0.001* (0.0004)      
+    ## net:cluster_rent                      -0.084 (0.055)       
+    ## amenities:Precipitation              -0.074** (0.033)      
+    ## amenities:Gas_Costs                 376.176** (172.712)    
+    ## amenities:Electricity_Costs         109.023*** (40.951)    
+    ## amenities:cluster_rent               -0.064** (0.029)      
+    ## cd_total_07:Gas_Costs                 0.531** (0.225)      
+    ## cd_total_07:Electricity_Costs        0.152*** (0.031)      
+    ## hd_total07:Precipitation            -0.0000*** (0.0000)    
+    ## hd_total07:Gas_Costs                  0.374** (0.170)      
+    ## hd_total07:Electricity_Costs         0.115*** (0.025)      
+    ## Precipitation:Gas_Costs              -23.045 (15.536)      
+    ## Precipitation:Electricity_Costs       -5.407 (3.406)       
+    ## Electricity_Costs:cluster_rent       7.812*** (2.045)      
+    ## Constant                              22.997 (17.403)      
+    ## -----------------------------------------------------------
+    ## Observations                               7,820           
+    ## Adjusted R2                                0.648           
+    ## ===========================================================
+    ## Note:                           *p<0.1; **p<0.05; ***p<0.01
 
 Finally, we did K-fold cross validation to check RMSE when K is 10. We
 built a train-test split and repeated the step from 1 to K repetitions
@@ -196,38 +199,228 @@ intercept.The result below shows the coefficients of grb\_beta, the
 minimum lambda in log scale, and the total number of variables including
 an intercept.
 
-    ## <!-- html table generated in R 3.6.3 by xtable 1.8-4 package -->
-    ## <!-- Sun Apr 19 14:49:24 2020 -->
-    ## <table border=1>
-    ## <tr> <th>  </th> <th> Variable </th> <th> Coefficient </th>  </tr>
-    ##   <tr> <td> 1 </td> <td> intercept </td> <td align="center"> 2.58 </td> </tr>
-    ##   <tr> <td> 2 </td> <td> cluster_rent </td> <td align="center"> 0.72 </td> </tr>
-    ##   <tr> <td> 3 </td> <td> size:stories </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 4 </td> <td> size:age </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 5 </td> <td> size:cd_total_07 </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 6 </td> <td> size:hd_total07 </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 7 </td> <td> size:Precipitation </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 8 </td> <td> size:cluster_rent </td> <td align="center"> 0.00 </td> </tr>
-    ##   <tr> <td> 9 </td> <td> empl_gr:class_a </td> <td align="center"> 0.05 </td> </tr>
-    ##   <tr> <td> 10 </td> <td> leasing_rate:age </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 11 </td> <td> leasing_rate:cluster_rent </td> <td align="center"> 0.00 </td> </tr>
-    ##   <tr> <td> 12 </td> <td> stories:renovated </td> <td align="center"> -0.01 </td> </tr>
-    ##   <tr> <td> 13 </td> <td> stories:class_b </td> <td align="center"> 0.02 </td> </tr>
-    ##   <tr> <td> 14 </td> <td> stories:Precipitation </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 15 </td> <td> stories:Gas_Costs </td> <td align="center"> -0.19 </td> </tr>
-    ##   <tr> <td> 16 </td> <td> age:green_rating </td> <td align="center"> 0.01 </td> </tr>
-    ##   <tr> <td> 17 </td> <td> age:cd_total_07 </td> <td align="center"> -0.00 </td> </tr>
-    ##   <tr> <td> 18 </td> <td> age:Gas_Costs </td> <td align="center"> -0.45 </td> </tr>
-    ##   <tr> <td> 19 </td> <td> class_a:cluster_rent </td> <td align="center"> 0.04 </td> </tr>
-    ##   <tr> <td> 20 </td> <td> class_b:green_rating </td> <td align="center"> 0.18 </td> </tr>
-    ##   <tr> <td> 21 </td> <td> class_b:amenities </td> <td align="center"> 0.18 </td> </tr>
-    ##   <tr> <td> 22 </td> <td> green_rating:cluster_rent </td> <td align="center"> 0.01 </td> </tr>
-    ##   <tr> <td> 23 </td> <td> net:cluster_rent </td> <td align="center"> -0.05 </td> </tr>
-    ##   <tr> <td> 24 </td> <td> amenities:Electricity_Costs </td> <td align="center"> 15.68 </td> </tr>
-    ##   <tr> <td> 25 </td> <td> hd_total07:Electricity_Costs </td> <td align="center"> 0.01 </td> </tr>
-    ##   <tr> <td> 26 </td> <td> Electricity_Costs:cluster_rent </td> <td align="center"> 2.47 </td> </tr>
-    ##    </table>
-
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+Coefficient
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+intercept
+</td>
+<td style="text-align:right;">
+2.5779998
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cluster\_rent
+</td>
+<td style="text-align:right;">
+0.7225084
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:stories
+</td>
+<td style="text-align:right;">
+-0.0000208
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:age
+</td>
+<td style="text-align:right;">
+-0.0000159
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:cd\_total\_07
+</td>
+<td style="text-align:right;">
+-0.0000015
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:hd\_total07
+</td>
+<td style="text-align:right;">
+-0.0000001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:Precipitation
+</td>
+<td style="text-align:right;">
+-0.0000308
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0004312
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+empl\_gr:class\_a
+</td>
+<td style="text-align:right;">
+0.0522454
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+leasing\_rate:age
+</td>
+<td style="text-align:right;">
+-0.0000584
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+leasing\_rate:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0006948
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:renovated
+</td>
+<td style="text-align:right;">
+-0.0080782
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:class\_b
+</td>
+<td style="text-align:right;">
+0.0155039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:Precipitation
+</td>
+<td style="text-align:right;">
+-0.0002636
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:Gas\_Costs
+</td>
+<td style="text-align:right;">
+-0.1875013
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age:green\_rating
+</td>
+<td style="text-align:right;">
+0.0101577
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age:cd\_total\_07
+</td>
+<td style="text-align:right;">
+-0.0000050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age:Gas\_Costs
+</td>
+<td style="text-align:right;">
+-0.4513846
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+class\_a:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0411992
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+class\_b:green\_rating
+</td>
+<td style="text-align:right;">
+0.1790789
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+class\_b:amenities
+</td>
+<td style="text-align:right;">
+0.1839059
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+green\_rating:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0079064
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+net:cluster\_rent
+</td>
+<td style="text-align:right;">
+-0.0546024
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+amenities:Electricity\_Costs
+</td>
+<td style="text-align:right;">
+15.6825595
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hd\_total07:Electricity\_Costs
+</td>
+<td style="text-align:right;">
+0.0053166
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Electricity\_Costs:cluster\_rent
+</td>
+<td style="text-align:right;">
+2.4733648
+</td>
+</tr>
+</tbody>
+</table>
     ##    seg100 
     ## -2.165552
 

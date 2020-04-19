@@ -119,9 +119,11 @@ step(model1, scope = list(lower= null, upper=full), dir="both")
 
 Here's our best predictive stepwise selection model with 84 variables obtained by backward selection.
 
-```{r 3.1.4, echo=FALSE}
-stargazer(model1, single.row = TRUE, type='html', omit.stat = c("ser", "rsq","f"),
+```{r 3.1.4, echo=FALSE, warning = FALSE}
+stargazer(model1, single.row = TRUE, type='text', omit.stat = c("ser", "rsq","f"),
           digits.extra = 1)
+
+
 ```
 
 ```{r 3.1.5, echo=FALSE}
@@ -185,9 +187,7 @@ var_coef[] <- lapply(var_coef, as.character)
 var_coef = cbind(var_coef, c(grb_beta@x))
 colnames(var_coef) = c("Variable","Coefficient")
 
-table_print = xtable(var_coef)
-align(table_print) <- "llc"
-print(table_print, "html")
+kable(var_coef) %>% kable_styling("striped")
 
 log(grblasso$lambda[which.min(AICc(grblasso))])
 sum(grb_beta!=0)
