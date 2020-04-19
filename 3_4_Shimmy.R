@@ -6,14 +6,14 @@ library(cluster)
 library(corrplot)
 library(GGally)
 
-csocial_marketing <- read.csv("C:/Users/yaint/OneDrive/desktop/data mining/ECO395M-master/data/social_marketing.csv", row.names = 1)
+csocial_marketing <- read.csv("https://raw.githubusercontent.com/jgscott/ECO395M/master/data/social_marketing.csv", row.names = 1)
 soma<- social_marketing
 
 # Data Cleaning
 
 # Get rid of spam users - Nobody tweets spam messages unless (s)he's a bot
 soma<-soma[(soma$spam==0),] # delete observations related to spam
-soma <- soma[,-36] # get rid of spam variable
+soma <- soma[,-35] # get rid of spam variable
 
 # we also delete variables "chatter" and "uncategorized"
 # because the company cannot get any information from these categories

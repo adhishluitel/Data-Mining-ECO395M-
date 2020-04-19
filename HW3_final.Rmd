@@ -353,3 +353,76 @@ partial(model4_train, pred.var = 'green_rating', n.trees=100)
 29.07784-28.50924
 ```
 
+## Exercise 3.4
+```{r setup4, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(foreach)
+library(tidyverse)
+library(LICORS)
+library(cluster)
+library(corrplot)
+library(GGally)
+
+social_marketing <- read.csv("https://raw.githubusercontent.com/jgscott/ECO395M/master/data/social_marketing.csv", row.names = 1)
+soma<- social_marketing
+
+#Cleaning the data
+soma<-soma[(soma$spam==0),]
+soma <- soma[,-35]
+soma<- soma[,-c(1,5)]
+soma <- cbind(tweet_sum = rowSums(soma), soma)
+soma <- cbind(adult_ratio = 1, soma)
+soma$adult_ratio <- soma$adult/soma$tweet_sum
+soma<-soma[(soma$adult_ratio<0.2),]
+soma <- soma[,-c(1,2)]
+```
+
+blalblalbal
+
+```{r 3.4.1, echo= FALSE, warning = FALSE, include = FALSE, cache = TRUE}
+# Extract the centers and scales from the rescaled data
+soma_sc <- scale(soma, center=TRUE, scale=TRUE)
+mu= attr(soma_sc, "scaled:center")
+sigma = attr(soma_sc, "scaled:scale")
+
+# What is the optimal K? Elbow plot
+k_grid = seq(2,20, by=1)
+SSE_grid = foreach(k=k_grid, .combine='c') %do% {cluster_k= kmeanspp(soma_sc, k, nstart=25)
+cluster_k$tot.withinss}
+
+N=nrow(soma)
+CH_grid= foreach(k=k_grid, .combine='c') %do% {
+  cluster_k = kmeanspp(soma_sc, k, nstart=25)
+  W= cluster_k$tot.withinss
+  B= cluster_k$betweenss
+  CH= (B/W)*((N-k)/(k-1))
+  CH
+}
+
+soma_gap = clusGap(soma_sc, FUN= kmeanspp, nstart=25, K.max=10, B=100)
+```
+
+blablalbalb
+
+```{r 3.4.2, echo= FALSE, warning = FALSE}
+plot(k_grid, SSE_grid) #cannot see any elbow here!
+plot(k_grid, CH_grid)# K=2 or 3?
+plot(soma_gap)
+```
+
+blablalbalb
+
+```{r 3.4.3, echo= FALSE, warning = FALSE}
+# Gap Statistic
+
+
+```
+
+blablalblab
+
+```{r 3.4.4, echo= FALSE, warning = FALSE}
+#correlation matrix
+res <- cor(soma_sc)
+corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
+```

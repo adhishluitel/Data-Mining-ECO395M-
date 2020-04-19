@@ -1,4 +1,5 @@
-\#ECO 395M: Exercise 3
+ECO 395M: Exercise 3
+====================
 
 Bernardo Arreal Magalhaes - UTEID ba25727
 
@@ -13,24 +14,24 @@ In this exercise, we analyzed a dataset on green buildings to build the
 best predictive pricing model. We started with cleaning the data. First
 we detected all the null values that were missing and deleted them. As
 we are running a lasso regression, in order to comply with the limits of
-computation, we scaled down ‘size’ variable from ‘square footage’ to
-‘(square footage)/1000’.
+computation, we scaled down 'size' variable from 'square footage' to
+'(square footage)/1000'.
 
 Next, we built a base model and used step-wise selection. From the
 insights we gathered while cleaning up the data, we decided to delete
-the variable ‘CS\_PropertyID’ as it was just a unique identity number
+the variable 'CS\_PropertyID' as it was just a unique identity number
 and contributed nothing to our model. We also deleted another variable
-‘total\_dd\_07’ due to the nature of its collinearity with the variables
-‘cd\_total\_07’ and ‘hd\_total07’(total\_dd\_07 = cd\_total\_07 +
-hd\_total07). Lastly, we also deleted the variable ‘cluster’ from our
+'total\_dd\_07' due to the nature of its collinearity with the variables
+'cd\_total\_07' and 'hd\_total07'(total\_dd\_07 = cd\_total\_07 +
+hd\_total07). Lastly, we also deleted the variable 'cluster' from our
 model because it was recognized as a numerical variable though it was a
 categorical one. And in order to reflect the effect of cluster on rent,
 we already have cluster.rent variable which shows the average rent by
 clusters.
 
 Finally, in order to check if a building is a green building, we used
-only ‘green\_rating’ as our dummy variable and didn’t consider ‘LEED’
-and ‘EnergyStar’ separately.
+only 'green\_rating' as our dummy variable and didn't consider 'LEED'
+and 'EnergyStar' separately.
 
 To find the best predictive model possible for price, we built 5
 different models and compared their performances. At the same time, we
@@ -47,7 +48,7 @@ additions to it including every interaction. ii) Backward selection
 model starts with the full model that has all the variables including
 all of interactions, then improves its performance by deleting each
 variable. iii) Stepwise selection model starts with our base model
-‘lm(Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster)’ and
+'lm(Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster)' and
 we considered all possible one-variable addtions or deletions including
 interactions.
 
@@ -57,11 +58,11 @@ selection model gives us the minimum AIC of 34372.28 with 84 variables,
 but it took very long time to compute all these procedures. In terms of
 AIC, we concluded that the backward selection model showed the best
 performance among three and ran an additional stepwise selection based
-on it to check if we could get any improvements. Since we didn’t witness
+on it to check if we could get any improvements. Since we didn't witness
 a further minimized AIC, we concluded that the backward selection model
 is out best model when we used stepwise selection.
 
-Here’s our best predictive stepwise selection model with 84 variables
+Here's our best predictive stepwise selection model with 84 variables
 obtained by backward selection.
 
     ## 
@@ -399,9 +400,9 @@ than the stepwise selection model.
 To further polish our best prediction model, we tried treebagging our
 best model with K-fold validation to assess its performance. We used our
 base
-model(‘Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster’)
+model('Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster')
 for our tree bagging, and excluded all the interaction variables because
-we didn’t need them explicity in tree regressions. The minimum size of
+we didn't need them explicity in tree regressions. The minimum size of
 terminal nodes is 5 which is default setting. We set the number of trees
 to be 300 times and run the regression. It took more than 7 minutes to
 compute the whole procedure, however, the RMSE for our bagging model was
@@ -420,7 +421,7 @@ trees which we used in our model is large enough to reduce our errors.
 
 In addition, the graph below shows a variable importance plot. The
 bigger the number is ,the greater the reduction on RMSE we get. We can
-see that “cluster\_rent” variable has the most important impact on
+see that "cluster\_rent" variable has the most important impact on
 decideing the rent price in our tree bagging model.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.12-1.png)
@@ -438,7 +439,7 @@ computational time.
 
 Now we fit a random forest model with 100 trees and do K-fold cross
 validation again. The result indicates that the value of RMSE is 6.26
-which is the smallest of all the RMSEs of the models we’ve seen above.
+which is the smallest of all the RMSEs of the models we've seen above.
 And the computational efficiency has been improved by taking less than 1
 minute to compute all these procedures.
 
@@ -458,17 +459,17 @@ minute to compute all these procedures.
     ## [1] 6.264436
 
 The plot below is the variable importance plot. We can see that
-‘cluster\_rent’ is the most important variable influencing rent price,
+'cluster\_rent' is the most important variable influencing rent price,
 which is the same result as we saw in the bagging model. But it reveals
 a slight difference in that the third influential variable is
-‘Electricity costs’, which is ‘age’ in bagging.
+'Electricity costs', which is 'age' in bagging.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.14-1.png)
 
 ### Tree - Boosting
 
 Finally, we fit a boosting model to derive the best predictive model. As
-we’ve done before, we use our base model to begin with. The result of
+we've done before, we use our base model to begin with. The result of
 our K-fold cross validation shows that the RMSE is 8.28 which is
 slightly higher than that of our random forest model. However, it took
 only 15 seconds to compute all these procedures.
@@ -479,9 +480,9 @@ only 15 seconds to compute all these procedures.
     ## [1] 8.280551
 
 Here is the summary of our boosting model which shows the relative
-influences of all variables. It appears to be ‘cluster\_rent’, ‘size’,
-‘leasing\_rate’ are three most influential variables on our dependent
-variable. This result is similar with previous results that we’ve seen
+influences of all variables. It appears to be 'cluster\_rent', 'size',
+'leasing\_rate' are three most influential variables on our dependent
+variable. This result is similar with previous results that we've seen
 above, but the third influential variable is slightly different, too.
 
     summary(model5_train)
@@ -518,7 +519,7 @@ which means the best performance.
 The randomforest model is superior in terms of computational speed. It
 took less than 1 minute to compute all the procedures, which is very
 efficient compared to the stepwise selection and the bagging. The lasso
-regression and the boosting method didn’t take much computational time,
+regression and the boosting method didn't take much computational time,
 but their performances are worse than the random forest model.Therefore,
 we can conclude that the random forest model shows the best performance.
 
@@ -566,12 +567,11 @@ RMSE
 </tr>
 </tbody>
 </table>
-
 ### The Partial Effect of Green Certification on Rent
 
 In order to derive the average change in rental income per square foot
 associated with green certification, holding other features of the
-building constant, we used ‘partial’ function in ‘pdp package’.
+building constant, we used 'partial' function in 'pdp package'.
 
 The average rent value without green certification holding other
 features constant is 28.50924, and the average rent value with green
@@ -589,3 +589,18 @@ building fixed.
     29.07784-28.50924
 
     ## [1] 0.5686
+
+Exercise 3.4
+------------
+
+blalblalbal
+
+blablalbalb
+
+![](HW3_final_files/figure-markdown_strict/3.4.2-1.png)![](HW3_final_files/figure-markdown_strict/3.4.2-2.png)![](HW3_final_files/figure-markdown_strict/3.4.2-3.png)
+
+blablalbalb
+
+blablalblab
+
+![](HW3_final_files/figure-markdown_strict/3.4.4-1.png)

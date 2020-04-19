@@ -14,3 +14,8 @@ kableExtra
 randomForest
 gbm
 pdp
+foreach
+LICORS
+cluster
+corrplot
+GGally
