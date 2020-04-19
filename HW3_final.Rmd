@@ -437,7 +437,19 @@ soma<-soma[(soma$adult_ratio<0.2),]
 soma <- soma[,-c(1,2)]
 ```
 
-blalblalbal
+In this exercise, we explore the data of followers of the Twitter account of 'NutrientH20', and come up with some interesting insights about the audience by identifying market segments.
+
+### Data cleaning
+We start with cleaning our data set which is comprised of 7,882 observations and 36 variables.
+First, we deleted all the users whose tweet fell into 'spam' category at least once. It is not likely that someone tweets a spam message unless (s)he's a bot. And we got rid of 'spam' variable out of our data set.  
+Then we also deleted 'chatter' and 'uncategorized' variables because the company can hardly get useful information from these categories.  
+Finally, 'adult' category can be interpreted as spam but sometimes it can become a hobby, too. Considering that normal people don't tweet much porn in public, we deleted users that have more than 20% of their total posts in pornography, regarding them as bots.  
+So we end up with 7,676 observations with 33 variables in our data set.  
+  
+### K-means++ clustering
+We'll start with performing clustering analysis. Since our data doesn't show any kinds of hierarchy, we'll focus on K-means analysis. We'll use K-means++ rather than K-means because it's already known that K-means++ show a better performance.  
+The first question we encounter when doing K-means++ is "How many clusters should we set?", i.e, "What is our optimal K?".  
+In order to find its answer, we used three methods - Elbow plot, CH index, and Gap statistics.  
 
 ```{r 3.4.1, echo= FALSE, warning = FALSE, include = FALSE, cache = TRUE}
 # Extract the centers and scales from the rescaled data
@@ -450,6 +462,7 @@ k_grid = seq(2,20, by=1)
 SSE_grid = foreach(k=k_grid, .combine='c') %do% {cluster_k= kmeanspp(soma_sc, k, nstart=25)
 cluster_k$tot.withinss}
 
+# CH index
 N=nrow(soma)
 CH_grid= foreach(k=k_grid, .combine='c') %do% {
   cluster_k = kmeanspp(soma_sc, k, nstart=25)
@@ -462,14 +475,16 @@ CH_grid= foreach(k=k_grid, .combine='c') %do% {
 soma_gap = clusGap(soma_sc, FUN= kmeanspp, nstart=25, K.max=10, B=100)
 ```
 
-blablalbalb
+The first plot shows the elbow plot of our data set. As we can see, there's no distinguished elbow here, so it doesn't give us clear messages about the optimal K.  
+The second one is the CH index. We can see it is the highest when K=1, and it decreases gradually. So we cannot get a satisfactory answer for our question, either.  
+
 
 ```{r 3.4.2, echo= FALSE, warning = FALSE}
 plot(k_grid, SSE_grid) #cannot see any elbow here!
 plot(k_grid, CH_grid)# K=2 or 3?
 ```
 
-blablalbalb
+Finally, we can see our gap statistics diagram of our data below. However, We cannot find any dips here. Unfortunately, it seems that none of these means could help us finding our optimal K.
 
 ```{r 3.4.3, echo= FALSE, warning = FALSE}
 plot(soma_gap)
