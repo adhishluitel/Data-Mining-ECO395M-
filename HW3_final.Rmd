@@ -24,7 +24,9 @@ library(kableExtra)
 library(randomForest)
 library(gbm)
 library(pdp)
-
+library(stargazer)
+library(xtable)
+library(tidytable)
 greenbuildings = read.csv(url("https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/greenbuildings.csv"))
 
 # data cleaning
@@ -117,7 +119,8 @@ step(model1, scope = list(lower= null, upper=full), dir="both")
 Here's our best predictive stepwise selection model with 84 variables obtained by backward selection.
 
 ```{r 3.1.4, echo=FALSE}
-model1
+stargazer(model1, single.row = TRUE, type='text', omit.stat = c("ser", "rsq","f"),
+          digits.extra = 1)
 ```
 
 ```{r 3.1.5, echo=FALSE}
@@ -171,7 +174,18 @@ Our optimal value of lambda turns out to be -2.17 in log scale, and at the optim
 
 ```{r 3.1.8, echo=FALSE}
 grb_beta = coef(grblasso) 
-grb_beta
+
+grb_variables = as.data.frame(grb_beta@Dimnames[[1]])
+var_position = c(grb_beta@i + 1)
+grb_result = grb_variables[var_position,1]
+grb_result = grb_result[, drop=TRUE]
+var_coef = as.data.frame(grb_result)
+var_coef[] <- lapply(var_coef, as.character)
+var_coef = cbind(var_coef, c(grb_beta@x))
+colnames(var_coef) = c("Variable","Coefficient")
+
+kable(var_coef) %>% kable_styling("striped")
+
 log(grblasso$lambda[which.min(AICc(grblasso))])
 sum(grb_beta!=0)
 

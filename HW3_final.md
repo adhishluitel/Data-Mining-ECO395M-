@@ -65,119 +65,100 @@ Here’s our best predictive stepwise selection model with 84 variables
 obtained by backward selection.
 
     ## 
-    ## Call:
-    ## lm(formula = Rent ~ size + empl_gr + leasing_rate + stories + 
-    ##     age + renovated + class_a + class_b + green_rating + net + 
-    ##     amenities + cd_total_07 + hd_total07 + Precipitation + Gas_Costs + 
-    ##     Electricity_Costs + cluster_rent + size:leasing_rate + size:stories + 
-    ##     size:age + size:renovated + size:class_a + size:class_b + 
-    ##     size:cd_total_07 + size:hd_total07 + size:Electricity_Costs + 
-    ##     size:cluster_rent + empl_gr:age + empl_gr:class_b + empl_gr:Gas_Costs + 
-    ##     leasing_rate:cd_total_07 + leasing_rate:hd_total07 + leasing_rate:Precipitation + 
-    ##     leasing_rate:Gas_Costs + leasing_rate:Electricity_Costs + 
-    ##     leasing_rate:cluster_rent + stories:age + stories:renovated + 
-    ##     stories:class_a + stories:class_b + stories:amenities + stories:cd_total_07 + 
-    ##     stories:Precipitation + stories:Electricity_Costs + stories:cluster_rent + 
-    ##     age:class_a + age:class_b + age:green_rating + age:cd_total_07 + 
-    ##     age:hd_total07 + age:cluster_rent + renovated:cd_total_07 + 
-    ##     renovated:hd_total07 + renovated:Precipitation + renovated:Gas_Costs + 
-    ##     renovated:Electricity_Costs + renovated:cluster_rent + class_a:amenities + 
-    ##     class_a:cd_total_07 + class_a:hd_total07 + class_a:Precipitation + 
-    ##     class_a:Gas_Costs + class_a:Electricity_Costs + class_b:cd_total_07 + 
-    ##     class_b:hd_total07 + class_b:Precipitation + class_b:Gas_Costs + 
-    ##     class_b:Electricity_Costs + green_rating:amenities + net:cd_total_07 + 
-    ##     net:cluster_rent + amenities:Precipitation + amenities:Gas_Costs + 
-    ##     amenities:Electricity_Costs + amenities:cluster_rent + cd_total_07:Gas_Costs + 
-    ##     cd_total_07:Electricity_Costs + hd_total07:Precipitation + 
-    ##     hd_total07:Gas_Costs + hd_total07:Electricity_Costs + Precipitation:Gas_Costs + 
-    ##     Precipitation:Electricity_Costs + Electricity_Costs:cluster_rent, 
-    ##     data = grb)
-    ## 
-    ## Coefficients:
-    ##                     (Intercept)                             size  
-    ##                       2.300e+01                       -3.451e-03  
-    ##                         empl_gr                     leasing_rate  
-    ##                      -1.409e+00                       -1.121e-01  
-    ##                         stories                              age  
-    ##                      -2.524e-01                        1.239e-01  
-    ##                       renovated                          class_a  
-    ##                      -8.201e+00                        2.677e+01  
-    ##                         class_b                     green_rating  
-    ##                       2.391e+01                        1.276e+00  
-    ##                             net                        amenities  
-    ##                      -1.210e+00                       -3.703e+00  
-    ##                     cd_total_07                       hd_total07  
-    ##                      -1.059e-02                       -4.924e-03  
-    ##                   Precipitation                        Gas_Costs  
-    ##                       7.332e-01                       -2.335e+03  
-    ##               Electricity_Costs                     cluster_rent  
-    ##                      -3.054e+02                        6.379e-01  
-    ##               size:leasing_rate                     size:stories  
-    ##                       8.265e-05                       -4.232e-05  
-    ##                        size:age                   size:renovated  
-    ##                      -1.410e-04                        7.104e-03  
-    ##                    size:class_a                     size:class_b  
-    ##                      -2.102e-02                       -1.657e-02  
-    ##                size:cd_total_07                  size:hd_total07  
-    ##                      -4.260e-06                        7.412e-07  
-    ##          size:Electricity_Costs                size:cluster_rent  
-    ##                       4.962e-01                        5.182e-04  
-    ##                     empl_gr:age                  empl_gr:class_b  
-    ##                       1.171e-03                       -8.590e-02  
-    ##               empl_gr:Gas_Costs         leasing_rate:cd_total_07  
-    ##                       1.287e+02                        1.569e-05  
-    ##         leasing_rate:hd_total07       leasing_rate:Precipitation  
-    ##                       8.867e-06                        1.947e-03  
-    ##          leasing_rate:Gas_Costs   leasing_rate:Electricity_Costs  
-    ##                      -1.073e+01                        2.846e+00  
-    ##       leasing_rate:cluster_rent                      stories:age  
-    ##                       1.609e-03                        3.871e-03  
-    ##               stories:renovated                  stories:class_a  
-    ##                      -2.148e-01                        4.110e-01  
-    ##                 stories:class_b                stories:amenities  
-    ##                       3.798e-01                        9.247e-02  
-    ##             stories:cd_total_07            stories:Precipitation  
-    ##                       6.973e-05                       -2.530e-03  
-    ##       stories:Electricity_Costs             stories:cluster_rent  
-    ##                      -5.517e+00                       -4.516e-03  
-    ##                     age:class_a                      age:class_b  
-    ##                      -3.931e-02                       -4.925e-02  
-    ##                age:green_rating                  age:cd_total_07  
-    ##                       4.046e-02                       -1.796e-05  
-    ##                  age:hd_total07                 age:cluster_rent  
-    ##                      -8.790e-06                       -2.820e-03  
-    ##           renovated:cd_total_07             renovated:hd_total07  
-    ##                       1.011e-03                        8.541e-04  
-    ##         renovated:Precipitation              renovated:Gas_Costs  
-    ##                       8.598e-02                       -4.343e+02  
-    ##     renovated:Electricity_Costs           renovated:cluster_rent  
-    ##                       1.837e+02                        6.662e-02  
-    ##               class_a:amenities              class_a:cd_total_07  
-    ##                      -1.017e+00                       -2.033e-03  
-    ##              class_a:hd_total07            class_a:Precipitation  
-    ##                      -1.985e-03                       -2.806e-01  
-    ##               class_a:Gas_Costs        class_a:Electricity_Costs  
-    ##                       1.412e+03                       -6.459e+02  
-    ##             class_b:cd_total_07               class_b:hd_total07  
-    ##                      -1.473e-03                       -1.492e-03  
-    ##           class_b:Precipitation                class_b:Gas_Costs  
-    ##                      -2.675e-01                        9.906e+02  
-    ##       class_b:Electricity_Costs           green_rating:amenities  
-    ##                      -5.397e+02                       -2.097e+00  
-    ##                 net:cd_total_07                 net:cluster_rent  
-    ##                       8.602e-04                       -8.390e-02  
-    ##         amenities:Precipitation              amenities:Gas_Costs  
-    ##                      -7.377e-02                        3.762e+02  
-    ##     amenities:Electricity_Costs           amenities:cluster_rent  
-    ##                       1.090e+02                       -6.376e-02  
-    ##           cd_total_07:Gas_Costs    cd_total_07:Electricity_Costs  
-    ##                       5.309e-01                        1.524e-01  
-    ##        hd_total07:Precipitation             hd_total07:Gas_Costs  
-    ##                      -4.818e-05                        3.742e-01  
-    ##    hd_total07:Electricity_Costs          Precipitation:Gas_Costs  
-    ##                       1.150e-01                       -2.305e+01  
-    ## Precipitation:Electricity_Costs   Electricity_Costs:cluster_rent  
-    ##                      -5.407e+00                        7.812e+00
+    ## ===========================================================
+    ##                                     Dependent variable:    
+    ##                                 ---------------------------
+    ##                                            Rent            
+    ## -----------------------------------------------------------
+    ## size                                  -0.003 (0.007)       
+    ## empl_gr                              -1.409** (0.571)      
+    ## leasing_rate                         -0.112** (0.051)      
+    ## stories                              -0.252** (0.120)      
+    ## age                                  0.124*** (0.023)      
+    ## renovated                            -8.201*** (2.130)     
+    ## class_a                              26.769*** (3.914)     
+    ## class_b                              23.912*** (3.657)     
+    ## green_rating                           1.276 (0.918)       
+    ## net                                   -1.210 (1.804)       
+    ## amenities                            -3.703** (1.681)      
+    ## cd_total_07                          -0.011*** (0.003)     
+    ## hd_total07                           -0.005** (0.002)      
+    ## Precipitation                        0.733*** (0.200)      
+    ## Gas_Costs                         -2,335.441 (1,459.125)   
+    ## Electricity_Costs                   -305.448 (198.790)     
+    ## cluster_rent                         0.638*** (0.087)      
+    ## size:leasing_rate                   0.0001*** (0.0000)     
+    ## size:stories                         -0.0000* (0.0000)     
+    ## size:age                            -0.0001*** (0.0000)    
+    ## size:renovated                       0.007*** (0.001)      
+    ## size:class_a                         -0.021*** (0.005)     
+    ## size:class_b                         -0.017*** (0.005)     
+    ## size:cd_total_07                    -0.0000*** (0.0000)    
+    ## size:hd_total07                      0.0000** (0.0000)     
+    ## size:Electricity_Costs               0.496*** (0.152)      
+    ## size:cluster_rent                    0.001*** (0.0001)     
+    ## empl_gr:age                            0.001 (0.001)       
+    ## empl_gr:class_b                      -0.086*** (0.033)     
+    ## empl_gr:Gas_Costs                   128.739*** (48.062)    
+    ## leasing_rate:cd_total_07             0.0000** (0.0000)     
+    ## leasing_rate:hd_total07              0.0000* (0.0000)      
+    ## leasing_rate:Precipitation           0.002*** (0.001)      
+    ## leasing_rate:Gas_Costs              -10.734*** (4.138)     
+    ## leasing_rate:Electricity_Costs        2.846** (1.280)      
+    ## leasing_rate:cluster_rent             0.002** (0.001)      
+    ## stories:age                          0.004*** (0.001)      
+    ## stories:renovated                    -0.215*** (0.036)     
+    ## stories:class_a                      0.411*** (0.090)      
+    ## stories:class_b                      0.380*** (0.082)      
+    ## stories:amenities                    0.092*** (0.026)      
+    ## stories:cd_total_07                 0.0001*** (0.0000)     
+    ## stories:Precipitation                -0.003** (0.001)      
+    ## stories:Electricity_Costs            -5.517** (2.689)      
+    ## stories:cluster_rent                 -0.005** (0.002)      
+    ## age:class_a                          -0.039** (0.017)      
+    ## age:class_b                          -0.049*** (0.012)     
+    ## age:green_rating                      0.040* (0.023)       
+    ## age:cd_total_07                     -0.0000*** (0.0000)    
+    ## age:hd_total07                      -0.0000*** (0.0000)    
+    ## age:cluster_rent                    -0.003*** (0.0005)     
+    ## renovated:cd_total_07                0.001*** (0.0003)     
+    ## renovated:hd_total07                 0.001*** (0.0002)     
+    ## renovated:Precipitation              0.086*** (0.033)      
+    ## renovated:Gas_Costs                -434.347** (178.191)    
+    ## renovated:Electricity_Costs         183.731*** (55.852)    
+    ## renovated:cluster_rent                0.067** (0.031)      
+    ## class_a:amenities                     -1.017* (0.571)      
+    ## class_a:cd_total_07                  -0.002*** (0.001)     
+    ## class_a:hd_total07                  -0.002*** (0.0004)     
+    ## class_a:Precipitation                -0.281*** (0.054)     
+    ## class_a:Gas_Costs                 1,412.093*** (299.902)   
+    ## class_a:Electricity_Costs          -645.902*** (80.989)    
+    ## class_b:cd_total_07                 -0.001*** (0.0005)     
+    ## class_b:hd_total07                  -0.001*** (0.0003)     
+    ## class_b:Precipitation                -0.267*** (0.049)     
+    ## class_b:Gas_Costs                  990.606*** (298.506)    
+    ## class_b:Electricity_Costs          -539.698*** (72.489)    
+    ## green_rating:amenities               -2.097** (0.837)      
+    ## net:cd_total_07                       0.001* (0.0004)      
+    ## net:cluster_rent                      -0.084 (0.055)       
+    ## amenities:Precipitation              -0.074** (0.033)      
+    ## amenities:Gas_Costs                 376.176** (172.712)    
+    ## amenities:Electricity_Costs         109.023*** (40.951)    
+    ## amenities:cluster_rent               -0.064** (0.029)      
+    ## cd_total_07:Gas_Costs                 0.531** (0.225)      
+    ## cd_total_07:Electricity_Costs        0.152*** (0.031)      
+    ## hd_total07:Precipitation            -0.0000*** (0.0000)    
+    ## hd_total07:Gas_Costs                  0.374** (0.170)      
+    ## hd_total07:Electricity_Costs         0.115*** (0.025)      
+    ## Precipitation:Gas_Costs              -23.045 (15.536)      
+    ## Precipitation:Electricity_Costs       -5.407 (3.406)       
+    ## Electricity_Costs:cluster_rent       7.812*** (2.045)      
+    ## Constant                              22.997 (17.403)      
+    ## -----------------------------------------------------------
+    ## Observations                               7,820           
+    ## Adjusted R2                                0.648           
+    ## ===========================================================
+    ## Note:                           *p<0.1; **p<0.05; ***p<0.01
 
 Finally, we did K-fold cross validation to check RMSE when K is 10. We
 built a train-test split and repeated the step from 1 to K repetitions
@@ -217,162 +198,228 @@ intercept.The result below shows the coefficients of grb\_beta, the
 minimum lambda in log scale, and the total number of variables including
 an intercept.
 
-    ## 154 x 1 sparse Matrix of class "dgCMatrix"
-    ##                                        seg100
-    ## intercept                        2.578000e+00
-    ## size                             .           
-    ## empl_gr                          .           
-    ## leasing_rate                     .           
-    ## stories                          .           
-    ## age                              .           
-    ## renovated                        .           
-    ## class_a                          .           
-    ## class_b                          .           
-    ## green_rating                     .           
-    ## net                              .           
-    ## amenities                        .           
-    ## cd_total_07                      .           
-    ## hd_total07                       .           
-    ## Precipitation                    .           
-    ## Gas_Costs                        .           
-    ## Electricity_Costs                .           
-    ## cluster_rent                     7.225084e-01
-    ## size:empl_gr                     .           
-    ## size:leasing_rate                .           
-    ## size:stories                    -2.075314e-05
-    ## size:age                        -1.585017e-05
-    ## size:renovated                   .           
-    ## size:class_a                     .           
-    ## size:class_b                     .           
-    ## size:green_rating                .           
-    ## size:net                         .           
-    ## size:amenities                   .           
-    ## size:cd_total_07                -1.517679e-06
-    ## size:hd_total07                 -1.205905e-07
-    ## size:Precipitation              -3.081512e-05
-    ## size:Gas_Costs                   .           
-    ## size:Electricity_Costs           .           
-    ## size:cluster_rent                4.312108e-04
-    ## empl_gr:leasing_rate             .           
-    ## empl_gr:stories                  .           
-    ## empl_gr:age                      .           
-    ## empl_gr:renovated                .           
-    ## empl_gr:class_a                  5.224541e-02
-    ## empl_gr:class_b                  .           
-    ## empl_gr:green_rating             .           
-    ## empl_gr:net                      .           
-    ## empl_gr:amenities                .           
-    ## empl_gr:cd_total_07              .           
-    ## empl_gr:hd_total07               .           
-    ## empl_gr:Precipitation            .           
-    ## empl_gr:Gas_Costs                .           
-    ## empl_gr:Electricity_Costs        .           
-    ## empl_gr:cluster_rent             .           
-    ## leasing_rate:stories             .           
-    ## leasing_rate:age                -5.843784e-05
-    ## leasing_rate:renovated           .           
-    ## leasing_rate:class_a             .           
-    ## leasing_rate:class_b             .           
-    ## leasing_rate:green_rating        .           
-    ## leasing_rate:net                 .           
-    ## leasing_rate:amenities           .           
-    ## leasing_rate:cd_total_07         .           
-    ## leasing_rate:hd_total07          .           
-    ## leasing_rate:Precipitation       .           
-    ## leasing_rate:Gas_Costs           .           
-    ## leasing_rate:Electricity_Costs   .           
-    ## leasing_rate:cluster_rent        6.947976e-04
-    ## stories:age                      .           
-    ## stories:renovated               -8.078208e-03
-    ## stories:class_a                  .           
-    ## stories:class_b                  1.550392e-02
-    ## stories:green_rating             .           
-    ## stories:net                      .           
-    ## stories:amenities                .           
-    ## stories:cd_total_07              .           
-    ## stories:hd_total07               .           
-    ## stories:Precipitation           -2.635501e-04
-    ## stories:Gas_Costs               -1.875013e-01
-    ## stories:Electricity_Costs        .           
-    ## stories:cluster_rent             .           
-    ## age:renovated                    .           
-    ## age:class_a                      .           
-    ## age:class_b                      .           
-    ## age:green_rating                 1.015769e-02
-    ## age:net                          .           
-    ## age:amenities                    .           
-    ## age:cd_total_07                 -5.016511e-06
-    ## age:hd_total07                   .           
-    ## age:Precipitation                .           
-    ## age:Gas_Costs                   -4.513846e-01
-    ## age:Electricity_Costs            .           
-    ## age:cluster_rent                 .           
-    ## renovated:class_a                .           
-    ## renovated:class_b                .           
-    ## renovated:green_rating           .           
-    ## renovated:net                    .           
-    ## renovated:amenities              .           
-    ## renovated:cd_total_07            .           
-    ## renovated:hd_total07             .           
-    ## renovated:Precipitation          .           
-    ## renovated:Gas_Costs              .           
-    ## renovated:Electricity_Costs      .           
-    ## renovated:cluster_rent           .           
-    ## class_a:class_b                  .           
-    ## class_a:green_rating             .           
-    ## class_a:net                      .           
-    ## class_a:amenities                .           
-    ## class_a:cd_total_07              .           
-    ## class_a:hd_total07               .           
-    ## class_a:Precipitation            .           
-    ## class_a:Gas_Costs                .           
-    ## class_a:Electricity_Costs        .           
-    ## class_a:cluster_rent             4.119923e-02
-    ## class_b:green_rating             1.790789e-01
-    ## class_b:net                      .           
-    ## class_b:amenities                1.839059e-01
-    ## class_b:cd_total_07              .           
-    ## class_b:hd_total07               .           
-    ## class_b:Precipitation            .           
-    ## class_b:Gas_Costs                .           
-    ## class_b:Electricity_Costs        .           
-    ## class_b:cluster_rent             .           
-    ## green_rating:net                 .           
-    ## green_rating:amenities           .           
-    ## green_rating:cd_total_07         .           
-    ## green_rating:hd_total07          .           
-    ## green_rating:Precipitation       .           
-    ## green_rating:Gas_Costs           .           
-    ## green_rating:Electricity_Costs   .           
-    ## green_rating:cluster_rent        7.906354e-03
-    ## net:amenities                    .           
-    ## net:cd_total_07                  .           
-    ## net:hd_total07                   .           
-    ## net:Precipitation                .           
-    ## net:Gas_Costs                    .           
-    ## net:Electricity_Costs            .           
-    ## net:cluster_rent                -5.460240e-02
-    ## amenities:cd_total_07            .           
-    ## amenities:hd_total07             .           
-    ## amenities:Precipitation          .           
-    ## amenities:Gas_Costs              .           
-    ## amenities:Electricity_Costs      1.568256e+01
-    ## amenities:cluster_rent           .           
-    ## cd_total_07:hd_total07           .           
-    ## cd_total_07:Precipitation        .           
-    ## cd_total_07:Gas_Costs            .           
-    ## cd_total_07:Electricity_Costs    .           
-    ## cd_total_07:cluster_rent         .           
-    ## hd_total07:Precipitation         .           
-    ## hd_total07:Gas_Costs             .           
-    ## hd_total07:Electricity_Costs     5.316644e-03
-    ## hd_total07:cluster_rent          .           
-    ## Precipitation:Gas_Costs          .           
-    ## Precipitation:Electricity_Costs  .           
-    ## Precipitation:cluster_rent       .           
-    ## Gas_Costs:Electricity_Costs      .           
-    ## Gas_Costs:cluster_rent           .           
-    ## Electricity_Costs:cluster_rent   2.473365e+00
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+Coefficient
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+intercept
+</td>
+<td style="text-align:right;">
+2.5779998
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+cluster\_rent
+</td>
+<td style="text-align:right;">
+0.7225084
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:stories
+</td>
+<td style="text-align:right;">
+-0.0000208
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:age
+</td>
+<td style="text-align:right;">
+-0.0000159
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:cd\_total\_07
+</td>
+<td style="text-align:right;">
+-0.0000015
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:hd\_total07
+</td>
+<td style="text-align:right;">
+-0.0000001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:Precipitation
+</td>
+<td style="text-align:right;">
+-0.0000308
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+size:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0004312
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+empl\_gr:class\_a
+</td>
+<td style="text-align:right;">
+0.0522454
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+leasing\_rate:age
+</td>
+<td style="text-align:right;">
+-0.0000584
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+leasing\_rate:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0006948
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:renovated
+</td>
+<td style="text-align:right;">
+-0.0080782
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:class\_b
+</td>
+<td style="text-align:right;">
+0.0155039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:Precipitation
+</td>
+<td style="text-align:right;">
+-0.0002636
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stories:Gas\_Costs
+</td>
+<td style="text-align:right;">
+-0.1875013
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age:green\_rating
+</td>
+<td style="text-align:right;">
+0.0101577
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age:cd\_total\_07
+</td>
+<td style="text-align:right;">
+-0.0000050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age:Gas\_Costs
+</td>
+<td style="text-align:right;">
+-0.4513846
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+class\_a:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0411992
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+class\_b:green\_rating
+</td>
+<td style="text-align:right;">
+0.1790789
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+class\_b:amenities
+</td>
+<td style="text-align:right;">
+0.1839059
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+green\_rating:cluster\_rent
+</td>
+<td style="text-align:right;">
+0.0079064
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+net:cluster\_rent
+</td>
+<td style="text-align:right;">
+-0.0546024
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+amenities:Electricity\_Costs
+</td>
+<td style="text-align:right;">
+15.6825595
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hd\_total07:Electricity\_Costs
+</td>
+<td style="text-align:right;">
+0.0053166
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Electricity\_Costs:cluster\_rent
+</td>
+<td style="text-align:right;">
+2.4733648
+</td>
+</tr>
+</tbody>
+</table>
 
     ##    seg100 
     ## -2.165552
