@@ -352,6 +352,17 @@ The average rent value without green certification holding other features consta
 partial(model4_train, pred.var = 'green_rating', n.trees=100)
 29.07784-28.50924
 ```
+## Exercise 3.2
+
+Test table 1
+
+<center><src="https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table1.png"></center>
+
+Test table 2
+
+<center><src="https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table2.png"></center>
+
+Test end
 
 ## Exercise 3.4
 ```{r setup4, include=FALSE}

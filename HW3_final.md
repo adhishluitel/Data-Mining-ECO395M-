@@ -590,6 +590,21 @@ building fixed.
 
     ## [1] 0.5686
 
+Exercise 3.2
+------------
+
+Test table 1
+
+<center>
+&lt;src="<https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table1.png>"&gt;
+</center>
+Test table 2
+
+<center>
+&lt;src="<https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table2.png>"&gt;
+</center>
+Test end
+
 Exercise 3.4
 ------------
 
