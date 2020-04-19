@@ -593,13 +593,97 @@ building fixed.
 Exercise 3.2
 ------------
 
-blablalb
+### Why can’t I just get data from a few different cities and run the regression of "Crime" on "Police" to understand how more cops in the streets affect crime?
+
+A researcher can easily think about a model that treats "Police"
+variables as regressors when explaining changes in crime, and another
+model, with a different research agenda, that includes "Crime" variables
+as regressors when explaining changes in police force. This fact
+suggests that crime and police might be jointly determined, what creates
+an endogeneity problem and brings difficulties when trying to
+disentangle the causal mechanism from the correlation between police
+force and crime, possibly misleading to wrong conclusions.
+
+Therefore, if we collect data from different cities and run a regression
+of "Crime" on "Police", the coefficient associated with the police force
+might be biased. If more police officers are hired in response to an
+increase in crime, a positive correlation can emerge even if this
+increase in police force end up reducing crime after all. Also, cities
+that have a high level of criminality are likely to have large police
+forces, while cities that have a low level of criminality are likely to
+have a small police force. Detroit, for instance, has twice as many
+police officers per capita as Omaha, and a violent crime rate over four
+times as high, but it would be a mistake to attribute the differences in
+crime rates to the presence of the police. (Levitt, 1995)
+
+### How were the researchers from UPenn able to isolate this effect?
+
+In order to isolate the causal effect, the researchers explored how an
+exogenous change in police force affected crimes in the District of
+Columbia. They argue that, in the presence of a high terrorism alert,
+there is an increase in police force that is not caused by local crimes.
+So, given the fact that (i) terrorism risk is correlated with police
+force (instrument relevance: *C**o**v*(*z*, *x*)≠0) and (ii) terrorism
+risk only affects local crime indirectly thru the police force
+(instrument exogeneity: *C**o**v*(*z*, *u*)=0), the researchers could
+exploit the variation in terrorism alert as an exogenous factor that
+affects crime.
 
 ![](https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table1.png)
-Test table 1
+
+Column 1 shows that the presence of a high alert is associated with a
+decrease of 7.3 crimes per day, holding all else fixed. Column 2 shows
+that, when controlling by the presence of tourists (using log of Metro
+ridership at midday), the presence of a high alert is associated with a
+decrease of 6.2 crimes per day, holding all else fixed. Both
+coefficients are statistically significant at the 5% level.
+
+### Why did they have to control for Metro ridership? What was that trying to capture?
+
+The researchers controlled for Metro ridership because there is a
+reasonable possibility that a decrease in crime as a response to the
+presence of a high terrorism alert might be happening indirectly thru
+alternative factors, such as a reduction in tourism. In that sense,
+midday Metro ridership is a good proxy for tourism, and this hypothesis
+implies that having fewer potential victims on the streets would lead to
+fewer committed crimes.
+
+When controlling for midday Metro ridership, the magnitude of the
+coefficient associated with a high alert slightly decrease, but remained
+in the confidence interval (−7.316 ± 2.877 × 1.96). Column 2 shows that
+a 10% increase in Metro ridership is associated with an increase of 1.7
+crimes per day, holding all else fixed.
+
+This procedure is important because, when trying to measure the causal
+effect of an intervention, we are implicitly assuming that all the other
+variables that affect the outcome, observed and unobserved, are not
+changing. Comparative statics methodological concept describes the
+effect of an explanatory variable on the response variable when holding
+all else fixed. (Cunningham, 2020) So, if something else is changing, we
+need to control for that change.
+
+### Below I am showing you "Table 4" from the researchers' paper. Just focus on the first column of the table. Can you describe the model being estimated here? What is the conclusion?
 
 ![](https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table2.png)
-Test table 2
+
+The researchers also analyzed the geographical patterns of crime in
+Washington, D.C. Given the fact that most of the potential targets of
+terrorist attacks, such as the White House and the Congress, are located
+in the National Mall area, one could argue that, in the presence of a
+terror alert, the police department would divert resources from other
+districts and concentrate them in District 1. If this hypothesis was
+right, we would expect a decrease in crime in District 1, but an
+increase in crime in the other districts. So, the researchers included
+an interaction *H**i**g**h**A**l**e**r**t* × *D**i**s**t**r**i**c**t*1
+to allow for district fixed effects.
+
+Column 1 shows that, holding all else fixed, crime in District 1
+decreases by 2.62 crimes per day, while in the other districts the
+effect is not statistically significant (but also not positive). This
+result provide evidence that an important part of the decrease in crime
+associated with the presence of a high terror alert is driven by the
+decrease in crime in the National Mall area, where the increment of
+police force tends to be placed.
 
 Exercise 3.4
 ------------
