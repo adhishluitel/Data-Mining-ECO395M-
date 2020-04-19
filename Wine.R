@@ -16,24 +16,45 @@ head(wine)
 z = wine[,1:11]
 z = scale(z, center=TRUE, scale=TRUE)
 z_std = scale(z)
-z_std = z
 mu = attr(z_std,"scaled:center")
 sigma = attr(z_std,"scaled:scale")
 res <- cor(z_std)
+corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
+#corrplot(res, method = "color", tl.cex = 0.5, tl.col="black") - full corrplot, it was symmetric so I removed it
 
 
 # distribution plot
-xy = subset(wine,select = c("fixed.acidity","chlorides","volatile.acidity","sulphates")) 
+#xy = subset(wine,select = c("fixed.acidity","total.sulfur.dioxide","alcohol","sulphates")) 
 #picked these four variables randomly
-ggpairs(xy,aes(col = wine$color, alpha = 0.7))
+#ggpairs(xy,aes(col = wine$color, alpha = 0.7))
 
 
 #Clustering
 #Start with K means 2 as we have two basic categories (Red/White) and 25 starts
 cluster1 = kmeans(z_std, 2, nstart=25) 
 
-#Comparing fixed acidity with chlorides 
-qplot(fixed.acidity, chlorides, data=wine, color=factor(cluster1$cluster))
+#Picking variables
+sort(cluster1$centers[1,], decreasing=TRUE)
+
+#Comparing 
+Cluster = factor(cluster1$cluster)
+#total.sulfur.dioxide, free.sulfur.dioxide and residual.sugar have the highest coefficients
+
+subset(wine, select = c("fixed.acidity","total.sulfur.dioxide","alcohol","sulphates")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+##Alt
+subset(wine, select = c("volatile.acidity","chlorides","sulphates")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+##Alt2
+subset(wine, select = c("total.sulfur.dioxide","free.sulfur.dioxide","residual.sugar")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+###
 
 wine$cluster = cluster1$cluster
 wine = wine %>%
@@ -46,7 +67,7 @@ print(table1)
 
 # Using kmeans++ clustering
 cluster_kpp = kmeanspp(z_std, k=2, nstart=25)
-qplot(fixed.acidity, chlorides, data=wine, color=factor(cluster_kpp$cluster))
+qplot(fixed.acidity, chlorides, data=wine, color=factor(cluster_kpp$cluster))#remove
 
 wine$cluster_kpp = cluster_kpp$cluster
 wine = wine %>%
@@ -98,6 +119,14 @@ table_wine = wine %>%
             quality_7 = sum(quality == 7),
             quality_8 = sum(quality == 8),
             quality_9 = sum(quality == 9))
+
+
+Clusterq = factor(cluster2$cluster)
+
+subset(wine, select = c("fixed.acidity","total.sulfur.dioxide","alcohol","sulphates")) %>%
+  ggpairs(legend = 1, aes(color=Clusterq, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 
 #Confusion martix
 table4 = xtabs(~cluster2$cluster + wine$quality)
