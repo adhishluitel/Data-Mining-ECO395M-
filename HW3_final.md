@@ -593,17 +593,13 @@ building fixed.
 Exercise 3.2
 ------------
 
+blablalb
+
+![](https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table1.png)
 Test table 1
 
-<center>
-&lt;src="<https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table1.png>"&gt;
-</center>
+![](https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table2.png)
 Test table 2
-
-<center>
-&lt;src="<https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table2.png>"&gt;
-</center>
-Test end
 
 Exercise 3.4
 ------------
