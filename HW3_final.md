@@ -1,5 +1,4 @@
-ECO 395M: Exercise 3
-====================
+\#ECO 395M: Exercise 3
 
 Bernardo Arreal Magalhaes - UTEID ba25727
 
@@ -14,24 +13,24 @@ In this exercise, we analyzed a dataset on green buildings to build the
 best predictive pricing model. We started with cleaning the data. First
 we detected all the null values that were missing and deleted them. As
 we are running a lasso regression, in order to comply with the limits of
-computation, we scaled down 'size' variable from 'square footage' to
-'(square footage)/1000'.
+computation, we scaled down ‘size’ variable from ‘square footage’ to
+‘(square footage)/1000’.
 
 Next, we built a base model and used step-wise selection. From the
 insights we gathered while cleaning up the data, we decided to delete
-the variable 'CS\_PropertyID' as it was just a unique identity number
+the variable ‘CS\_PropertyID’ as it was just a unique identity number
 and contributed nothing to our model. We also deleted another variable
-'total\_dd\_07' due to the nature of its collinearity with the variables
-'cd\_total\_07' and 'hd\_total07'(total\_dd\_07 = cd\_total\_07 +
-hd\_total07). Lastly, we also deleted the variable 'cluster' from our
+‘total\_dd\_07’ due to the nature of its collinearity with the variables
+‘cd\_total\_07’ and ‘hd\_total07’(total\_dd\_07 = cd\_total\_07 +
+hd\_total07). Lastly, we also deleted the variable ‘cluster’ from our
 model because it was recognized as a numerical variable though it was a
 categorical one. And in order to reflect the effect of cluster on rent,
 we already have cluster.rent variable which shows the average rent by
 clusters.
 
 Finally, in order to check if a building is a green building, we used
-only 'green\_rating' as our dummy variable and didn't consider 'LEED'
-and 'EnergyStar' separately.
+only ‘green\_rating’ as our dummy variable and didn’t consider ‘LEED’
+and ‘EnergyStar’ separately.
 
 To find the best predictive model possible for price, we built 5
 different models and compared their performances. At the same time, we
@@ -48,7 +47,7 @@ additions to it including every interaction. ii) Backward selection
 model starts with the full model that has all the variables including
 all of interactions, then improves its performance by deleting each
 variable. iii) Stepwise selection model starts with our base model
-'lm(Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster)' and
+‘lm(Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster)’ and
 we considered all possible one-variable addtions or deletions including
 interactions.
 
@@ -58,108 +57,127 @@ selection model gives us the minimum AIC of 34372.28 with 84 variables,
 but it took very long time to compute all these procedures. In terms of
 AIC, we concluded that the backward selection model showed the best
 performance among three and ran an additional stepwise selection based
-on it to check if we could get any improvements. Since we didn't witness
+on it to check if we could get any improvements. Since we didn’t witness
 a further minimized AIC, we concluded that the backward selection model
 is out best model when we used stepwise selection.
 
-Here's our best predictive stepwise selection model with 84 variables
+Here’s our best predictive stepwise selection model with 84 variables
 obtained by backward selection.
 
     ## 
-    ## ===========================================================
-    ##                                     Dependent variable:    
-    ##                                 ---------------------------
-    ##                                            Rent            
-    ## -----------------------------------------------------------
-    ## size                                  -0.003 (0.007)       
-    ## empl_gr                              -1.409** (0.571)      
-    ## leasing_rate                         -0.112** (0.051)      
-    ## stories                              -0.252** (0.120)      
-    ## age                                  0.124*** (0.023)      
-    ## renovated                            -8.201*** (2.130)     
-    ## class_a                              26.769*** (3.914)     
-    ## class_b                              23.912*** (3.657)     
-    ## green_rating                           1.276 (0.918)       
-    ## net                                   -1.210 (1.804)       
-    ## amenities                            -3.703** (1.681)      
-    ## cd_total_07                          -0.011*** (0.003)     
-    ## hd_total07                           -0.005** (0.002)      
-    ## Precipitation                        0.733*** (0.200)      
-    ## Gas_Costs                         -2,335.441 (1,459.125)   
-    ## Electricity_Costs                   -305.448 (198.790)     
-    ## cluster_rent                         0.638*** (0.087)      
-    ## size:leasing_rate                   0.0001*** (0.0000)     
-    ## size:stories                         -0.0000* (0.0000)     
-    ## size:age                            -0.0001*** (0.0000)    
-    ## size:renovated                       0.007*** (0.001)      
-    ## size:class_a                         -0.021*** (0.005)     
-    ## size:class_b                         -0.017*** (0.005)     
-    ## size:cd_total_07                    -0.0000*** (0.0000)    
-    ## size:hd_total07                      0.0000** (0.0000)     
-    ## size:Electricity_Costs               0.496*** (0.152)      
-    ## size:cluster_rent                    0.001*** (0.0001)     
-    ## empl_gr:age                            0.001 (0.001)       
-    ## empl_gr:class_b                      -0.086*** (0.033)     
-    ## empl_gr:Gas_Costs                   128.739*** (48.062)    
-    ## leasing_rate:cd_total_07             0.0000** (0.0000)     
-    ## leasing_rate:hd_total07              0.0000* (0.0000)      
-    ## leasing_rate:Precipitation           0.002*** (0.001)      
-    ## leasing_rate:Gas_Costs              -10.734*** (4.138)     
-    ## leasing_rate:Electricity_Costs        2.846** (1.280)      
-    ## leasing_rate:cluster_rent             0.002** (0.001)      
-    ## stories:age                          0.004*** (0.001)      
-    ## stories:renovated                    -0.215*** (0.036)     
-    ## stories:class_a                      0.411*** (0.090)      
-    ## stories:class_b                      0.380*** (0.082)      
-    ## stories:amenities                    0.092*** (0.026)      
-    ## stories:cd_total_07                 0.0001*** (0.0000)     
-    ## stories:Precipitation                -0.003** (0.001)      
-    ## stories:Electricity_Costs            -5.517** (2.689)      
-    ## stories:cluster_rent                 -0.005** (0.002)      
-    ## age:class_a                          -0.039** (0.017)      
-    ## age:class_b                          -0.049*** (0.012)     
-    ## age:green_rating                      0.040* (0.023)       
-    ## age:cd_total_07                     -0.0000*** (0.0000)    
-    ## age:hd_total07                      -0.0000*** (0.0000)    
-    ## age:cluster_rent                    -0.003*** (0.0005)     
-    ## renovated:cd_total_07                0.001*** (0.0003)     
-    ## renovated:hd_total07                 0.001*** (0.0002)     
-    ## renovated:Precipitation              0.086*** (0.033)      
-    ## renovated:Gas_Costs                -434.347** (178.191)    
-    ## renovated:Electricity_Costs         183.731*** (55.852)    
-    ## renovated:cluster_rent                0.067** (0.031)      
-    ## class_a:amenities                     -1.017* (0.571)      
-    ## class_a:cd_total_07                  -0.002*** (0.001)     
-    ## class_a:hd_total07                  -0.002*** (0.0004)     
-    ## class_a:Precipitation                -0.281*** (0.054)     
-    ## class_a:Gas_Costs                 1,412.093*** (299.902)   
-    ## class_a:Electricity_Costs          -645.902*** (80.989)    
-    ## class_b:cd_total_07                 -0.001*** (0.0005)     
-    ## class_b:hd_total07                  -0.001*** (0.0003)     
-    ## class_b:Precipitation                -0.267*** (0.049)     
-    ## class_b:Gas_Costs                  990.606*** (298.506)    
-    ## class_b:Electricity_Costs          -539.698*** (72.489)    
-    ## green_rating:amenities               -2.097** (0.837)      
-    ## net:cd_total_07                       0.001* (0.0004)      
-    ## net:cluster_rent                      -0.084 (0.055)       
-    ## amenities:Precipitation              -0.074** (0.033)      
-    ## amenities:Gas_Costs                 376.176** (172.712)    
-    ## amenities:Electricity_Costs         109.023*** (40.951)    
-    ## amenities:cluster_rent               -0.064** (0.029)      
-    ## cd_total_07:Gas_Costs                 0.531** (0.225)      
-    ## cd_total_07:Electricity_Costs        0.152*** (0.031)      
-    ## hd_total07:Precipitation            -0.0000*** (0.0000)    
-    ## hd_total07:Gas_Costs                  0.374** (0.170)      
-    ## hd_total07:Electricity_Costs         0.115*** (0.025)      
-    ## Precipitation:Gas_Costs              -23.045 (15.536)      
-    ## Precipitation:Electricity_Costs       -5.407 (3.406)       
-    ## Electricity_Costs:cluster_rent       7.812*** (2.045)      
-    ## Constant                              22.997 (17.403)      
-    ## -----------------------------------------------------------
-    ## Observations                               7,820           
-    ## Adjusted R2                                0.648           
-    ## ===========================================================
-    ## Note:                           *p<0.1; **p<0.05; ***p<0.01
+    ## Call:
+    ## lm(formula = Rent ~ size + empl_gr + leasing_rate + stories + 
+    ##     age + renovated + class_a + class_b + green_rating + net + 
+    ##     amenities + cd_total_07 + hd_total07 + Precipitation + Gas_Costs + 
+    ##     Electricity_Costs + cluster_rent + size:leasing_rate + size:stories + 
+    ##     size:age + size:renovated + size:class_a + size:class_b + 
+    ##     size:cd_total_07 + size:hd_total07 + size:Electricity_Costs + 
+    ##     size:cluster_rent + empl_gr:age + empl_gr:class_b + empl_gr:Gas_Costs + 
+    ##     leasing_rate:cd_total_07 + leasing_rate:hd_total07 + leasing_rate:Precipitation + 
+    ##     leasing_rate:Gas_Costs + leasing_rate:Electricity_Costs + 
+    ##     leasing_rate:cluster_rent + stories:age + stories:renovated + 
+    ##     stories:class_a + stories:class_b + stories:amenities + stories:cd_total_07 + 
+    ##     stories:Precipitation + stories:Electricity_Costs + stories:cluster_rent + 
+    ##     age:class_a + age:class_b + age:green_rating + age:cd_total_07 + 
+    ##     age:hd_total07 + age:cluster_rent + renovated:cd_total_07 + 
+    ##     renovated:hd_total07 + renovated:Precipitation + renovated:Gas_Costs + 
+    ##     renovated:Electricity_Costs + renovated:cluster_rent + class_a:amenities + 
+    ##     class_a:cd_total_07 + class_a:hd_total07 + class_a:Precipitation + 
+    ##     class_a:Gas_Costs + class_a:Electricity_Costs + class_b:cd_total_07 + 
+    ##     class_b:hd_total07 + class_b:Precipitation + class_b:Gas_Costs + 
+    ##     class_b:Electricity_Costs + green_rating:amenities + net:cd_total_07 + 
+    ##     net:cluster_rent + amenities:Precipitation + amenities:Gas_Costs + 
+    ##     amenities:Electricity_Costs + amenities:cluster_rent + cd_total_07:Gas_Costs + 
+    ##     cd_total_07:Electricity_Costs + hd_total07:Precipitation + 
+    ##     hd_total07:Gas_Costs + hd_total07:Electricity_Costs + Precipitation:Gas_Costs + 
+    ##     Precipitation:Electricity_Costs + Electricity_Costs:cluster_rent, 
+    ##     data = grb)
+    ## 
+    ## Coefficients:
+    ##                     (Intercept)                             size  
+    ##                       2.300e+01                       -3.451e-03  
+    ##                         empl_gr                     leasing_rate  
+    ##                      -1.409e+00                       -1.121e-01  
+    ##                         stories                              age  
+    ##                      -2.524e-01                        1.239e-01  
+    ##                       renovated                          class_a  
+    ##                      -8.201e+00                        2.677e+01  
+    ##                         class_b                     green_rating  
+    ##                       2.391e+01                        1.276e+00  
+    ##                             net                        amenities  
+    ##                      -1.210e+00                       -3.703e+00  
+    ##                     cd_total_07                       hd_total07  
+    ##                      -1.059e-02                       -4.924e-03  
+    ##                   Precipitation                        Gas_Costs  
+    ##                       7.332e-01                       -2.335e+03  
+    ##               Electricity_Costs                     cluster_rent  
+    ##                      -3.054e+02                        6.379e-01  
+    ##               size:leasing_rate                     size:stories  
+    ##                       8.265e-05                       -4.232e-05  
+    ##                        size:age                   size:renovated  
+    ##                      -1.410e-04                        7.104e-03  
+    ##                    size:class_a                     size:class_b  
+    ##                      -2.102e-02                       -1.657e-02  
+    ##                size:cd_total_07                  size:hd_total07  
+    ##                      -4.260e-06                        7.412e-07  
+    ##          size:Electricity_Costs                size:cluster_rent  
+    ##                       4.962e-01                        5.182e-04  
+    ##                     empl_gr:age                  empl_gr:class_b  
+    ##                       1.171e-03                       -8.590e-02  
+    ##               empl_gr:Gas_Costs         leasing_rate:cd_total_07  
+    ##                       1.287e+02                        1.569e-05  
+    ##         leasing_rate:hd_total07       leasing_rate:Precipitation  
+    ##                       8.867e-06                        1.947e-03  
+    ##          leasing_rate:Gas_Costs   leasing_rate:Electricity_Costs  
+    ##                      -1.073e+01                        2.846e+00  
+    ##       leasing_rate:cluster_rent                      stories:age  
+    ##                       1.609e-03                        3.871e-03  
+    ##               stories:renovated                  stories:class_a  
+    ##                      -2.148e-01                        4.110e-01  
+    ##                 stories:class_b                stories:amenities  
+    ##                       3.798e-01                        9.247e-02  
+    ##             stories:cd_total_07            stories:Precipitation  
+    ##                       6.973e-05                       -2.530e-03  
+    ##       stories:Electricity_Costs             stories:cluster_rent  
+    ##                      -5.517e+00                       -4.516e-03  
+    ##                     age:class_a                      age:class_b  
+    ##                      -3.931e-02                       -4.925e-02  
+    ##                age:green_rating                  age:cd_total_07  
+    ##                       4.046e-02                       -1.796e-05  
+    ##                  age:hd_total07                 age:cluster_rent  
+    ##                      -8.790e-06                       -2.820e-03  
+    ##           renovated:cd_total_07             renovated:hd_total07  
+    ##                       1.011e-03                        8.541e-04  
+    ##         renovated:Precipitation              renovated:Gas_Costs  
+    ##                       8.598e-02                       -4.343e+02  
+    ##     renovated:Electricity_Costs           renovated:cluster_rent  
+    ##                       1.837e+02                        6.662e-02  
+    ##               class_a:amenities              class_a:cd_total_07  
+    ##                      -1.017e+00                       -2.033e-03  
+    ##              class_a:hd_total07            class_a:Precipitation  
+    ##                      -1.985e-03                       -2.806e-01  
+    ##               class_a:Gas_Costs        class_a:Electricity_Costs  
+    ##                       1.412e+03                       -6.459e+02  
+    ##             class_b:cd_total_07               class_b:hd_total07  
+    ##                      -1.473e-03                       -1.492e-03  
+    ##           class_b:Precipitation                class_b:Gas_Costs  
+    ##                      -2.675e-01                        9.906e+02  
+    ##       class_b:Electricity_Costs           green_rating:amenities  
+    ##                      -5.397e+02                       -2.097e+00  
+    ##                 net:cd_total_07                 net:cluster_rent  
+    ##                       8.602e-04                       -8.390e-02  
+    ##         amenities:Precipitation              amenities:Gas_Costs  
+    ##                      -7.377e-02                        3.762e+02  
+    ##     amenities:Electricity_Costs           amenities:cluster_rent  
+    ##                       1.090e+02                       -6.376e-02  
+    ##           cd_total_07:Gas_Costs    cd_total_07:Electricity_Costs  
+    ##                       5.309e-01                        1.524e-01  
+    ##        hd_total07:Precipitation             hd_total07:Gas_Costs  
+    ##                      -4.818e-05                        3.742e-01  
+    ##    hd_total07:Electricity_Costs          Precipitation:Gas_Costs  
+    ##                       1.150e-01                       -2.305e+01  
+    ## Precipitation:Electricity_Costs   Electricity_Costs:cluster_rent  
+    ##                      -5.407e+00                        7.812e+00
 
 Finally, we did K-fold cross validation to check RMSE when K is 10. We
 built a train-test split and repeated the step from 1 to K repetitions
@@ -199,228 +217,163 @@ intercept.The result below shows the coefficients of grb\_beta, the
 minimum lambda in log scale, and the total number of variables including
 an intercept.
 
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Variable
-</th>
-<th style="text-align:right;">
-Coefficient
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-intercept
-</td>
-<td style="text-align:right;">
-2.5779998
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-cluster\_rent
-</td>
-<td style="text-align:right;">
-0.7225084
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-size:stories
-</td>
-<td style="text-align:right;">
--0.0000208
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-size:age
-</td>
-<td style="text-align:right;">
--0.0000159
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-size:cd\_total\_07
-</td>
-<td style="text-align:right;">
--0.0000015
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-size:hd\_total07
-</td>
-<td style="text-align:right;">
--0.0000001
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-size:Precipitation
-</td>
-<td style="text-align:right;">
--0.0000308
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-size:cluster\_rent
-</td>
-<td style="text-align:right;">
-0.0004312
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-empl\_gr:class\_a
-</td>
-<td style="text-align:right;">
-0.0522454
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-leasing\_rate:age
-</td>
-<td style="text-align:right;">
--0.0000584
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-leasing\_rate:cluster\_rent
-</td>
-<td style="text-align:right;">
-0.0006948
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stories:renovated
-</td>
-<td style="text-align:right;">
--0.0080782
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stories:class\_b
-</td>
-<td style="text-align:right;">
-0.0155039
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stories:Precipitation
-</td>
-<td style="text-align:right;">
--0.0002636
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-stories:Gas\_Costs
-</td>
-<td style="text-align:right;">
--0.1875013
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-age:green\_rating
-</td>
-<td style="text-align:right;">
-0.0101577
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-age:cd\_total\_07
-</td>
-<td style="text-align:right;">
--0.0000050
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-age:Gas\_Costs
-</td>
-<td style="text-align:right;">
--0.4513846
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-class\_a:cluster\_rent
-</td>
-<td style="text-align:right;">
-0.0411992
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-class\_b:green\_rating
-</td>
-<td style="text-align:right;">
-0.1790789
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-class\_b:amenities
-</td>
-<td style="text-align:right;">
-0.1839059
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-green\_rating:cluster\_rent
-</td>
-<td style="text-align:right;">
-0.0079064
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-net:cluster\_rent
-</td>
-<td style="text-align:right;">
--0.0546024
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-amenities:Electricity\_Costs
-</td>
-<td style="text-align:right;">
-15.6825595
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-hd\_total07:Electricity\_Costs
-</td>
-<td style="text-align:right;">
-0.0053166
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Electricity\_Costs:cluster\_rent
-</td>
-<td style="text-align:right;">
-2.4733648
-</td>
-</tr>
-</tbody>
-</table>
+    ## 154 x 1 sparse Matrix of class "dgCMatrix"
+    ##                                        seg100
+    ## intercept                        2.578000e+00
+    ## size                             .           
+    ## empl_gr                          .           
+    ## leasing_rate                     .           
+    ## stories                          .           
+    ## age                              .           
+    ## renovated                        .           
+    ## class_a                          .           
+    ## class_b                          .           
+    ## green_rating                     .           
+    ## net                              .           
+    ## amenities                        .           
+    ## cd_total_07                      .           
+    ## hd_total07                       .           
+    ## Precipitation                    .           
+    ## Gas_Costs                        .           
+    ## Electricity_Costs                .           
+    ## cluster_rent                     7.225084e-01
+    ## size:empl_gr                     .           
+    ## size:leasing_rate                .           
+    ## size:stories                    -2.075314e-05
+    ## size:age                        -1.585017e-05
+    ## size:renovated                   .           
+    ## size:class_a                     .           
+    ## size:class_b                     .           
+    ## size:green_rating                .           
+    ## size:net                         .           
+    ## size:amenities                   .           
+    ## size:cd_total_07                -1.517679e-06
+    ## size:hd_total07                 -1.205905e-07
+    ## size:Precipitation              -3.081512e-05
+    ## size:Gas_Costs                   .           
+    ## size:Electricity_Costs           .           
+    ## size:cluster_rent                4.312108e-04
+    ## empl_gr:leasing_rate             .           
+    ## empl_gr:stories                  .           
+    ## empl_gr:age                      .           
+    ## empl_gr:renovated                .           
+    ## empl_gr:class_a                  5.224541e-02
+    ## empl_gr:class_b                  .           
+    ## empl_gr:green_rating             .           
+    ## empl_gr:net                      .           
+    ## empl_gr:amenities                .           
+    ## empl_gr:cd_total_07              .           
+    ## empl_gr:hd_total07               .           
+    ## empl_gr:Precipitation            .           
+    ## empl_gr:Gas_Costs                .           
+    ## empl_gr:Electricity_Costs        .           
+    ## empl_gr:cluster_rent             .           
+    ## leasing_rate:stories             .           
+    ## leasing_rate:age                -5.843784e-05
+    ## leasing_rate:renovated           .           
+    ## leasing_rate:class_a             .           
+    ## leasing_rate:class_b             .           
+    ## leasing_rate:green_rating        .           
+    ## leasing_rate:net                 .           
+    ## leasing_rate:amenities           .           
+    ## leasing_rate:cd_total_07         .           
+    ## leasing_rate:hd_total07          .           
+    ## leasing_rate:Precipitation       .           
+    ## leasing_rate:Gas_Costs           .           
+    ## leasing_rate:Electricity_Costs   .           
+    ## leasing_rate:cluster_rent        6.947976e-04
+    ## stories:age                      .           
+    ## stories:renovated               -8.078208e-03
+    ## stories:class_a                  .           
+    ## stories:class_b                  1.550392e-02
+    ## stories:green_rating             .           
+    ## stories:net                      .           
+    ## stories:amenities                .           
+    ## stories:cd_total_07              .           
+    ## stories:hd_total07               .           
+    ## stories:Precipitation           -2.635501e-04
+    ## stories:Gas_Costs               -1.875013e-01
+    ## stories:Electricity_Costs        .           
+    ## stories:cluster_rent             .           
+    ## age:renovated                    .           
+    ## age:class_a                      .           
+    ## age:class_b                      .           
+    ## age:green_rating                 1.015769e-02
+    ## age:net                          .           
+    ## age:amenities                    .           
+    ## age:cd_total_07                 -5.016511e-06
+    ## age:hd_total07                   .           
+    ## age:Precipitation                .           
+    ## age:Gas_Costs                   -4.513846e-01
+    ## age:Electricity_Costs            .           
+    ## age:cluster_rent                 .           
+    ## renovated:class_a                .           
+    ## renovated:class_b                .           
+    ## renovated:green_rating           .           
+    ## renovated:net                    .           
+    ## renovated:amenities              .           
+    ## renovated:cd_total_07            .           
+    ## renovated:hd_total07             .           
+    ## renovated:Precipitation          .           
+    ## renovated:Gas_Costs              .           
+    ## renovated:Electricity_Costs      .           
+    ## renovated:cluster_rent           .           
+    ## class_a:class_b                  .           
+    ## class_a:green_rating             .           
+    ## class_a:net                      .           
+    ## class_a:amenities                .           
+    ## class_a:cd_total_07              .           
+    ## class_a:hd_total07               .           
+    ## class_a:Precipitation            .           
+    ## class_a:Gas_Costs                .           
+    ## class_a:Electricity_Costs        .           
+    ## class_a:cluster_rent             4.119923e-02
+    ## class_b:green_rating             1.790789e-01
+    ## class_b:net                      .           
+    ## class_b:amenities                1.839059e-01
+    ## class_b:cd_total_07              .           
+    ## class_b:hd_total07               .           
+    ## class_b:Precipitation            .           
+    ## class_b:Gas_Costs                .           
+    ## class_b:Electricity_Costs        .           
+    ## class_b:cluster_rent             .           
+    ## green_rating:net                 .           
+    ## green_rating:amenities           .           
+    ## green_rating:cd_total_07         .           
+    ## green_rating:hd_total07          .           
+    ## green_rating:Precipitation       .           
+    ## green_rating:Gas_Costs           .           
+    ## green_rating:Electricity_Costs   .           
+    ## green_rating:cluster_rent        7.906354e-03
+    ## net:amenities                    .           
+    ## net:cd_total_07                  .           
+    ## net:hd_total07                   .           
+    ## net:Precipitation                .           
+    ## net:Gas_Costs                    .           
+    ## net:Electricity_Costs            .           
+    ## net:cluster_rent                -5.460240e-02
+    ## amenities:cd_total_07            .           
+    ## amenities:hd_total07             .           
+    ## amenities:Precipitation          .           
+    ## amenities:Gas_Costs              .           
+    ## amenities:Electricity_Costs      1.568256e+01
+    ## amenities:cluster_rent           .           
+    ## cd_total_07:hd_total07           .           
+    ## cd_total_07:Precipitation        .           
+    ## cd_total_07:Gas_Costs            .           
+    ## cd_total_07:Electricity_Costs    .           
+    ## cd_total_07:cluster_rent         .           
+    ## hd_total07:Precipitation         .           
+    ## hd_total07:Gas_Costs             .           
+    ## hd_total07:Electricity_Costs     5.316644e-03
+    ## hd_total07:cluster_rent          .           
+    ## Precipitation:Gas_Costs          .           
+    ## Precipitation:Electricity_Costs  .           
+    ## Precipitation:cluster_rent       .           
+    ## Gas_Costs:Electricity_Costs      .           
+    ## Gas_Costs:cluster_rent           .           
+    ## Electricity_Costs:cluster_rent   2.473365e+00
+
     ##    seg100 
     ## -2.165552
 
@@ -446,9 +399,9 @@ than the stepwise selection model.
 To further polish our best prediction model, we tried treebagging our
 best model with K-fold validation to assess its performance. We used our
 base
-model('Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster')
+model(‘Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster’)
 for our tree bagging, and excluded all the interaction variables because
-we didn't need them explicity in tree regressions. The minimum size of
+we didn’t need them explicity in tree regressions. The minimum size of
 terminal nodes is 5 which is default setting. We set the number of trees
 to be 300 times and run the regression. It took more than 7 minutes to
 compute the whole procedure, however, the RMSE for our bagging model was
@@ -467,7 +420,7 @@ trees which we used in our model is large enough to reduce our errors.
 
 In addition, the graph below shows a variable importance plot. The
 bigger the number is ,the greater the reduction on RMSE we get. We can
-see that "cluster\_rent" variable has the most important impact on
+see that “cluster\_rent” variable has the most important impact on
 decideing the rent price in our tree bagging model.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.12-1.png)
@@ -485,7 +438,7 @@ computational time.
 
 Now we fit a random forest model with 100 trees and do K-fold cross
 validation again. The result indicates that the value of RMSE is 6.26
-which is the smallest of all the RMSEs of the models we've seen above.
+which is the smallest of all the RMSEs of the models we’ve seen above.
 And the computational efficiency has been improved by taking less than 1
 minute to compute all these procedures.
 
@@ -505,17 +458,17 @@ minute to compute all these procedures.
     ## [1] 6.264436
 
 The plot below is the variable importance plot. We can see that
-'cluster\_rent' is the most important variable influencing rent price,
+‘cluster\_rent’ is the most important variable influencing rent price,
 which is the same result as we saw in the bagging model. But it reveals
 a slight difference in that the third influential variable is
-'Electricity costs', which is 'age' in bagging.
+‘Electricity costs’, which is ‘age’ in bagging.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.14-1.png)
 
 ### Tree - Boosting
 
 Finally, we fit a boosting model to derive the best predictive model. As
-we've done before, we use our base model to begin with. The result of
+we’ve done before, we use our base model to begin with. The result of
 our K-fold cross validation shows that the RMSE is 8.28 which is
 slightly higher than that of our random forest model. However, it took
 only 15 seconds to compute all these procedures.
@@ -526,9 +479,9 @@ only 15 seconds to compute all these procedures.
     ## [1] 8.280551
 
 Here is the summary of our boosting model which shows the relative
-influences of all variables. It appears to be 'cluster\_rent', 'size',
-'leasing\_rate' are three most influential variables on our dependent
-variable. This result is similar with previous results that we've seen
+influences of all variables. It appears to be ‘cluster\_rent’, ‘size’,
+‘leasing\_rate’ are three most influential variables on our dependent
+variable. This result is similar with previous results that we’ve seen
 above, but the third influential variable is slightly different, too.
 
     summary(model5_train)
@@ -563,7 +516,7 @@ which means the best performance.
 The randomforest model is superior in terms of computational speed. It
 took less than 1 minute to compute all the procedures, which is very
 efficient compared to the stepwise selection and the bagging. The lasso
-regression and the boosting method didn't take much computational time,
+regression and the boosting method didn’t take much computational time,
 but their performances are worse than the random forest model.Therefore,
 we can conclude that the random forest model shows the best performance.
 
@@ -611,11 +564,12 @@ RMSE
 </tr>
 </tbody>
 </table>
+
 ### The Partial Effect of Green Certification on Rent
 
 In order to derive the average change in rental income per square foot
 associated with green certification, holding other features of the
-building constant, we used 'partial' function in 'pdp package'.
+building constant, we used ‘partial’ function in ‘pdp package’.
 
 The average rent value without green certification holding other
 features constant is 28.50924, and the average rent value with green
@@ -637,11 +591,11 @@ building fixed.
 Exercise 3.2
 ------------
 
-### Why can’t I just get data from a few different cities and run the regression of "Crime" on "Police" to understand how more cops in the streets affect crime?
+### Why can’t I just get data from a few different cities and run the regression of “Crime” on “Police” to understand how more cops in the streets affect crime?
 
-A researcher can easily think about a model that treats "Police"
+A researcher can easily think about a model that treats “Police”
 variables as regressors when explaining changes in crime, and another
-model, with a different research agenda, that includes "Crime" variables
+model, with a different research agenda, that includes “Crime” variables
 as regressors when explaining changes in police force. This fact
 suggests that crime and police might be jointly determined, what creates
 an endogeneity problem and brings difficulties when trying to
@@ -649,7 +603,7 @@ disentangle the causal mechanism from the correlation between police
 force and crime, possibly misleading to wrong conclusions.
 
 Therefore, if we collect data from different cities and run a regression
-of "Crime" on "Police", the coefficient associated with the police force
+of “Crime” on “Police”, the coefficient associated with the police force
 might be biased. If more police officers are hired in response to an
 increase in crime, a positive correlation can emerge even if this
 increase in police force end up reducing crime after all. Also, cities
@@ -667,9 +621,9 @@ exogenous change in police force affected crimes in the District of
 Columbia. They argue that, in the presence of a high terrorism alert,
 there is an increase in police force that is not caused by local crimes.
 So, given the fact that (i) terrorism risk is correlated with police
-force (instrument relevance: *C**o**v*(*z*, *x*)≠0) and (ii) terrorism
+force (instrument relevance: *C**o**v*(*z*, *x*) ≠ 0) and (ii) terrorism
 risk only affects local crime indirectly thru the police force
-(instrument exogeneity: *C**o**v*(*z*, *u*)=0), the researchers could
+(instrument exogeneity: *C**o**v*(*z*, *u*) = 0), the researchers could
 exploit the variation in terrorism alert as an exogenous factor that
 affects crime.
 
@@ -694,9 +648,9 @@ fewer committed crimes.
 
 When controlling for midday Metro ridership, the magnitude of the
 coefficient associated with a high alert slightly decrease, but remained
-in the confidence interval (−7.316 ± 2.877 × 1.96). Column 2 shows that
-a 10% increase in Metro ridership is associated with an increase of 1.7
-crimes per day, holding all else fixed.
+in the confidence interval ( − 7.316 ± 2.877 × 1.96). Column 2 shows
+that a 10% increase in Metro ridership is associated with an increase of
+1.7 crimes per day, holding all else fixed.
 
 This procedure is important because, when trying to measure the causal
 effect of an intervention, we are implicitly assuming that all the other
@@ -706,7 +660,7 @@ effect of an explanatory variable on the response variable when holding
 all else fixed. (Cunningham, 2020) So, if something else is changing, we
 need to control for that change.
 
-### Below I am showing you "Table 4" from the researchers' paper. Just focus on the first column of the table. Can you describe the model being estimated here? What is the conclusion?
+### Below I am showing you “Table 4” from the researchers’ paper. Just focus on the first column of the table. Can you describe the model being estimated here? What is the conclusion?
 
 ![](https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table2.png)
 
@@ -732,17 +686,186 @@ police force tends to be placed.
 Exercise 3.4
 ------------
 
-blalblalbal
+In this exercise, we explore the data of followers of the Twitter
+account of ‘NutrientH20’, and come up with some interesting insights
+about the audience by identifying market segments.
 
-blablalbalb
+### Data cleaning
+
+We start with cleaning our data set which is comprised of 7,882
+observations and 36 variables. First, we deleted all the users whose
+tweet fell into ‘spam’ category at least once. It is not likely that
+someone tweets a spam message unless (s)he’s a bot. And we got rid of
+‘spam’ variable out of our data set.  
+Then we also deleted ‘chatter’ and ‘uncategorized’ variables because the
+company can hardly get useful information from these categories.  
+Finally, ‘adult’ category can be interpreted as spam but sometimes it
+can become a hobby, too. Considering that normal people don’t tweet much
+porn in public, we deleted users that have more than 20% of their total
+posts in pornography, regarding them as bots.  
+So we end up with 7,676 observations with 33 variables in our data set.
+
+### K-means++ clustering
+
+We’ll start with performing clustering analysis. Since our data doesn’t
+show any kinds of hierarchy, we’ll focus on K-means analysis. We’ll use
+K-means++ rather than K-means because it’s already known that K-means++
+show a better performance.  
+The first question we encounter when doing K-means++ is “How many
+clusters should we set?”, i.e, “What is our optimal K?”.  
+In order to find its answer, we used three methods - Elbow plot, CH
+index, and Gap statistics.
+
+We scaled our data first, and performed three analysis by using scaled
+data.  
+The first graph shows the elbow plot of our data set. As we can see,
+there’s no distinguished elbow here, so it doesn’t give us clear
+messages about the optimal K.  
+The second one is the CH index. We can see it is the highest when K=1,
+and it decreases gradually. So we cannot get a satisfactory answer for
+our question, either.
 
 ![](HW3_final_files/figure-markdown_strict/3.4.2-1.png)![](HW3_final_files/figure-markdown_strict/3.4.2-2.png)
 
-blablalbalb
+Finally, we can see our gap statistics diagram of our data below.
+However, We cannot find any dips here. Unfortunately, it seems that none
+of these means could help us finding our optimal K.
 
 ![](HW3_final_files/figure-markdown_strict/3.4.3-1.png)
 
-blablalblab
+It is difficult to find the optimal K by using mathematics, so we’ll use
+our intuition instead. We’ll suppose that the company divides market
+segments into three parts - one to focus on, one to maintain, one to
+give up. We’ll see what happens when K=3, if it doesn’t seem to be
+reasonable, we’ll keep going on K=4,5, etc.
+
+We ran a K-means++ with K=3 and nstart=25. When we divided our scaled
+data into 3 clusters, The sizes of each cluster turned out to be 816,
+1997, 4863 respectively, which was pretty unbalanced.
+
+Now, we’ll take a close look at each cluster’s cetroid. The values below
+are the top 5 largest values on each cluster’s centroid. In case of
+cluster 1, we can see that top 5 largest values are bigger than 1.0.
+However, there’s no value that is bigger than 1.0 in cetroid of
+cluster2. And in case of cluster3, all the values are negatives.
+
+    clust1_cent = sort(clust1$centers[1,], decreasing=TRUE)
+    clust1_cent[1:6]
+
+    ##      religion     parenting sports_fandom          food        school 
+    ##      2.150847      2.019904      1.944755      1.752934      1.592943 
+    ##        family 
+    ##      1.418779
+
+    clust2_cent = sort(clust1$centers[2,], decreasing=TRUE)
+    clust2_cent[1:5]
+
+    ##          cooking personal_fitness health_nutrition          fashion 
+    ##        0.7903583        0.6729810        0.6708798        0.6674520 
+    ##         outdoors 
+    ##        0.6268985
+
+    clust3_cent = sort(clust1$centers[3,], decreasing=TRUE)
+    clust3_cent[1:5]
+
+    ##          adult  online_gaming current_events         dating     automotive 
+    ##    -0.08677996    -0.11104628    -0.11194465    -0.13067046    -0.13075336
+
+Therefore, we can say that people in cluster1 are very interested in
+some categories such as religion, parenting, etc. But people in cluster2
+don’t seem to be specially interested in something. Moreover, people in
+cluster3 are not interested in anything.  
+This conclusion doesn’t give us any insights on how ‘NutrientH20’ should
+react to their customers. So K=3 is not a good suggestion for our
+analysis here.
+
+    ##   current_events      travel photo_sharing     tv_film sports_fandom   politics
+    ## 1     0.11086722  1.75668549   -0.06535279  0.04917506     0.1952442  2.3456611
+    ## 2     0.14811854 -0.09269948    0.68421907  0.15468378    -0.1951128 -0.1634062
+    ## 3     0.11190221 -0.10754829   -0.02260353  0.01237458     1.9547341 -0.2092612
+    ## 4    -0.07715259 -0.21316916   -0.18256208 -0.05353630    -0.2959048 -0.2624419
+    ##          food      family home_and_garden       music        news online_gaming
+    ## 1  0.02658693  0.05777898       0.1240354 -0.04497001  1.94258878   -0.03860691
+    ## 2  0.18147730  0.02629933       0.2722580  0.41589406 -0.07966576    0.15086839
+    ## 3  1.74867057  1.43711900       0.1770765  0.06159668 -0.08677850    0.02240617
+    ## 4 -0.34492878 -0.25357286      -0.1253955 -0.12265318 -0.24758275   -0.04123574
+    ##       shopping health_nutrition  college_uni sports_playing     cooking
+    ## 1 -0.008771795       -0.1628695 -0.008387854     0.05619665 -0.17878457
+    ## 2  0.345439697        1.1197107  0.184401254     0.30756500  1.24217742
+    ## 3  0.034832813       -0.1302196 -0.022030432     0.13429273 -0.08488492
+    ## 4 -0.103364875       -0.2751505 -0.047918907    -0.11848694 -0.31537185
+    ##           eco    computers   business    outdoors     crafts   automotive
+    ## 1  0.09442154  1.556400348  0.3379599  0.14098874  0.1289698  1.118457419
+    ## 2  0.44188464 -0.002742705  0.2741169  0.92916788  0.2129233 -0.007425371
+    ## 3  0.19911858  0.082967450  0.1105397 -0.04782464  0.6857211  0.153049926
+    ## 4 -0.17325927 -0.241059917 -0.1462842 -0.27876101 -0.1932182 -0.187113425
+    ##           art    religion     beauty   parenting      dating      school
+    ## 1 -0.02586333 -0.03928363 -0.1536466  0.01683146  0.19789666 -0.04650336
+    ## 2  0.18239972 -0.15460684  0.8666380 -0.08724565  0.27590710  0.05693935
+    ## 3  0.11113647  2.14975873  0.3029451  2.03057583  0.01997185  1.59159113
+    ## 4 -0.06679871 -0.30536505 -0.2756607 -0.31317172 -0.11129485 -0.27259559
+    ##   personal_fitness     fashion small_business       adult
+    ## 1       -0.1526179 -0.14649667      0.2162166 -0.08470152
+    ## 2        1.1072698  0.97861335      0.1999966  0.19493593
+    ## 3       -0.0779186  0.02558422      0.1138945  0.14311837
+    ## 4       -0.2817376 -0.26291351     -0.1077751 -0.06705039
+
+    ## [1] 704
+
+    ## [1] 1375
+
+    ## [1] 794
+
+    ## [1] 4803
+
+Now, we set K=4, and divide our sample into 4 clusters using K-means++.
+The sizes of each cluster are 704, 1375, 794, 4803 respectively, still
+looks like an unbalanced distribution.  
+However, each centroid shows a distinguished feature unlike the previous
+examples when K=3. The numbers below are top 5 values of each cluster’s
+centroid. In case of cluster1, we can see that these user types are
+highly interested in politics, news, travel, computers, and automotive.
+It seems that these variables share something in common, we may name
+this group as “Intelligent and Active”.
+
+    clust1_cen = sort(clust2$centers[1,], decreasing=TRUE)
+    clust1_cen[1:5]
+
+    ##   politics       news     travel  computers automotive 
+    ##   2.345661   1.942589   1.756685   1.556400   1.118457
+
+People in cluster2 seem to love cooking, health\_nutrition,
+personal\_fitness, fashion, and outdoors. We can name this group as
+“Healthy”.
+
+    clust2_cen = sort(clust2$centers[2,], decreasing=TRUE)
+    clust2_cen[1:5]
+
+    ##          cooking health_nutrition personal_fitness          fashion 
+    ##        1.2421774        1.1197107        1.1072698        0.9786134 
+    ##         outdoors 
+    ##        0.9291679
+
+People in cluster3 seem to be fond of religion, parenting,
+sports\_fandom, food, and school. We can name them as “family-oriented”
+
+    clust3_cen = sort(clust2$centers[3,], decreasing=TRUE)
+    clust3_cen[1:5]
+
+    ##      religion     parenting sports_fandom          food        school 
+    ##      2.149759      2.030576      1.954734      1.748671      1.591591
+
+At last, people in cluster4 don’t seem to be specially interested in
+anything. The category which shows the largest value is online\_gaming,
+but it is even negative. We can name this type as “Normal”. Overall,
+using K=4 seems to be reasonable, so we’ll keep doing our analysis when
+K=4.
+
+    clust4_cen = sort(clust2$centers[4,], decreasing=TRUE)
+    clust4_cen[1:5]
+
+    ## online_gaming   college_uni       tv_film           art         adult 
+    ##   -0.04123574   -0.04791891   -0.05353630   -0.06679871   -0.06705039
 
 ![](HW3_final_files/figure-markdown_strict/3.4.4-1.png) blalblablal
 
@@ -761,14 +884,14 @@ blblallbalbl
 ### Can we use PCA in this example?
 
 Now, we try to perform a principal component analysis to find
-low-dimensional summaries of our data set. Then we'll divide our samples
+low-dimensional summaries of our data set. Then we’ll divide our samples
 into several clusters hoping that we can make our model simpler and more
 interpretable.  
-However, the table below shows that it's hard to narrow down the number
+However, the table below shows that it’s hard to narrow down the number
 of variables by using PCA. We need at least 7 principal components to
-explain more than 50% of the variance of the data, 13 components for
-70%, and 23 components for 90%.  
-So performing clustering analysis after PCA doesn't seem to be a good
+explain more than 50% of data, 13 components for 70%, and 23 components
+for 90%.  
+So performing clustering analysis after PCA doesn’t seem to be a good
 idea. However, PCA itself can give us some useful information about our
 samples in another sense.
 
@@ -795,20 +918,20 @@ samples in another sense.
     ## Cumulative Proportion  0.9748 0.98193 0.98884 0.9946 1.00000
 
 The table below is the matrix of variable loadings.  
-In PC1, we can see 'religion', 'food', and 'parenting' show the largest
+In PC1, we can see ‘religion’, ‘food’, and ‘parenting’ show the largest
 value, which means the more tweets a user has made in these categories,
-the more scores (s)he'll get in PC1. And there is no negative value
+the more scores (s)he’ll get in PC1. And there is no negative value
 here.  
-In PC2, 'sports\_fandom', 'religion', 'parenting' have the largest
+In PC2, ‘sports\_fandom’, ‘religion’, ‘parenting’ have the largest
 values, which means the more tweets one has made in these categories,
 the more scores one will get in PC2. On the other hand,
-'cooking','fashion', and 'photo\_sharing' show the smallest values, and
+‘cooking’,‘fashion’, and ‘photo\_sharing’ show the smallest values, and
 they are all negative numbers. It means that the more one tweets in
 these categories, the less scores one will get. Lastly, in PC3,
-'politics','travel', and 'computers' have the largest values, which
+‘politics’,‘travel’, and ‘computers’ have the largest values, which
 means the more tweets one has made in these categories, the more scores
-one will get in PC3. On the other hand, 'helath\_nutrition',
-'personal\_fitness', and 'cooking' have the smallest and negative
+one will get in PC3. On the other hand, ‘helath\_nutrition’,
+‘personal\_fitness’, and ‘cooking’ have the smallest and negative
 values, which means the more tweets one has made in these categories,
 the less scores one will get in PC3.
 
@@ -852,11 +975,11 @@ axis - PC1 and PC2, and color them by clusters that we showed in
 Kmeans++. Here, we can find different characteristics depending on
 clusters. For example, cluster3 clearly shows higher PC2 value than
 cluster2 does on average. We saw that the more tweets one has made in
-'sports\_fandom', 'religion', 'parenting' categories, the more PC2
+‘sports\_fandom’, ‘religion’, ‘parenting’ categories, the more PC2
 scores one will get. So it is probable that users in cluster3 tweeted
 more in these categories.  
-Recalling the characteristics of cluster3, we can observe 'religion',
-'parenting', 'sports\_fandom' are its top 3 intersets, which corresponds
+Recalling the characteristics of cluster3, we can observe ‘religion’,
+‘parenting’, ‘sports\_fandom’ are its top 3 intersets, which corresponds
 with our result of PCA analysis.
 
 ![](HW3_final_files/figure-markdown_strict/3.4.14-1.png)
@@ -866,9 +989,9 @@ example. The plot below shows the relationship between PC1 and PC3. One
 thing we can clearly see here is that cluster1 shows higher PC3 value
 than cluster2 on average.  
 We already mentioned above that the more tweets one has made in
-'politics','travel', and 'computers' categories, the more PC3 scores one
-will get. And we can recall that 'politics', 'news', 'travel' and
-'computers' are the most tweeted categories the users in cluster 1 has
+‘politics’,‘travel’, and ‘computers’ categories, the more PC3 scores one
+will get. And we can recall that ‘politics’, ‘news’, ‘travel’ and
+‘computers’ are the most tweeted categories the users in cluster 1 has
 made. This correspondence fortifies our finding that clustering and PCA
 can share something in common.
 
