@@ -4,15 +4,16 @@ library(tidyverse)
 library(LICORS)
 library(cluster)
 library(corrplot)
+library(GGally)
 
-social_marketing <- read.csv("C:/Users/yaint/OneDrive/desktop/data mining/ECO395M-master/data/social_marketing.csv", row.names = 1)
+csocial_marketing <- read.csv("C:/Users/yaint/OneDrive/desktop/data mining/ECO395M-master/data/social_marketing.csv", row.names = 1)
 soma<- social_marketing
 
 # Data Cleaning
 
 # Get rid of spam users - Nobody tweets spam messages unless (s)he's a bot
 soma<-soma[(soma$spam==0),] # delete observations related to spam
-soma <- soma[,-35] # get rid of spam variable
+soma <- soma[,-36] # get rid of spam variable
 
 # we also delete variables "chatter" and "uncategorized"
 # because the company cannot get any information from these categories
@@ -72,7 +73,7 @@ plot(soma_gap) # There is no dip
 
 # corrplot(just for reference)
 res <- cor(soma_sc)
-corrplot(res, method = "color", tl.cex = 0.5, tl.col="black")
+corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
 
 # It's hard to find the optimal K by mathematics.
 # Suppose the company divides market segments into three parts
@@ -129,7 +130,34 @@ sort(clust2$centers[4,], decreasing=TRUE)
 # Now it seems to be more balanced
 
 # Some example plots
-qplot(politics, cooking, data=soma, color=factor(clust2$cluster))
+
+Cluster = factor(clust2$cluster)
+
+subset(soma, select = c("family","school","food","sports_fandom","religion","parenting")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+        upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+
+subset(soma, select = c("computers","travel","politics","news","automotive")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+
+subset(soma, select = c("outdoors","health_nutrition","personal_fitness")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+
+subset(soma, select = c("beauty","cooking","fashion")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+
+subset(soma, select = c("sports_playing","online_gaming","college_uni")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+
 # cluster1: interested in politics but not in cooking
 # cluster2: interested in cooking but not in politics
 # cluster3 and 4 : interested in neither one
