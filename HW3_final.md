@@ -692,10 +692,24 @@ blalblalbal
 
 blablalbalb
 
-![](HW3_final_files/figure-markdown_strict/3.4.2-1.png)![](HW3_final_files/figure-markdown_strict/3.4.2-2.png)![](HW3_final_files/figure-markdown_strict/3.4.2-3.png)
+![](HW3_final_files/figure-markdown_strict/3.4.2-1.png)![](HW3_final_files/figure-markdown_strict/3.4.2-2.png)
 
 blablalbalb
 
+![](HW3_final_files/figure-markdown_strict/3.4.3-1.png)
+
 blablalblab
 
-![](HW3_final_files/figure-markdown_strict/3.4.4-1.png)
+![](HW3_final_files/figure-markdown_strict/3.4.4-1.png) blalblablal
+
+blblallbalbl
+
+![](HW3_final_files/figure-markdown_strict/3.4.6-1.png) blablalbl
+
+![](HW3_final_files/figure-markdown_strict/3.4.7-1.png) blablalbl
+
+![](HW3_final_files/figure-markdown_strict/3.4.8-1.png) blablalbl
+
+![](HW3_final_files/figure-markdown_strict/3.4.9-1.png) blablalbl
+
+![](HW3_final_files/figure-markdown_strict/3.4.10-1.png)
