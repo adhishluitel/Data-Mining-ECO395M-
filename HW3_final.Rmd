@@ -36,7 +36,7 @@ grb$size = grb$size/1000 # lower the scale of size in order to get around limits
 
 In this exercise, we analyzed a dataset on green buildings to build the best predictive pricing model. We started with cleaning the data. First we detected all the null values that were missing and deleted them. As we are running a lasso regression, in order to comply with  the limits of computation, we scaled down 'size' variable from 'square footage' to '(square footage)/1000'.
 
-Next, we built a base model and used step-wise selection. From the insights we gathered while cleaning up the data, we decided to delete the variable 'CS_PropertyID' as it was just a unique identity number and contributed nothing to our model. We also deleted another variable 'total_dd_07' due to the nature of its collinearity with the variables 'cd_total_07' and 'hd_total07'(total_dd_07 = cd_total_07 + hd_total07). Lastly, we also deleted the variable 'cluster' from our model because it was recognized as a numerical variable though it was a categorical variable. And we already have cluster.rent variable which shows the average rent by clusters.
+Next, we built a base model and used step-wise selection. From the insights we gathered while cleaning up the data, we decided to delete the variable 'CS_PropertyID' as it was just a unique identity number and contributed nothing to our model. We also deleted another variable 'total_dd_07' due to the nature of its collinearity with the variables 'cd_total_07' and 'hd_total07'(total_dd_07 = cd_total_07 + hd_total07). Lastly, we also deleted the variable 'cluster' from our model because it was recognized as a numerical variable though it was a categorical one. And in order to reflect the effect of cluster on rent, we already have cluster.rent variable which shows the average rent by clusters.
 
 Finally, in order to check if a building is a green building, we used only 'green_rating' as our dummy variable and didn't  consider 'LEED' and 'EnergyStar' separately.
 
@@ -230,7 +230,7 @@ system.time(for(i in 1:K){
 })
 ```
 
-To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess its performance. We used our base model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicity in tree regressions.
+To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess its performance. We used our base model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicity in tree regressions. The minimum size of terminal nodes is 5 which is default setting.
 We set the number of trees to be 300 times and run the regression. It took more than 7 minutes to compute the whole procedure, however, the RMSE for our bagging model was `r round(sqrt(mean(err_save3)), 2)` which was much lower than those of our previous models.
 
  
