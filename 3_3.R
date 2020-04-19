@@ -15,6 +15,7 @@ social_adult = social_adult %>%
   mutate(adultpct = adult/(select(., chatter:adult) %>% rowSums(na.rm = TRUE)))
 
 length(which(social_adult$adultpct >= 0.25))
+social = subset(social_adult, 0.25 >= adultpct)
 
 x = social[,(2:36)]
 x = scale(x, center = TRUE, scale = TRUE) #subtracting the mean and dividind by the st dev
@@ -22,12 +23,12 @@ x = scale(x, center = TRUE, scale = TRUE) #subtracting the mean and dividind by 
 mu = attr(x,"scaled:center")
 sigma = attr(x,"scaled:scale")
 
-clust1 = kmeanspp(x, 6, nstart = 25)
+clust1 = kmeanspp(x, 4, nstart = 25)
 
 clust1$centers * sigma + mu
 
 colnames(social)
-qplot(adult, online_gaming, data=social, color=factor(clust1$cluster)) +
+qplot(adult, college_uni, data=social, color=factor(clust1$cluster)) +
   theme_bw()
 
 # Compare versus within-cluster average distances from the first run
