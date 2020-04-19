@@ -766,8 +766,8 @@ into several clusters hoping that we can make our model simpler and more
 interpretable.  
 However, the table below shows that it's hard to narrow down the number
 of variables by using PCA. We need at least 7 principal components to
-explain more than 50% of data, 13 components for 70%, and 23 components
-for 90%.  
+explain more than 50% of the variance of the data, 13 components for
+70%, and 23 components for 90%.  
 So performing clustering analysis after PCA doesn't seem to be a good
 idea. However, PCA itself can give us some useful information about our
 samples in another sense.
