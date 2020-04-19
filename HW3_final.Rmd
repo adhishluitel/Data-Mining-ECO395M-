@@ -406,7 +406,7 @@ library(cluster)
 library(corrplot)
 library(GGally)
 
-social_marketing <- read.csv("https://raw.githubusercontent.com/jgscott/ECO395M/master/data/social_marketing.csv", row.names = 1)
+social_marketing <- read.csv("https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/social_marketing.csv", row.names = 1)
 soma<- social_marketing
 
 #Cleaning the data
@@ -512,3 +512,63 @@ subset(soma, select = c("sports_playing","online_gaming","college_uni")) %>%
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
+
+### Can we use PCA in this example?
+Now, we try to perform a principal component analysis to find low-dimensional summaries of our data set. Then we'll divide our samples into several clusters hoping that we can make our model simpler and more interpretable.  
+However, the table below shows that it's hard to narrow down the number of variables by using PCA. We need at least 7 principal components to explain more than 50% of data, 13 components for 70%, and 23 components for 90%.  
+So performing clustering analysis after PCA doesn't seem to be a good idea. However, PCA itself can give us some useful information about our samples in another sense.
+
+```{r 3.4.11, echo=FALSE}
+
+pca= prcomp(soma_sc)#don't need to scale it because we already did
+summary(pca)
+
+loadings= pca$rotation
+scores = pca$x
+```
+
+The table below is the matrix of variable loadings.  
+In PC1, we can see 'religion', 'food', and 'parenting' show the largest value, which means the more tweets a user has made in these categories, the more scores (s)he'll get in PC1. And there is no negative value here.  
+In PC2, 'sports_fandom', 'religion', 'parenting' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC2.
+On the other hand, 'cooking','fashion', and 'photo_sharing' show the smallest values, and they are all negative numbers. It means that the more one tweets in these categories, the less scores one will get.
+Lastly, in PC3, 'politics','travel', and 'computers' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC3. On the other hand, 'helath_nutrition', 'personal_fitness', and 'cooking' have the smallest and negative values, which means the more tweets one has made in these categories, the less scores one will get in PC3.
+
+
+```{r 3.4.12, echo=FALSE}
+loadings[,c(1:3)]
+```
+```{r 3.4.13, echo=FALSE, include=FALSE}
+o1 = order(loadings[,1], decreasing=TRUE)
+colnames(soma_sc)[head(o1,3)]
+colnames(soma_sc)[tail(o1,3)]
+o2 = order(loadings[,2], decreasing=TRUE)
+colnames(soma_sc)[head(o2,3)]
+colnames(soma_sc)[tail(o2,3)]
+o3 = order(loadings[,3], decreasing=TRUE)
+colnames(soma_sc)[head(o3,3)]
+colnames(soma_sc)[tail(o3,3)]
+```
+
+Now, We plot our samples on two-dimensional space which consist of two axis - PC1 and PC2, and color them by clusters that we showed in Kmeans++. Here, we can find different characteristics depending on clusters.
+For example, cluster3 clearly shows higher PC2 value than cluster2 does on average. We saw that the more tweets one has made in 'sports_fandom', 'religion', 'parenting' categories, the more PC2 scores one will get. So it is probable that users in cluster3 tweeted more in these categories.  
+Recalling the characteristics of cluster3, we can observe 'religion', 'parenting', 'sports_fandom' are its top 3 intersets, which corresponds with our result of PCA analysis.  
+
+```{r 3.4.14, echo=FALSE}
+qplot(scores[,1], scores[,2], color=factor(clust2$cluster), xlab='Component1', ylab='Component2')
+# cluster1: normal
+# cluster2: low pc2 score -> likes photo sharing, fashion, cooking 
+#           We already saw that this type likes cooking, which corresponds with our clustering result.
+# cluster3: high pc2 score -> likes sports fandom, religion, parenting
+#           We already saw that this type likes religion, parenting and sports fandom, which perfectly corresponds with our clustering result.
+# cluster4: low pc1 score -> likes college and university, online gaming and porn
+#           We don't see these characteristics in our previous clustering analysis.
+```
+
+We can find the commonality between clustering and PCA in another example. The plot below shows the relationship between PC1 and PC3. One thing we can clearly see here is that cluster1 shows higher PC3 value than cluster2 on average.  
+We already mentioned above that the more tweets one has made in 'politics','travel', and 'computers' categories, the more PC3 scores one will get. And we can recall that 'politics', 'news', 'travel' and 'computers' are the most tweeted categories the users in cluster 1 has made.
+This correspondence fortifies our finding that clustering and PCA can share something in common.
+
+```{r 3.4.15, echo=FALSE}
+qplot(scores[,1], scores[,3], color=factor(clust2$cluster), xlab='Component1', ylab='Component3')
+
+
