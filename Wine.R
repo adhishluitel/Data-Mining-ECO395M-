@@ -23,10 +23,6 @@ corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method 
 #corrplot(res, method = "color", tl.cex = 0.5, tl.col="black") - full corrplot, it was symmetric so I removed it
 
 
-# distribution plot
-#xy = subset(wine,select = c("fixed.acidity","total.sulfur.dioxide","alcohol","sulphates")) 
-#picked these four variables randomly
-#ggpairs(xy,aes(col = wine$color, alpha = 0.7))
 
 
 #Clustering
@@ -35,21 +31,13 @@ cluster1 = kmeans(z_std, 2, nstart=25)
 
 #Picking variables
 sort(cluster1$centers[1,], decreasing=TRUE)
+#sort(cluster1$centers[2,], decreasing=TRUE)
 
 #Comparing 
 Cluster = factor(cluster1$cluster)
 #total.sulfur.dioxide, free.sulfur.dioxide and residual.sugar have the highest coefficients
 
-subset(wine, select = c("fixed.acidity","total.sulfur.dioxide","alcohol","sulphates")) %>%
-  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
-  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
-##Alt
-subset(wine, select = c("volatile.acidity","chlorides","sulphates")) %>%
-  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
-  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
-##Alt2
+
 subset(wine, select = c("total.sulfur.dioxide","free.sulfur.dioxide","residual.sugar")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
@@ -64,6 +52,7 @@ wine = wine %>%
 #Confusion matrix
 table1 = xtabs(~wine$color_hat + wine$color) ###
 print(table1)
+#Accuracy 6405/6497 = 98.58%
 
 # Using kmeans++ clustering
 cluster_kpp = kmeanspp(z_std, k=2, nstart=25)
@@ -78,9 +67,6 @@ table2 = xtabs(~wine$color_hat_kpp + wine$color) ###
 print(table2)
 #Same as Kmeans clustering. No improvement
 
-#What elements in what cluster?
-#cluster_kpp$center[1,]*sigma + mu
-#cluster_kpp$center[2,]*sigma + mu
 
 #Now, PCA
 pca = prcomp(z_std, scale=TRUE)
