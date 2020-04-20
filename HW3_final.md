@@ -762,13 +762,13 @@ So we end up with 7,676 observations with 33 variables in our data set.
 We'll start with performing clustering analysis. Since our data doesn't
 show any kinds of hierarchy, we'll focus on K-means analysis. We'll use
 K-means++ rather than K-means because it's already known that K-means++
-show a better performance.  
+shows a better performance.  
 The first question we encounter when doing K-means++ is "How many
 clusters should we set?", i.e, "What is our optimal K?".  
 In order to find its answer, we used three methods - Elbow plot, CH
 index, and Gap statistics.
 
-We scaled our data first, and performed three analysis by using scaled
+We scaled our data first, and performed three analyses by using scaled
 data.  
 The first graph shows the elbow plot of our data set. As we can see,
 there's no distinguished elbow here, so it doesn't give us clear
@@ -785,138 +785,9 @@ of these means could lead us to a conclusive answer for the optimal K.
 
 ![](HW3_final_files/figure-markdown_strict/3.4.3-1.png)
 
-It is difficult to find the optimal K only by eyeballing the graph, so
-we decided to run the analysis for different values of K, starting from
-K=3. We'll see what happens when K=3, and if the results don't seem to
-be reasonable, we'll keep going on K=4,5, etc.
-
-We ran a K-means++ with K=3 and nstart=25. When we divided our scaled
-data into 3 clusters, The sizes of each cluster turned out to be 816,
-1997, 4863 respectively, which was pretty unbalanced.
-
-Now, we'll take a close look at each cluster's cetroid. The values below
-are the top 5 largest values on each cluster's centroid. In case of
-cluster 1, we can see that top 5 largest values are bigger than 1.0.
-However, there's no value that is bigger than 1.0 in cetroid of
-cluster2. And in case of cluster3, all the values are negatives.
-
-    clust1_cent = sort(clust1$centers[1,], decreasing=TRUE)
-    clust1_cent[1:6]
-
-    ##      religion     parenting sports_fandom          food        school 
-    ##      2.150847      2.019904      1.944755      1.752934      1.592943 
-    ##        family 
-    ##      1.418779
-
-    clust2_cent = sort(clust1$centers[2,], decreasing=TRUE)
-    clust2_cent[1:5]
-
-    ##          cooking personal_fitness health_nutrition          fashion 
-    ##        0.7903583        0.6729810        0.6708798        0.6674520 
-    ##         outdoors 
-    ##        0.6268985
-
-    clust3_cent = sort(clust1$centers[3,], decreasing=TRUE)
-    clust3_cent[1:5]
-
-    ##          adult  online_gaming current_events         dating     automotive 
-    ##    -0.08677996    -0.11104628    -0.11194465    -0.13067046    -0.13075336
-
-Therefore, we can say that people in cluster1 are very interested in
-some categories such as religion, parenting, etc. But people in cluster2
-don't seem to be specially interested in something. Moreover, people in
-cluster3 are not interested in anything.  
-This conclusion doesn't give us any insights on how 'NutrientH20' should
-react to their customers. So K=3 is not a good suggestion for our
-analysis here.
-
-    ##   current_events      travel photo_sharing     tv_film sports_fandom   politics
-    ## 1     0.11086722  1.75668549   -0.06535279  0.04917506     0.1952442  2.3456611
-    ## 2     0.14811854 -0.09269948    0.68421907  0.15468378    -0.1951128 -0.1634062
-    ## 3     0.11190221 -0.10754829   -0.02260353  0.01237458     1.9547341 -0.2092612
-    ## 4    -0.07715259 -0.21316916   -0.18256208 -0.05353630    -0.2959048 -0.2624419
-    ##          food      family home_and_garden       music        news online_gaming
-    ## 1  0.02658693  0.05777898       0.1240354 -0.04497001  1.94258878   -0.03860691
-    ## 2  0.18147730  0.02629933       0.2722580  0.41589406 -0.07966576    0.15086839
-    ## 3  1.74867057  1.43711900       0.1770765  0.06159668 -0.08677850    0.02240617
-    ## 4 -0.34492878 -0.25357286      -0.1253955 -0.12265318 -0.24758275   -0.04123574
-    ##       shopping health_nutrition  college_uni sports_playing     cooking
-    ## 1 -0.008771795       -0.1628695 -0.008387854     0.05619665 -0.17878457
-    ## 2  0.345439697        1.1197107  0.184401254     0.30756500  1.24217742
-    ## 3  0.034832813       -0.1302196 -0.022030432     0.13429273 -0.08488492
-    ## 4 -0.103364875       -0.2751505 -0.047918907    -0.11848694 -0.31537185
-    ##           eco    computers   business    outdoors     crafts   automotive
-    ## 1  0.09442154  1.556400348  0.3379599  0.14098874  0.1289698  1.118457419
-    ## 2  0.44188464 -0.002742705  0.2741169  0.92916788  0.2129233 -0.007425371
-    ## 3  0.19911858  0.082967450  0.1105397 -0.04782464  0.6857211  0.153049926
-    ## 4 -0.17325927 -0.241059917 -0.1462842 -0.27876101 -0.1932182 -0.187113425
-    ##           art    religion     beauty   parenting      dating      school
-    ## 1 -0.02586333 -0.03928363 -0.1536466  0.01683146  0.19789666 -0.04650336
-    ## 2  0.18239972 -0.15460684  0.8666380 -0.08724565  0.27590710  0.05693935
-    ## 3  0.11113647  2.14975873  0.3029451  2.03057583  0.01997185  1.59159113
-    ## 4 -0.06679871 -0.30536505 -0.2756607 -0.31317172 -0.11129485 -0.27259559
-    ##   personal_fitness     fashion small_business       adult
-    ## 1       -0.1526179 -0.14649667      0.2162166 -0.08470152
-    ## 2        1.1072698  0.97861335      0.1999966  0.19493593
-    ## 3       -0.0779186  0.02558422      0.1138945  0.14311837
-    ## 4       -0.2817376 -0.26291351     -0.1077751 -0.06705039
-
-    ## [1] 704
-
-    ## [1] 1375
-
-    ## [1] 794
-
-    ## [1] 4803
-
-Now, we set K=4, and divide our sample into 4 clusters using K-means++.
-The sizes of each cluster are 704, 1375, 794, 4803 respectively, still
-looks like an unbalanced distribution.  
-However, each centroid shows a distinguished feature unlike the previous
-examples when K=3. The numbers below are top 5 values of each cluster's
-centroid. In case of cluster1, we can see that these user types are
-highly interested in politics, news, travel, computers, and automotive.
-It seems that these variables share something in common, we may name
-this group as "Intelligent and Active".
-
-    clust1_cen = sort(clust2$centers[1,], decreasing=TRUE)
-    clust1_cen[1:5]
-
-    ##   politics       news     travel  computers automotive 
-    ##   2.345661   1.942589   1.756685   1.556400   1.118457
-
-People in cluster2 seem to love cooking, health\_nutrition,
-personal\_fitness, fashion, and outdoors. We can name this group as
-"Healthy".
-
-    clust2_cen = sort(clust2$centers[2,], decreasing=TRUE)
-    clust2_cen[1:5]
-
-    ##          cooking health_nutrition personal_fitness          fashion 
-    ##        1.2421774        1.1197107        1.1072698        0.9786134 
-    ##         outdoors 
-    ##        0.9291679
-
-People in cluster3 seem to be fond of religion, parenting,
-sports\_fandom, food, and school. We can name them as "family-oriented"
-
-    clust3_cen = sort(clust2$centers[3,], decreasing=TRUE)
-    clust3_cen[1:5]
-
-    ##      religion     parenting sports_fandom          food        school 
-    ##      2.149759      2.030576      1.954734      1.748671      1.591591
-
-At last, people in cluster4 don't seem to be specially interested in
-anything. The category which shows the largest value is online\_gaming,
-but it is even negative. We can name this type as "Normal". Overall,
-using K=4 seems to outperform when compared to K=3, so we'll keep doing
-our analysis when K=4.
-
-    clust4_cen = sort(clust2$centers[4,], decreasing=TRUE)
-    clust4_cen[1:5]
-
-    ## online_gaming   college_uni       tv_film           art         adult 
-    ##   -0.04123574   -0.04791891   -0.05353630   -0.06679871   -0.06705039
+Since it is difficult to find the optimal K only by eyeballing the
+graph, we decided to plot a correlogram, and try to identify possible
+singularities among the variables.
 
 ![](HW3_final_files/figure-markdown_strict/3.4.4-1.png)
 
@@ -930,17 +801,34 @@ fourth. And 'beauty', 'cooking' and 'fashion' form the fifth.
 
 Therefore, we decided to use K=5.
 
-blblallbalbl
+![](HW3_final_files/figure-markdown_strict/3.4.6-1.png)
 
-![](HW3_final_files/figure-markdown_strict/3.4.6-1.png) blablalbl
+For the first subgroup, we can see that followers that belong to
+"Cluster 4" are those that, in general, have a high interest in
+'family', 'school', 'food', 'sports\_fandom' and 'religion'.
 
-![](HW3_final_files/figure-markdown_strict/3.4.7-1.png) blablalbl
+![](HW3_final_files/figure-markdown_strict/3.4.7-1.png)
 
-![](HW3_final_files/figure-markdown_strict/3.4.8-1.png) blablalbl
+For the second subgroup, we can see that followers that belong to
+"Cluster 1" are those that, in general, have a high interest in
+'Computers', 'travel', 'politics', 'news' and 'automotive'.
 
-![](HW3_final_files/figure-markdown_strict/3.4.9-1.png) blablalbl
+![](HW3_final_files/figure-markdown_strict/3.4.8-1.png)
+
+For the third subgroup, we can see that followers that belong to
+"Cluster 3" are those that, in general, have a high interest in
+‘Outdoors’, ‘health\_nutrition’ and ‘personal\_fitness’.
+
+![](HW3_final_files/figure-markdown_strict/3.4.9-1.png)
+
+For the fourth subgroup, we can see that followers that belong to
+"Cluster 5" are those that, in general, have a high interest in
+‘Sports\_playing’, ‘online\_gaming’ and ‘college\_uni’.
 
 ![](HW3_final_files/figure-markdown_strict/3.4.10-1.png)
+
+For the fifth subgroup, we can't find some well defined patterns when
+comparing within cluster interests in ‘beauty’, ‘cooking’ and ‘fashion’.
 
 ### Can we use PCA in this example?
 
