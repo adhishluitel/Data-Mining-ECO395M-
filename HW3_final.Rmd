@@ -447,7 +447,7 @@ Finally, even though tweets classified in the 'adult' category can be interprete
 So we end up with 7,676 observations with 33 variables in our data set.  
   
 ### K-means++ clustering
-We'll start with performing clustering analysis. Since our data doesn't show any kinds of hierarchy, we'll focus on K-means analysis. We'll use K-means++ rather than K-means because it's already known that K-means++ show a better performance.  
+We'll start with performing clustering analysis. Since our data doesn't show any kinds of hierarchy, we'll focus on K-means analysis. We'll use K-means++ rather than K-means because it's already known that K-means++ shows a better performance.  
 The first question we encounter when doing K-means++ is "How many clusters should we set?", i.e, "What is our optimal K?".  
 In order to find its answer, we used three methods - Elbow plot, CH index, and Gap statistics.  
 
@@ -475,7 +475,7 @@ CH_grid= foreach(k=k_grid, .combine='c') %do% {
 soma_gap = clusGap(soma_sc, FUN= kmeanspp, nstart=25, K.max=10, B=100)
 ```
 
-We scaled our data first, and performed three analysis by using scaled data.  
+We scaled our data first, and performed three analyses by using scaled data.  
 The first graph shows the elbow plot of our data set. As we can see, there's no distinguished elbow here, so it doesn't give us clear messages about the optimal K.  
 The second one is the CH index. We can see it is the highest when K=1, and it decreases gradually. So we cannot get a satisfactory answer for our question, either.  
 

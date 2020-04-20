@@ -1,5 +1,4 @@
-ECO 395M: Exercise 3
-====================
+\#ECO 395M: Exercise 3
 
 Bernardo Arreal Magalhaes - UTEID ba25727
 
@@ -14,24 +13,24 @@ In this exercise, we analyzed a dataset on green buildings to build the
 best predictive pricing model. We started with cleaning the data. First
 we detected all the null values that were missing and deleted them. As
 we are running a lasso regression, in order to comply with the limits of
-computation, we scaled down 'size' variable from 'square footage' to
-'(square footage)/1000'.
+computation, we scaled down ‘size’ variable from ‘square footage’ to
+‘(square footage)/1000’.
 
 Next, we built a base model and used step-wise selection. From the
 insights we gathered while cleaning up the data, we decided to delete
-the variable 'CS\_PropertyID' as it was just a unique identity number
+the variable ‘CS\_PropertyID’ as it was just a unique identity number
 and contributed nothing to our model. We also deleted another variable
-'total\_dd\_07' due to the nature of its collinearity with the variables
-'cd\_total\_07' and 'hd\_total07'(total\_dd\_07 = cd\_total\_07 +
-hd\_total07). Lastly, we also deleted the variable 'cluster' from our
+‘total\_dd\_07’ due to the nature of its collinearity with the variables
+‘cd\_total\_07’ and ‘hd\_total07’(total\_dd\_07 = cd\_total\_07 +
+hd\_total07). Lastly, we also deleted the variable ‘cluster’ from our
 model because it was recognized as a numerical variable though it was a
 categorical one. And in order to reflect the effect of cluster on rent,
 we already have cluster.rent variable which shows the average rent by
 clusters.
 
 Finally, in order to check if a building is a green building, we used
-only 'green\_rating' as our dummy variable and didn't consider 'LEED'
-and 'EnergyStar' separately.
+only ‘green\_rating’ as our dummy variable and didn’t consider ‘LEED’
+and ‘EnergyStar’ separately.
 
 To find the best predictive model possible for price, we built 5
 different models and compared their performances. At the same time, we
@@ -48,7 +47,7 @@ additions to it including every interaction. ii) Backward selection
 model starts with the full model that has all the variables including
 all of interactions, then improves its performance by deleting each
 variable. iii) Stepwise selection model starts with our base model
-'lm(Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster)' and
+‘lm(Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster)’ and
 we considered all possible one-variable addtions or deletions including
 interactions.
 
@@ -58,11 +57,11 @@ selection model gives us the minimum AIC of 34372.28 with 84 variables,
 but it took very long time to compute all these procedures. In terms of
 AIC, we concluded that the backward selection model showed the best
 performance among three and ran an additional stepwise selection based
-on it to check if we could get any improvements. Since we didn't witness
+on it to check if we could get any improvements. Since we didn’t witness
 a further minimized AIC, we concluded that the backward selection model
 is out best model when we used stepwise selection.
 
-Here's our best predictive stepwise selection model with 84 variables
+Here’s our best predictive stepwise selection model with 84 variables
 obtained by backward selection.
 
     ## 
@@ -421,6 +420,7 @@ Electricity\_Costs:cluster\_rent
 </tr>
 </tbody>
 </table>
+
     ##    seg100 
     ## -2.165552
 
@@ -446,9 +446,9 @@ than the stepwise selection model.
 To further polish our best prediction model, we tried treebagging our
 best model with K-fold validation to assess its performance. We used our
 base
-model('Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster')
+model(‘Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster’)
 for our tree bagging, and excluded all the interaction variables because
-we didn't need them explicity in tree regressions. The minimum size of
+we didn’t need them explicity in tree regressions. The minimum size of
 terminal nodes is 5 which is default setting. We set the number of trees
 to be 300 times and run the regression. It took more than 7 minutes to
 compute the whole procedure, however, the RMSE for our bagging model was
@@ -467,7 +467,7 @@ trees which we used in our model is large enough to reduce our errors.
 
 In addition, the graph below shows a variable importance plot. The
 bigger the number is ,the greater the reduction on RMSE we get. We can
-see that "cluster\_rent" variable has the most important impact on
+see that “cluster\_rent” variable has the most important impact on
 decideing the rent price in our tree bagging model.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.12-1.png)
@@ -485,7 +485,7 @@ computational time.
 
 Now we fit a random forest model with 100 trees and do K-fold cross
 validation again. The result indicates that the value of RMSE is 6.26
-which is the smallest of all the RMSEs of the models we've seen above.
+which is the smallest of all the RMSEs of the models we’ve seen above.
 And the computational efficiency has been improved by taking less than 1
 minute to compute all these procedures.
 
@@ -505,17 +505,17 @@ minute to compute all these procedures.
     ## [1] 6.264436
 
 The plot below is the variable importance plot. We can see that
-'cluster\_rent' is the most important variable influencing rent price,
+‘cluster\_rent’ is the most important variable influencing rent price,
 which is the same result as we saw in the bagging model. But it reveals
 a slight difference in that the third influential variable is
-'Electricity costs', which is 'age' in bagging.
+‘Electricity costs’, which is ‘age’ in bagging.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.14-1.png)
 
 ### Tree - Boosting
 
 Finally, we fit a boosting model to derive the best predictive model. As
-we've done before, we use our base model to begin with. The result of
+we’ve done before, we use our base model to begin with. The result of
 our K-fold cross validation shows that the RMSE is 8.28 which is
 slightly higher than that of our random forest model. However, it took
 only 15 seconds to compute all these procedures.
@@ -526,9 +526,9 @@ only 15 seconds to compute all these procedures.
     ## [1] 8.280551
 
 Here is the summary of our boosting model which shows the relative
-influences of all variables. It appears to be 'cluster\_rent', 'size',
-'leasing\_rate' are three most influential variables on our dependent
-variable. This result is similar with previous results that we've seen
+influences of all variables. It appears to be ‘cluster\_rent’, ‘size’,
+‘leasing\_rate’ are three most influential variables on our dependent
+variable. This result is similar with previous results that we’ve seen
 above, but the third influential variable is slightly different, too.
 
     summary(model5_train)
@@ -563,7 +563,7 @@ which means the best performance.
 The randomforest model is superior in terms of computational speed. It
 took less than 1 minute to compute all the procedures, which is very
 efficient compared to the stepwise selection and the bagging. The lasso
-regression and the boosting method didn't take much computational time,
+regression and the boosting method didn’t take much computational time,
 but their performances are worse than the random forest model.Therefore,
 we can conclude that the random forest model shows the best performance.
 
@@ -611,11 +611,12 @@ RMSE
 </tr>
 </tbody>
 </table>
+
 ### The Partial Effect of Green Certification on Rent
 
 In order to derive the average change in rental income per square foot
 associated with green certification, holding other features of the
-building constant, we used 'partial' function in 'pdp package'.
+building constant, we used ‘partial’ function in ‘pdp package’.
 
 The average rent value without green certification holding other
 features constant is 28.50924, and the average rent value with green
@@ -637,11 +638,11 @@ building fixed.
 Exercise 3.2
 ------------
 
-### Why can’t I just get data from a few different cities and run the regression of "Crime" on "Police" to understand how more cops in the streets affect crime?
+### Why can’t I just get data from a few different cities and run the regression of “Crime” on “Police” to understand how more cops in the streets affect crime?
 
-A researcher can easily think about a model that treats "Police"
+A researcher can easily think about a model that treats “Police”
 variables as regressors when explaining changes in crime, and another
-model, with a different research agenda, that includes "Crime" variables
+model, with a different research agenda, that includes “Crime” variables
 as regressors when explaining changes in police force. This fact
 suggests that crime and police might be jointly determined, what creates
 an endogeneity problem and brings difficulties when trying to
@@ -649,7 +650,7 @@ disentangle the causal mechanism from the correlation between police
 force and crime, possibly misleading to wrong conclusions.
 
 Therefore, if we collect data from different cities and run a regression
-of "Crime" on "Police", the coefficient associated with the police force
+of “Crime” on “Police”, the coefficient associated with the police force
 might be biased. If more police officers are hired in response to an
 increase in crime, a positive correlation can emerge even if this
 increase in police force end up reducing crime after all. Also, cities
@@ -667,9 +668,9 @@ exogenous change in police force affected crimes in the District of
 Columbia. They argue that, in the presence of a high terrorism alert,
 there is an increase in police force that is not caused by local crimes.
 So, given the fact that (i) terrorism risk is correlated with police
-force (instrument relevance: *C**o**v*(*z*, *x*)≠0) and (ii) terrorism
+force (instrument relevance: *C**o**v*(*z*, *x*) ≠ 0) and (ii) terrorism
 risk only affects local crime indirectly thru the police force
-(instrument exogeneity: *C**o**v*(*z*, *u*)=0), the researchers could
+(instrument exogeneity: *C**o**v*(*z*, *u*) = 0), the researchers could
 exploit the variation in terrorism alert as an exogenous factor that
 affects crime.
 
@@ -694,9 +695,9 @@ fewer committed crimes.
 
 When controlling for midday Metro ridership, the magnitude of the
 coefficient associated with a high alert slightly decrease, but remained
-in the confidence interval (−7.316 ± 2.877 × 1.96). Column 2 shows that
-a 10% increase in Metro ridership is associated with an increase of 1.7
-crimes per day, holding all else fixed.
+in the confidence interval ( − 7.316 ± 2.877 × 1.96). Column 2 shows
+that a 10% increase in Metro ridership is associated with an increase of
+1.7 crimes per day, holding all else fixed.
 
 This procedure is important because, when trying to measure the causal
 effect of an intervention, we are implicitly assuming that all the other
@@ -706,7 +707,7 @@ effect of an explanatory variable on the response variable when holding
 all else fixed. (Cunningham, 2020) So, if something else is changing, we
 need to control for that change.
 
-### Below I am showing you "Table 4" from the researchers' paper. Just focus on the first column of the table. Can you describe the model being estimated here? What is the conclusion?
+### Below I am showing you “Table 4” from the researchers’ paper. Just focus on the first column of the table. Can you describe the model being estimated here? What is the conclusion?
 
 ![](https://raw.githubusercontent.com/bmagalhaes/ECO395M-HW3/master/HW3_1_files/3.2-table2.png)
 
@@ -733,7 +734,7 @@ Exercise 3.4
 ------------
 
 In this exercise, we explored the content of multiple tweets from a
-sample of followers of NutrientH20's Twitter profile, and come up with
+sample of followers of NutrientH20’s Twitter profile, and come up with
 some interesting insights about the audience by identifying possible
 market segments.
 
@@ -742,36 +743,36 @@ market segments.
 We started by cleaning our data set, which is originally comprised of
 7,882 observations and 36 variables.
 
-First, we deleted all the users whose tweet fell into 'spam' category at
+First, we deleted all the users whose tweet fell into ‘spam’ category at
 least once, due to the high probability of this account being a bot.
-Naturally, we excluded the 'spam' variable from our data set.
+Naturally, we excluded the ‘spam’ variable from our data set.
 
-Additionally, we also deleted the variables 'chatter' and
-'uncategorized', since these categories would hardly give some useful
+Additionally, we also deleted the variables ‘chatter’ and
+‘uncategorized’, since these categories would hardly give some useful
 insights about the followers.
 
-Finally, even though tweets classified in the 'adult' category can be
+Finally, even though tweets classified in the ‘adult’ category can be
 interpreted as spam, sometimes it can also be a hobby for real followers
-too. In that sense, considering that normal people don't tweet much porn
+too. In that sense, considering that normal people don’t tweet much porn
 in public, we deleted users that have more than 20% of their total posts
 in pornography, regarding them as bots.  
 So we end up with 7,676 observations with 33 variables in our data set.
 
 ### K-means++ clustering
 
-We'll start with performing clustering analysis. Since our data doesn't
-show any kinds of hierarchy, we'll focus on K-means analysis. We'll use
-K-means++ rather than K-means because it's already known that K-means++
-show a better performance.  
-The first question we encounter when doing K-means++ is "How many
-clusters should we set?", i.e, "What is our optimal K?".  
+We’ll start with performing clustering analysis. Since our data doesn’t
+show any kinds of hierarchy, we’ll focus on K-means analysis. We’ll use
+K-means++ rather than K-means because it’s already known that K-means++
+shows a better performance.  
+The first question we encounter when doing K-means++ is “How many
+clusters should we set?”, i.e, “What is our optimal K?”.  
 In order to find its answer, we used three methods - Elbow plot, CH
 index, and Gap statistics.
 
-We scaled our data first, and performed three analysis by using scaled
+We scaled our data first, and performed three analyses by using scaled
 data.  
 The first graph shows the elbow plot of our data set. As we can see,
-there's no distinguished elbow here, so it doesn't give us clear
+there’s no distinguished elbow here, so it doesn’t give us clear
 messages about the optimal K.  
 The second one is the CH index. We can see it is the highest when K=1,
 and it decreases gradually. So we cannot get a satisfactory answer for
@@ -787,17 +788,17 @@ of these means could lead us to a conclusive answer for the optimal K.
 
 It is difficult to find the optimal K only by eyeballing the graph, so
 we decided to run the analysis for different values of K, starting from
-K=3. We'll see what happens when K=3, and if the results don't seem to
-be reasonable, we'll keep going on K=4,5, etc.
+K=3. We’ll see what happens when K=3, and if the results don’t seem to
+be reasonable, we’ll keep going on K=4,5, etc.
 
 We ran a K-means++ with K=3 and nstart=25. When we divided our scaled
 data into 3 clusters, The sizes of each cluster turned out to be 816,
 1997, 4863 respectively, which was pretty unbalanced.
 
-Now, we'll take a close look at each cluster's cetroid. The values below
-are the top 5 largest values on each cluster's centroid. In case of
+Now, we’ll take a close look at each cluster’s cetroid. The values below
+are the top 5 largest values on each cluster’s centroid. In case of
 cluster 1, we can see that top 5 largest values are bigger than 1.0.
-However, there's no value that is bigger than 1.0 in cetroid of
+However, there’s no value that is bigger than 1.0 in cetroid of
 cluster2. And in case of cluster3, all the values are negatives.
 
     clust1_cent = sort(clust1$centers[1,], decreasing=TRUE)
@@ -824,9 +825,9 @@ cluster2. And in case of cluster3, all the values are negatives.
 
 Therefore, we can say that people in cluster1 are very interested in
 some categories such as religion, parenting, etc. But people in cluster2
-don't seem to be specially interested in something. Moreover, people in
+don’t seem to be specially interested in something. Moreover, people in
 cluster3 are not interested in anything.  
-This conclusion doesn't give us any insights on how 'NutrientH20' should
+This conclusion doesn’t give us any insights on how ‘NutrientH20’ should
 react to their customers. So K=3 is not a good suggestion for our
 analysis here.
 
@@ -873,11 +874,11 @@ Now, we set K=4, and divide our sample into 4 clusters using K-means++.
 The sizes of each cluster are 704, 1375, 794, 4803 respectively, still
 looks like an unbalanced distribution.  
 However, each centroid shows a distinguished feature unlike the previous
-examples when K=3. The numbers below are top 5 values of each cluster's
+examples when K=3. The numbers below are top 5 values of each cluster’s
 centroid. In case of cluster1, we can see that these user types are
 highly interested in politics, news, travel, computers, and automotive.
 It seems that these variables share something in common, we may name
-this group as "Intelligent and Active".
+this group as “Intelligent and Active”.
 
     clust1_cen = sort(clust2$centers[1,], decreasing=TRUE)
     clust1_cen[1:5]
@@ -887,7 +888,7 @@ this group as "Intelligent and Active".
 
 People in cluster2 seem to love cooking, health\_nutrition,
 personal\_fitness, fashion, and outdoors. We can name this group as
-"Healthy".
+“Healthy”.
 
     clust2_cen = sort(clust2$centers[2,], decreasing=TRUE)
     clust2_cen[1:5]
@@ -898,7 +899,7 @@ personal\_fitness, fashion, and outdoors. We can name this group as
     ##        0.9291679
 
 People in cluster3 seem to be fond of religion, parenting,
-sports\_fandom, food, and school. We can name them as "family-oriented"
+sports\_fandom, food, and school. We can name them as “family-oriented”
 
     clust3_cen = sort(clust2$centers[3,], decreasing=TRUE)
     clust3_cen[1:5]
@@ -906,10 +907,10 @@ sports\_fandom, food, and school. We can name them as "family-oriented"
     ##      religion     parenting sports_fandom          food        school 
     ##      2.149759      2.030576      1.954734      1.748671      1.591591
 
-At last, people in cluster4 don't seem to be specially interested in
+At last, people in cluster4 don’t seem to be specially interested in
 anything. The category which shows the largest value is online\_gaming,
-but it is even negative. We can name this type as "Normal". Overall,
-using K=4 seems to outperform when compared to K=3, so we'll keep doing
+but it is even negative. We can name this type as “Normal”. Overall,
+using K=4 seems to outperform when compared to K=3, so we’ll keep doing
 our analysis when K=4.
 
     clust4_cen = sort(clust2$centers[4,], decreasing=TRUE)
@@ -921,12 +922,12 @@ our analysis when K=4.
 ![](HW3_final_files/figure-markdown_strict/3.4.4-1.png)
 
 From the correlation plot, we can observe some subgroups of variables
-that are highly correlated with each other. The variables 'family',
-'school', 'food', 'sports\_fandom', 'religion' form the first group.
-'Computers', 'travel', 'politics', 'news' and 'automotive' form the
-second. 'Outdoors', 'health\_nutrition' and 'personal\_fitness' the
-third. 'Sports\_playing', 'online\_gaming' and 'college\_uni' form the
-fourth. And 'beauty', 'cooking' and 'fashion' form the fifth.
+that are highly correlated with each other. The variables ‘family’,
+‘school’, ‘food’, ‘sports\_fandom’, ‘religion’ form the first group.
+‘Computers’, ‘travel’, ‘politics’, ‘news’ and ‘automotive’ form the
+second. ‘Outdoors’, ‘health\_nutrition’ and ‘personal\_fitness’ the
+third. ‘Sports\_playing’, ‘online\_gaming’ and ‘college\_uni’ form the
+fourth. And ‘beauty’, ‘cooking’ and ‘fashion’ form the fifth.
 
 Therefore, we decided to use K=5.
 
@@ -945,14 +946,14 @@ blblallbalbl
 ### Can we use PCA in this example?
 
 Now, we try to perform a principal component analysis to find
-low-dimensional summaries of our data set. Then we'll divide our samples
+low-dimensional summaries of our data set. Then we’ll divide our samples
 into several clusters hoping that we can make our model simpler and more
 interpretable.  
-However, the table below shows that it's hard to narrow down the number
+However, the table below shows that it’s hard to narrow down the number
 of variables by using PCA. We need at least 7 principal components to
 explain more than 50% of data, 13 components for 70%, and 23 components
 for 90%.  
-So performing clustering analysis after PCA doesn't seem to be a good
+So performing clustering analysis after PCA doesn’t seem to be a good
 idea. However, PCA itself can give us some useful information about our
 samples in another sense.
 
@@ -979,20 +980,20 @@ samples in another sense.
     ## Cumulative Proportion  0.9748 0.98193 0.98884 0.9946 1.00000
 
 The table below is the matrix of variable loadings.  
-In PC1, we can see 'religion', 'food', and 'parenting' show the largest
+In PC1, we can see ‘religion’, ‘food’, and ‘parenting’ show the largest
 value, which means the more tweets a user has made in these categories,
-the more scores (s)he'll get in PC1. And there is no negative value
+the more scores (s)he’ll get in PC1. And there is no negative value
 here.  
-In PC2, 'sports\_fandom', 'religion', 'parenting' have the largest
+In PC2, ‘sports\_fandom’, ‘religion’, ‘parenting’ have the largest
 values, which means the more tweets one has made in these categories,
 the more scores one will get in PC2. On the other hand,
-'cooking','fashion', and 'photo\_sharing' show the smallest values, and
+‘cooking’,‘fashion’, and ‘photo\_sharing’ show the smallest values, and
 they are all negative numbers. It means that the more one tweets in
 these categories, the less scores one will get. Lastly, in PC3,
-'politics','travel', and 'computers' have the largest values, which
+‘politics’,‘travel’, and ‘computers’ have the largest values, which
 means the more tweets one has made in these categories, the more scores
-one will get in PC3. On the other hand, 'helath\_nutrition',
-'personal\_fitness', and 'cooking' have the smallest and negative
+one will get in PC3. On the other hand, ‘helath\_nutrition’,
+‘personal\_fitness’, and ‘cooking’ have the smallest and negative
 values, which means the more tweets one has made in these categories,
 the less scores one will get in PC3.
 
@@ -1036,11 +1037,11 @@ axis - PC1 and PC2, and color them by clusters that we showed in
 Kmeans++. Here, we can find different characteristics depending on
 clusters. For example, cluster3 clearly shows higher PC2 value than
 cluster2 does on average. We saw that the more tweets one has made in
-'sports\_fandom', 'religion', 'parenting' categories, the more PC2
+‘sports\_fandom’, ‘religion’, ‘parenting’ categories, the more PC2
 scores one will get. So it is probable that users in cluster3 tweeted
 more in these categories.  
-Recalling the characteristics of cluster3, we can observe 'religion',
-'parenting', 'sports\_fandom' are its top 3 intersets, which corresponds
+Recalling the characteristics of cluster3, we can observe ‘religion’,
+‘parenting’, ‘sports\_fandom’ are its top 3 intersets, which corresponds
 with our result of PCA analysis.
 
 ![](HW3_final_files/figure-markdown_strict/3.4.14-1.png)
@@ -1050,9 +1051,9 @@ example. The plot below shows the relationship between PC1 and PC3. One
 thing we can clearly see here is that cluster1 shows higher PC3 value
 than cluster2 on average.  
 We already mentioned above that the more tweets one has made in
-'politics','travel', and 'computers' categories, the more PC3 scores one
-will get. And we can recall that 'politics', 'news', 'travel' and
-'computers' are the most tweeted categories the users in cluster 1 has
+‘politics’,‘travel’, and ‘computers’ categories, the more PC3 scores one
+will get. And we can recall that ‘politics’, ‘news’, ‘travel’ and
+‘computers’ are the most tweeted categories the users in cluster 1 has
 made. This correspondence fortifies our finding that clustering and PCA
 can share something in common.
 
