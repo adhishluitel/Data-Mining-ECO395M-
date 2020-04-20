@@ -719,9 +719,8 @@ terror alert, the police department would divert resources from other
 districts and concentrate them in District 1. If this hypothesis was
 right, we would expect a decrease in crime in District 1, but an
 increase in crime in the other districts. So, the researchers included
-an interaction
-*H**i**g**h**A**l**e**r**t* × *D**i**s**t**r**i**c**t*<sub>1</sub> to
-allow for district fixed effects.
+an interaction High Alert × District\_1 to allow for district fixed
+effects.
 
 Column 1 shows that, holding all else fixed, crime in District 1
 decreases by 2.62 crimes per day, while in the other districts the
