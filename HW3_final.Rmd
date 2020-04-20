@@ -609,7 +609,7 @@ subset(soma, select = c("beauty","cooking","fashion")) %>%
 ```
 blablalbl
 
-```{r 3.4.10, echo= FALSE, warning = FALSE, cache = TRUE}
+```{r 3.4.10, echo= FALSE, warning = FALSE, cache = FALSE}
 subset(soma, select = c("sports_playing","online_gaming","college_uni")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
