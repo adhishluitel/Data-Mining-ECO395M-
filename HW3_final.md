@@ -860,9 +860,9 @@ starting by running Kmeans with K=7.
 
 Above, we see the confusion matrix of our k-means clustering which
 barely provided any insight. For instance, we observe that both wines of
-quality 3 and quality 6 maximum observations (7 and 645) are grouped in
-cluster 4. On the other hand, cluster 4 most frequent observations are
-from wines with quality 5. Therefore, determining how to classify this
+quality 7, 8 and 9 maximum observations (438, 94 and 4) are grouped in
+cluster 2. On the other hand, cluster 2 most frequent observations are
+from wines with quality 6. Therefore, determining how to classify this
 cluster would require some degree of arbitrariness.
 
     ##                     wine$quality
