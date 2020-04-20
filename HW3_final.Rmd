@@ -566,6 +566,7 @@ clust4_cen[1:5]
 res <- cor(soma_sc)
 corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
 ```
+
 From the correlation plot, we can observe some subgroups of variables that are highly correlated with each other. The variables 'family', 'school', 'food', 'sports_fandom', 'religion' form the first group. 'Computers', 'travel', 'politics', 'news' and 'automotive' form the second. 'Outdoors', 'health_nutrition' and 'personal_fitness' the third. 'Sports_playing', 'online_gaming' and 'college_uni' form the fourth. And 'beauty', 'cooking' and 'fashion' form the fifth.
 
 Therefore, we decided to use K=5.
@@ -577,7 +578,7 @@ Cluster = factor(clust2$cluster)
 ```
 blblallbalbl
 
-```{r 3.4.6, echo= FALSE, warning = FALSE, cache = FALSE}
+```{r 3.4.6, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("family","school","food","sports_fandom","religion","parenting")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
         upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
@@ -585,7 +586,7 @@ subset(soma, select = c("family","school","food","sports_fandom","religion","par
 ```
 blablalbl
 
-```{r 3.4.7, echo= FALSE, warning = FALSE, cache = FALSE}
+```{r 3.4.7, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("computers","travel","politics","news","automotive")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
@@ -593,7 +594,7 @@ subset(soma, select = c("computers","travel","politics","news","automotive")) %>
 ```
 blablalbl
 
-```{r 3.4.8, echo= FALSE, warning = FALSE, cache = FALSE}
+```{r 3.4.8, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("outdoors","health_nutrition","personal_fitness")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
@@ -601,7 +602,7 @@ subset(soma, select = c("outdoors","health_nutrition","personal_fitness")) %>%
 ```
 blablalbl
 
-```{r 3.4.9, echo= FALSE, warning = FALSE, cache = FALSE}
+```{r 3.4.9, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("beauty","cooking","fashion")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
@@ -609,7 +610,7 @@ subset(soma, select = c("beauty","cooking","fashion")) %>%
 ```
 blablalbl
 
-```{r 3.4.10, echo= FALSE, warning = FALSE, cache = FALSE}
+```{r 3.4.10, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("sports_playing","online_gaming","college_uni")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +

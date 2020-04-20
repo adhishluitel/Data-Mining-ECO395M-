@@ -918,14 +918,15 @@ our analysis when K=4.
     ## online_gaming   college_uni       tv_film           art         adult 
     ##   -0.04123574   -0.04791891   -0.05353630   -0.06679871   -0.06705039
 
-![](HW3_final_files/figure-markdown_strict/3.4.4-1.png) From the
-correlation plot, we can observe some subgroups of variables that are
-highly correlated with each other. The variables 'family', 'school',
-'food', 'sports\_fandom', 'religion' form the first group. 'Computers',
-'travel', 'politics', 'news' and 'automotive' form the second.
-'Outdoors', 'health\_nutrition' and 'personal\_fitness' the third.
-'Sports\_playing', 'online\_gaming' and 'college\_uni' form the fourth.
-And 'beauty', 'cooking' and 'fashion' form the fifth.
+![](HW3_final_files/figure-markdown_strict/3.4.4-1.png)
+
+From the correlation plot, we can observe some subgroups of variables
+that are highly correlated with each other. The variables 'family',
+'school', 'food', 'sports\_fandom', 'religion' form the first group.
+'Computers', 'travel', 'politics', 'news' and 'automotive' form the
+second. 'Outdoors', 'health\_nutrition' and 'personal\_fitness' the
+third. 'Sports\_playing', 'online\_gaming' and 'college\_uni' form the
+fourth. And 'beauty', 'cooking' and 'fashion' form the fifth.
 
 Therefore, we decided to use K=5.
 
