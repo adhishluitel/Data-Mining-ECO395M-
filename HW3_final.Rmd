@@ -437,7 +437,8 @@ mu = attr(z_std,"scaled:center")
 sigma = attr(z_std,"scaled:scale")
 res <- cor(z_std)
 ```
-Then we plotted the below shown correlation plot of all 11 chemical properties to determine how strongly they are correlated with one another. Just by eyeballing the below plot, we could tell that perhaps the chemical properties “total sulfur dioxide”, “free sulfur dioxide” and “residual sugar” would be the most relevant chemical properties for us. 
+
+Then we plotted the correlogram below identify possible correlations among the 11 chemical properties. Just by eyeballing the below plot, we could tell that perhaps the chemical properties “total sulfur dioxide”, “free sulfur dioxide” and “residual sugar” could be analyzed as a subgroup, and "volatile.acidity", "chlorides", "sulphates" and "pH" as another.
 
 ```{r 3.3.2, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
@@ -457,18 +458,37 @@ sort(cluster1$centers[2,], decreasing=TRUE)
 Cluster = factor(cluster1$cluster)
 ```
 
-From the below scatter plots and bell curves of these three chemical properties we could see that they formed somewhat proper clusters, however there were plenty of overlaps. We also needed to determine that our two clusters had distinguished wine types, red and white.
+From the below scatter plots and histograms of these three chemical properties we can see how these variables are distributed in the original dataset. If the cluster method gives us some predictive power in distinguishing a red wine from a white wine, than it should preserve some patterns from the distributions.
 
 ```{r 3.3.4, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 subset(wine, select = c("total.sulfur.dioxide","free.sulfur.dioxide","residual.sugar")) %>%
-  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+  ggpairs(legend = 1, aes(color=wine$color, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+
+subset(wine, select = c("volatile.acidity","chlorides","sulphates","pH")) %>%
+  ggpairs(legend = 1, aes(color=wine$color, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
 
-After this we attempted to form the clusters as per the colors of the wines. So the cluster that mostly had red wines was be the red wine cluster and similarly the cluster that mostly had white wines was be the white wine cluster. 
+From the below scatter plots and histograms of the same chemical properties we could see that, even though there were a few overlaps, they formed somewhat proper clusters that show the similar patterns as the original distribution. 
 
 ```{r 3.3.5, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+subset(wine, select = c("total.sulfur.dioxide","free.sulfur.dioxide","residual.sugar")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+
+subset(wine, select = c("volatile.acidity","chlorides","sulphates","pH")) %>%
+  ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
+  theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
+```
+
+We also needed to determine that our two clusters had distinguished wine types, red and white. After this we attempted to form the clusters as per the colors of the wines. So the cluster that mostly had red wines was be the red wine cluster and similarly the cluster that mostly had white wines was be the white wine cluster. 
+
+```{r 3.3.6, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 wine$cluster = cluster1$cluster
 wine = wine %>%
   group_by(cluster) %>%
@@ -480,7 +500,7 @@ print(table1)
 ```
 From the above table we could see that we had clustered our wines pretty accurately, with a majority of our red wines being under the ‘color_hat’ cluster red and white wines being under the ‘color_hat’ cluster white. With a 98.58% accuracy, we concluded that our k-means clustering had done a pretty good job in terms of dimension reduction.
 
-```{r 3.3.6, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+```{r 3.3.7, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 cluster_kpp = kmeanspp(z_std, k=2, nstart=25)
 
 wine$cluster_kpp = cluster_kpp$cluster
@@ -494,14 +514,14 @@ print(table2)
 
 Next, we did a k -means++ clustering with k-means 2 and 25 starts, again. Just like before, we labelled our clusters as ‘color_hat’ cluster red and white wines being under the ‘color_hat’ cluster white. As shown above, with a 98.58% accuracy, we found out that our k-means++ clustering performed just as efficiently as k-means. 
 
-```{r 3.3.7, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+```{r 3.3.8, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 pca = prcomp(z_std, scale=TRUE)
 summary(pca)
 ```
 
 Next, we performed a Principal Component Analysis(PCA). The above table showed that the first three principal components (PC1-PC3) combined form 64.3% of the total variance in the dataset, which is a highly significant proportion. Based on this, we used our first three principal components to perform our clustering.
 
-```{r 3.3.8, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+```{r 3.3.9, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 scores = pca$x
 loadings = pca$rotation
 
@@ -518,7 +538,7 @@ From the above scatter plot and confusion matrix we could see that our PCA based
 
 After this we were tasked with answering another key problem: whether this technique also seem capable of sorting the higher from the lower quality wines or not. Due to this we had to distinguish the quality of wine, since all the wines were judged from a scale of 1-10, we had 10 categories. However, inspecting the data set, we found out that a majority of wines were rated 5 or 6 and there were no wines that were scored 1, 2 or 10, that is extremely high or low. Thus, in reality, we only had 7 different qualities of wine.
 
-```{r 3.3.9, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+```{r 3.3.10, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 ggplot(data=wine) +
   geom_bar(aes(x = quality))+
   labs(x = "Wine Quality", y = "Frequency")+
@@ -531,7 +551,7 @@ Due to the fact that our dataset isn't balanced regarding wine quality, there is
 
 Bearing this in mind, we applied the same tools as we did initially, starting by running K-means with K=7.
 
-```{r 3.3.10, echo= FALSE, warning = FALSE, include = TRUE, cache=TRUE}
+```{r 3.3.11, echo= FALSE, warning = FALSE, include = TRUE, cache=TRUE}
 set.seed(14)
 cluster2 = kmeans(z_std, 7, nstart=25)
 wine$cluster2 = cluster2$cluster
@@ -542,16 +562,17 @@ print(table4)
 
 Above, we see the confusion matrix of our k-means clustering which barely provided any insight. For instance, we observe that both wines of quality 7, 8 and 9 maximum observations (438, 94 and 4) are grouped in cluster 2. On the other hand, cluster 2 most frequent observations are from wines with quality 6. Therefore, determining how to classify this cluster would require some degree of arbitrariness. 
 
-```{r 3.3.11, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+```{r 3.3.12, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+set.seed(NULL)
 cluster_kpp2 = kmeanspp(z_std, 7, nstart=25)
 
 table5 = xtabs(~cluster_kpp2$cluster + wine$quality)
 print(table5)
 ```
 
-Similarly, we conducted k-means++ clustering. Just as the case with k-means clustering, the confusion matrix in this case didn't provide much insights either. 
+Similarly, we conducted k-means++ clustering. Just as the case with k-means clustering, the confusion matrix in this case didn't provide many insights either. 
 
-```{r 3.3.12, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+```{r 3.3.13, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 pca2 = prcomp(z_std, scale=TRUE)
 loadings = pca2$rotation
 scores = pca2$x
