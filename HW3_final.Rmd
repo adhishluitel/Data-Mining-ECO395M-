@@ -36,9 +36,9 @@ grb$size = grb$size/1000 # lower the scale of size in order to get around limits
 # We see an error occurs when doing a lasso regression if we don't lower the scale
 ```
 
-In this exercise, we analyzed a dataset on green buildings to build the best predictive pricing model. We started with cleaning the data. First we detected all the null values that were missing and deleted them. As we are running a lasso regression, in order to comply with  the limits of computation, we scaled down 'size' variable from 'square footage' to '(square footage)/1000'.
+In this exercise, we analyzed a dataset on green buildings to build the best predictive pricing model. We started with cleaning the data. First, we detected all the null values that were missing and deleted them. As we are running a lasso regression, in order to comply with  the limits of computation, we scaled down 'size' variable from 'square footage' to '(square footage)/1000'.
 
-Next, we built a base model and used step-wise selection. From the insights we gathered while cleaning up the data, we decided to delete the variable 'CS_PropertyID' as it was just a unique identity number and contributed nothing to our model. We also deleted another variable 'total_dd_07' due to the nature of its collinearity with the variables 'cd_total_07' and 'hd_total07'(total_dd_07 = cd_total_07 + hd_total07). Lastly, we also deleted the variable 'cluster' from our model because it was recognized as a numerical variable though it was a categorical one. And in order to reflect the effect of cluster on rent, we already have cluster.rent variable which shows the average rent by clusters.
+Next, we built a base model and used stepwise selection. From the insights we gathered while cleaning up the data, we decided to delete the variable 'CS_PropertyID' as it was just a unique identity number and contributed nothing to our model. We also deleted another variable 'total_dd_07' due to the nature of its collinearity with the variables 'cd_total_07' and 'hd_total07'(total_dd_07 = cd_total_07 + hd_total07). Lastly, we also deleted the variable 'cluster' from our model because it was recognized as a numerical variable though it was a categorical one. And in order to reflect the effect of cluster on rent, we already have cluster.rent variable which shows the average rent by clusters.
 
 Finally, in order to check if a building is a green building, we used only 'green_rating' as our dummy variable and didn't  consider 'LEED' and 'EnergyStar' separately.
 
@@ -64,7 +64,7 @@ To find the best predictive model possible for price, we built 5 different model
 
 ### Stepwise Selection Model
 First, we used stepwise regression method to find the model with the best performance. 
-We built forward selection model, backward selection model and stepwise selection model. i) Forward selection model starts with a model having no variables, and add all possible one-variable additions to it including every interaction. ii) Backward selection model starts with the full model that has all the variables including all of interactions, then improves its performance by deleting each variable. iii) Stepwise selection model starts with our base model 'lm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster)' and we considered all possible one-variable addtions or deletions including interactions. 
+We built forward selection model, backward selection model and stepwise selection model. i) Forward selection model starts with a model having no variables and add all possible one-variable additions to it including every interaction. ii) Backward selection model starts with the full model that has all the variables including all of interactions, then improves its performance by deleting each variable. iii) Stepwise selection model starts with our base model 'lm(Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster)' and we considered all possible one-variable additions or deletions including interactions. 
 
 ```{r 3.1.2, echo=FALSE, include = FALSE}
 # Pick the backward selection model as our best model
@@ -116,7 +116,7 @@ step(model1, scope = list(lower= null, upper=full), dir="both")
 # No more progress! so we can say model1 is the best model when we use a stepwise selection
 ```
 
-Here's our best predictive stepwise selection model with 84 variables obtained by backward selection.
+Here is our best predictive stepwise selection model with 84 variables obtained by backward selection.
 
 ```{r 3.1.4, echo=FALSE}
 stargazer(model1, single.row = TRUE, type='text', omit.stat = c("ser", "rsq","f"),
@@ -152,7 +152,7 @@ sqrt(mean(err_save))
 ```
 
 ### Lasso Regression Model
-After this, we fit a lasso regression model to attempt to assemble the best predictive model. We used our full model including all the variables and interactions except some variable that we mentioned above - CS_PropertyID, LEED, Energystar, total_dd_07, cluster.
+After this, we fit a lasso regression model to attempt to assemble the best predictive model. We used our full model including all the variables and interactions except some variable that we mentioned above(CS_PropertyID, LEED, Energystar, total_dd_07, cluster).
 Running the lasso regression model, the path plot is shown on the diagram below.
 
 ```{r 3.1.6, echo=FALSE}
@@ -170,7 +170,7 @@ min(AICc(grblasso))
 which.min(AICc(grblasso))
 ```
 
-Our optimal value of lambda turns out to be -2.17 in log scale, and at the optimal lambda, our lasso regression model has 25 variables with an intercept.The result below shows the coefficients of grb_beta, the minimum lambda in log scale, and the total number of variables including an intercept.
+Our optimal value of lambda turns out to be -2.17 in log scale, and at the optimal lambda, our lasso regression model has 25 variables with an intercept. The result below shows the coefficients of grb_beta, the minimum lambda in log scale, and the total number of variables including an intercept.
 
 ```{r 3.1.8, echo=FALSE}
 grb_beta = coef(grblasso) 
@@ -244,7 +244,7 @@ system.time(for(i in 1:K){
 })
 ```
 
-To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess its performance. We used our base model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicity in tree regressions. The minimum size of terminal nodes is 5 which is default setting.
+To further polish our best prediction model, we tried treebagging our best model with K-fold validation to assess its performance. We used our base model('Rent~(.-CS_PropertyID-LEED-Energystar-total_dd_07-cluster') for our tree bagging, and excluded all the interaction variables because we didn't need them explicitly in tree regressions. The minimum size of terminal nodes is 5 which is default setting.
 We set the number of trees to be 300 times and run the regression. It took more than 7 minutes to compute the whole procedure, however, the RMSE for our bagging model was `r round(sqrt(mean(err_save3)), 2)` which was much lower than those of our previous models.
 
  
@@ -260,7 +260,7 @@ Below, we constructed a plot that shows the error in the variables. Judging by t
 plot(model3_train, main = 'Bagging Model') 
 ```
 
-In addition, the graph below shows a variable importance plot. The bigger the number is ,the greater the reduction on RMSE we get. We can see that "cluster_rent" variable has the most important impact on decideing the rent price in our tree bagging model.
+In addition, the graph below shows a variable importance plot. The bigger the number is, the greater the reduction on RMSE we get. We can see that "cluster_rent" variable has the most important impact on deciding the rent price in our tree bagging model.
 
 ```{r 3.1.12, echo=FALSE}
 varImpPlot(model3_train, main='Bagging Model')
@@ -278,7 +278,7 @@ system.time(for(i in 1:K){
 ```
 
 ### Tree - Random Forest Model
-Now, we fit a random forest model to predict rent price using our base model and also did K-fold cross validation. First, we start with 300 trees and it took almost 3 minutes to compute all the procedures, however, the plot below shows that the error curve stops decreasing much after 50 trees. So we can reduce our number of trees to 100 and save our computational time.
+Now, we fit a random forest model to predict rent price using our base model and also did K-fold cross validation. First, we start with 300 trees and it took almost 3 minutes to compute all the procedures, however, the plot below shows that the error curve stops decreasing much after 50 trees. So, we can reduce our number of trees to 100 and save our computational time.
 
 ```{r 3.1.13.1, echo=FALSE }
 plot(model4_train, main = 'Random Forest Model')
@@ -345,7 +345,7 @@ summary(model5_train)
 By using K-fold cross validation, we derived 5 RMSE out of 5 models as below.
 We can see that the randomforest model shows the lowest RMSE which means the best performance.  
 
-The randomforest model is superior in terms of computational speed. It took less than 1 minute to compute all the procedures, which is very efficient compared to the stepwise selection and the bagging. The lasso regression and the boosting method didn't take much computational time, but their performances are worse than the random forest model.Therefore, we can conclude that the random forest model shows the best performance.
+The randomforest model is superior in terms of computational speed. It took less than 1 minute to compute all the procedures, which is very efficient compared to the stepwise selection and the bagging. The lasso regression and the boosting method didn't take much computational time, but their performances are worse than the random forest model. Therefore, we can conclude that the random forest model shows the best performance.
 
 ```{r 3.1.18, echo=FALSE, warning=FALSE}
 Model <- c('Stepwise', 'Lasso','Bagging','Randomforest','Boosting')
@@ -395,7 +395,7 @@ Column 1 shows that the presence of a high alert is associated with a decrease o
 
 The researchers controlled for Metro ridership because there is a reasonable possibility that a decrease in crime as a response to the presence of a high terrorism alert might be happening indirectly thru alternative factors, such as a reduction in tourism. In that sense, midday Metro ridership is a good proxy for tourism, and this hypothesis implies that having fewer potential victims on the streets would lead to fewer committed crimes.
 
-When controlling for midday Metro ridership, the magnitude of the coefficient associated with a high alert slightly decrease, but remained in the confidence interval ($-7.316 \pm 2.877 \times 1.96$). Column 2 shows that a 10% increase in Metro ridership is associated with an increase of 1.7 crimes per day, holding all else fixed.
+When controlling for midday Metro ridership, the magnitude of the coefficient associated with a high alert slightly decreased but remained in the confidence interval ($-7.316 \pm 2.877 \times 1.96$). Column 2 shows that a 10% increase in Metro ridership is associated with an increase of 1.7 crimes per day, holding all else fixed.
 
 This procedure is important because, when trying to measure the causal effect of an intervention, we are implicitly assuming that all the other variables that affect the outcome, observed and unobserved, are not changing. Comparative statics methodological concept describes the effect of an explanatory variable on the response variable when holding all else fixed. (Cunningham, 2020) So, if something else is changing, we need to control for that change. 
 
@@ -438,30 +438,36 @@ sigma = attr(z_std,"scaled:scale")
 res <- cor(z_std)
 ```
 Then we plotted the below shown correlation plot of all 11 chemical properties to determine how strongly they are correlated with one another. Just by eyeballing the below plot, we could tell that perhaps the chemical properties “total sulfur dioxide”, “free sulfur dioxide” and “residual sugar” would be the most relevant chemical properties for us. 
+
 ```{r 3.3.2, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
 ```
+
+### Distinguishing colors
 Then we started clustering our normalized dataset with k-means 2 as we had 2 types of wines by color, red or white and with 25 starts. We then attempted to find the scaled center of one of the clusters in order to find the most prominent variables, judging by their coefficient. When we did this for cluster 1, we found out that the chemical properties “total sulfur dioxide”, “free sulfur dioxide” and “residual sugar” appeared to have the highest coefficients. This implied the other cluster (cluster 2) would have the lowest coefficient values for these variables, so these were the variables could explain the difference between the two different wine color clusters very clearly. This further cemented our reasoning for picking these variables. 
+
 ```{r 3.3.3, echo= FALSE, warning = FALSE, include = FALSE, cache = TRUE}
 #Clustering
 #Start with K means 2 as we have two basic categories (Red/White) and 25 starts
 cluster1 = kmeans(z_std, 2, nstart=25) 
-
 #Picking variables
 sort(cluster1$centers[1,], decreasing=TRUE)
 sort(cluster1$centers[2,], decreasing=TRUE)
-
 #Comparing 
 Cluster = factor(cluster1$cluster)
 ```
+
 From the below scatter plots and bell curves of these three chemical properties we could see that they formed somewhat proper clusters, however there were plenty of overlaps. We also needed to determine that our two clusters had distinguished wine types, red and white.
+
 ```{r 3.3.4, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 subset(wine, select = c("total.sulfur.dioxide","free.sulfur.dioxide","residual.sugar")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
           upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
+
 After this we attempted to form the clusters as per the colors of the wines. So the cluster that mostly had red wines was be the red wine cluster and similarly the cluster that mostly had white wines was be the white wine cluster. 
+
 ```{r 3.3.5, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 wine$cluster = cluster1$cluster
 wine = wine %>%
@@ -472,7 +478,8 @@ wine = wine %>%
 table1 = xtabs(~wine$color_hat + wine$color) 
 print(table1)
 ```
-From the above table we could see that we had clustered our wines pretty accurately, with a majority of our red wines being under the ‘color_hat’ cluster red and white wines being under the ‘color_hat’ cluster white. With a 98.58% accuracy, we concluded that our k-means clustering had done a pretty good job in terms of dimension reduction. 
+From the above table we could see that we had clustered our wines pretty accurately, with a majority of our red wines being under the ‘color_hat’ cluster red and white wines being under the ‘color_hat’ cluster white. With a 98.58% accuracy, we concluded that our k-means clustering had done a pretty good job in terms of dimension reduction.
+
 ```{r 3.3.6, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 cluster_kpp = kmeanspp(z_std, k=2, nstart=25)
 
@@ -484,12 +491,16 @@ wine = wine %>%
 table2 = xtabs(~wine$color_hat_kpp + wine$color) ###
 print(table2)
 ```
+
 Next, we did a k -means++ clustering with k-means 2 and 25 starts, again. Just like before, we labelled our clusters as ‘color_hat’ cluster red and white wines being under the ‘color_hat’ cluster white. As shown above, with a 98.58% accuracy, we found out that our k-means++ clustering performed just as efficiently as k-means. 
+
 ```{r 3.3.7, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 pca = prcomp(z_std, scale=TRUE)
 summary(pca)
 ```
+
 Next, we performed a Principal Component Analysis(PCA). The above table showed that the first three principal components (PC1-PC3) combined form 64.3% of the total variance in the dataset, which is a highly significant proportion. Based on this, we used our first three principal components to perform our clustering.
+
 ```{r 3.3.8, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 scores = pca$x
 loadings = pca$rotation
@@ -516,9 +527,9 @@ ggplot(data=wine) +
 
 ```
 
-Due to the fact that our dataset isn't balanced regarding wine quality, there is a real possibility that wines with quality 5 and 6 will be the the most frequent values in more than one cluster, which would bring additional difficulties on determining which cluster corresponds to which quality of wine.
+Due to the fact that our dataset isn't balanced regarding wine quality, there is a real possibility that wines with quality 5 and 6 will be the most frequent values in more than one cluster, which would bring additional difficulties on determining which cluster corresponds to which quality of wine.
 
-Bearing this in mind, we applied the same tools as we did initially, starting by running Kmeans with K=7.
+Bearing this in mind, we applied the same tools as we did initially, starting by running K-means with K=7.
 
 ```{r 3.3.10, echo= FALSE, warning = FALSE, include = TRUE, cache=TRUE}
 set.seed(14)
@@ -550,7 +561,7 @@ qplot(scores[,1], scores[,2], data=wine, color=factor(cluster_pca1$cluster), xla
 
 Similarly, we also did a PCA based clustering and noticed that bar few extremes, all the data points are clustered collectively around the center, as we could see in the scatterplot that illustrated all 7 clusters. Based on this we decided to see the absolute quantities of wines that were given their respective scores. 
 
-As seen in the tables from kmeans and kmeans++, we could see how the quality scores of the wines are distributed and where our problem lied. A majority of wines were rated between 5, 6 and 7. That meant, all 7 clusters ended up being dominated by wines being rated between 5-7. As a result, wines rated 2, 3 or 9 were heavily under-represented whereas wines rated between 5-7 were heavily over-represented among all 7 clusters. Due to this it was determined to distinguish what chemical property played a role in good or poor quality of wines. Earlier, when we were only distinguishing between red and white wines using k-means 2, we had some overlaps, but this wasn’t much of an issue and our results were still pretty accurate as we had only two categories. But as the number of categories and clusters grew, the disparity between categories was more prevalent and we couldn’t succeed in sorting the higher from the lower quality wines.
+As seen in the tables from k-means and k-means++, we could see how the quality scores of the wines are distributed and where our problem lied. A majority of wines were rated between 5, 6 and 7. That meant, all 7 clusters ended up being dominated by wines being rated between 5-7. As a result, wines rated 2, 3 or 9 were heavily under-represented whereas wines rated between 5-7 were heavily over-represented among all 7 clusters. Due to this it was determined to distinguish what chemical property played a role in good or poor quality of wines. Earlier, when we were only distinguishing between red and white wines using k-means 2, we had some overlaps, but this wasn’t much of an issue and our results were still pretty accurate as we had only two categories. But as the number of categories and clusters grew, the disparity between categories was more prevalent and we couldn’t succeed in sorting the higher from the lower quality wines.
 
 ## Exercise 3.4
 ```{r setup4, include=FALSE}
@@ -577,7 +588,7 @@ soma<-soma[(soma$adult_ratio<0.2),]
 soma <- soma[,-c(1,2)]
 ```
 
-In this exercise, we explored the content of multiple tweets from a sample of followers of NutrientH20's Twitter profile, and come up with some interesting insights about the audience by identifying possible market segments.
+In this exercise, we explored the content of multiple tweets from a sample of followers of NutrientH20's Twitter profile and come up with some interesting insights about the audience by identifying possible market segments.
 
 ### Data cleaning
 We started by cleaning our data set, which is originally comprised of 7,882 observations and 36 variables.
@@ -591,7 +602,7 @@ So we end up with 7,676 observations with 33 variables in our data set.
   
 ### K-means++ clustering
 We'll start with performing clustering analysis. Since our data doesn't show any kinds of hierarchy, we'll focus on K-means analysis. We'll use K-means++ rather than K-means because it's already known that K-means++ shows a better performance.  
-The first question we encounter when doing K-means++ is "How many clusters should we set?", i.e, "What is our optimal K?".  
+The first question we encounter when doing K-means++ is "How many clusters should we set?", i.e., "What is our optimal K?".  
 In order to find its answer, we used three methods - Elbow plot, CH index, and Gap statistics.  
 
 
@@ -618,9 +629,9 @@ CH_grid= foreach(k=k_grid, .combine='c') %do% {
 soma_gap = clusGap(soma_sc, FUN= kmeanspp, nstart=25, K.max=10, B=100)
 ```
 
-We scaled our data first, and performed three analyses by using scaled data.  
-The first graph shows the elbow plot of our data set. As we can see, there's no distinguished elbow here, so it doesn't give us clear messages about the optimal K.  
-The second one is the CH index. We can see it is the highest when K=1, and it decreases gradually. So we cannot get a satisfactory answer for our question, either.  
+We scaled our data first and performed three analyses by using scaled data.  
+The first graph shows the elbow plot of our data set. As we can see, there is no distinguished elbow here, so it doesn't give us clear messages about the optimal K.  
+The second one is the CH index. We can see it is the highest when K=1, and it decreases gradually. So, we cannot get a satisfactory answer for our question, either.  
 
 
 ```{r 3.4.2, echo= FALSE, warning = FALSE}
@@ -628,7 +639,7 @@ plot(k_grid, SSE_grid) #cannot see any elbow here!
 plot(k_grid, CH_grid)# K=2 or 3?
 ```
 
-Finally, we can see our gap statistics diagram of our data below. However, We cannot find any dips here. Unfortunately, it seems that none of these means could lead us to a conclusive answer for the optimal K.
+Finally, we can see our gap statistics diagram of our data below. However, we cannot find any dips here. Unfortunately, it seems that none of these means could lead us to a conclusive answer for the optimal K.
 
 ```{r 3.4.3, echo= FALSE, warning = FALSE}
 plot(soma_gap)
@@ -642,7 +653,7 @@ res <- cor(soma_sc)
 corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
 ```
 
-From the correlation plot, we can observe some subgroups of variables that are highly correlated with each other. The variables 'family', 'school', 'food', 'sports_fandom', 'religion' form the first group. 'Computers', 'travel', 'politics', 'news' and 'automotive' form the second. 'Outdoors', 'health_nutrition' and 'personal_fitness' the third. 'Sports_playing', 'online_gaming' and 'college_uni' form the fourth. And 'beauty', 'cooking' and 'fashion' form the fifth.
+From the correlation plot, we can observe some subgroups of variables that are highly correlated with each other. The variables 'family', 'school', 'food', 'sports_fandom', 'religion' from the first group. 'Computers', 'travel', 'politics', 'news' and 'automotive' form the second. 'Outdoors', 'health_nutrition' and 'personal_fitness' the third. 'Sports_playing', 'online_gaming' and 'college_uni' form the fourth. And 'beauty', 'cooking' and 'fashion' form the fifth.
 
 Therefore, we decided to use K=5.
 
@@ -695,7 +706,7 @@ subset(soma, select = c("sports_playing","online_gaming","college_uni")) %>%
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
 
-For the fifth subgroup, we can't find some well defined patterns when comparing within cluster interests in ‘beauty’, ‘cooking’ and ‘fashion’.
+For the fifth subgroup, we can't find some well-defined patterns when comparing within cluster interests in ‘beauty’, ‘cooking’ and ‘fashion’.
 
 ### Can we use PCA in this example?
 Now, we try to perform a principal component analysis to find low-dimensional summaries of our data set. Then we'll divide our samples into several clusters hoping that we can make our model simpler and more interpretable.  
@@ -711,12 +722,12 @@ loadings= pca$rotation
 scores = pca$x
 ```
 
-The table below is the matrix of variable loadings from PC1 to PC4. We'll see if what we found by PCA can share something in common with our findings by our K-means++ clustering.
+The table below is the matrix of variable loadings from PC1 to PC4. We'll see if what we found from PCA shares something in common with our findings from our K-means++ clustering.
 In PC1, we can see 'religion', 'food', and 'parenting' show the largest value, which means the more tweets a user has made in these categories, the more scores (s)he'll get in PC1. And there is no negative value here.  
 In PC2, 'sports_fandom', 'religion', 'parenting' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC2.
 On the other hand, 'cooking','fashion', and 'photo_sharing' show the smallest values, and they are all negative numbers. It means that the more one tweets in these categories, the less scores one will get.
 In PC3, 'politics','travel', and 'computers' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC3. On the other hand, 'helath_nutrition', 'personal_fitness', and 'cooking' have the smallest and negative values, which means the more tweets one has made in these categories, the less scores one will get in PC3.  
-Lastly, in PC4, 'health_nutrition','personal_fitness','outdoors' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC4. On the other hand, 'college_uni', 'online_gaming', and 'sport_playing' have the smallest and negatieve values, which means the more tweets one has made in these categories, the less scores one will get in PC4.
+Lastly, in PC4, 'health_nutrition','personal_fitness','outdoors' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC4. On the other hand, 'college_uni', 'online_gaming', and 'sport_playing' have the smallest and negative values, which means the more tweets one has made in these categories, the less scores one will get in PC4.
 
 ```{r 3.4.12, echo=FALSE}
 loadings[,c(1:4)]
@@ -736,7 +747,7 @@ colnames(soma_sc)[head(o4,3)]
 colnames(soma_sc)[tail(o4,3)]
 ```
 
-Now, We plot our samples on two-dimensional space which consist of two axis - PC1 and PC2, and color them by clusters that we showed in Kmeans++. Here, we can find different characteristics depending on clusters.
+Now, We plot our samples on two-dimensional space which consist of two axis - PC1 and PC2, and color them by clusters that we showed in K-means++. Here, we can find different characteristics depending on clusters.
 For example, cluster4 clearly shows higher PC2 values than other clusters do on average. We've already seen that users in cluster4 have a high interest in 'sports_fandom' and 'religion.' And as we have shown above, the more tweets one has made in 'sports_fandom' and 'religion', the more scores one will get in PC2. So it is no wonder that cluster4 shows high PC2 values on the graph below.  
 
 ```{r 3.4.14, echo=FALSE}
@@ -744,8 +755,13 @@ qplot(scores[,1], scores[,2], color=factor(clust2$cluster), xlab='Component1', y
 ```
 
 We can find the commonality between clustering and PCA in another example. The plot below shows the relationship between PC3 and PC4. One thing we can clearly see here is that cluster1 shows higher PC3 value than other clusters on average.  
-We already mentioned above that the more tweets one has made in 'politics','travel', and 'computers' categories, the more PC3 scores one will get. And we can recall that users in cluster1 have a high interest in 'computers', 'travel', and 'politics'. This correspondence fortifies our finding that clustering and PCA can share something in common.
+We already mentioned above that the more tweets one has made in 'politics', 'travel', and 'computers' categories, the more PC3 scores one will get. And we can recall that users in cluster1 have a high interest in 'computers', 'travel', and 'politics'. This correspondence fortifies our finding that clustering and PCA can share something in common.
 
 ```{r 3.4.15, echo=FALSE}
 qplot(scores[,3], scores[,4], color=factor(clust2$cluster), xlab='Component3', ylab='Component4')
 ```
+
+### Conclusion
+By using the clustering approach, we were able to find interesting market segments that stand out in NutrientH20's social-media audience. We were able to identify some patterns in groups of correlated interests that we believe can help to position the company's brand to maximally appeal to each market segment.
+And by using the principal component analysis, we can confirm that the patterns we've seen in clustering analysis are still valid in the PCA.
+Considering different patterns shown in each cluster, the company will be able to establish customized strategies for each market segment.
