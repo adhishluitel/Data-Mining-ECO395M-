@@ -31,7 +31,7 @@ cluster1 = kmeans(z_std, 2, nstart=25)
 
 #Picking variables
 sort(cluster1$centers[1,], decreasing=TRUE)
-#sort(cluster1$centers[2,], decreasing=TRUE)
+sort(cluster1$centers[2,], decreasing=TRUE)
 
 #Comparing 
 Cluster = factor(cluster1$cluster)
@@ -105,6 +105,7 @@ table_wine = wine %>%
             quality_7 = sum(quality == 7),
             quality_8 = sum(quality == 8),
             quality_9 = sum(quality == 9))
+print(table_wine)
 
 
 Clusterq = factor(cluster2$cluster)
@@ -133,7 +134,7 @@ print(table4)
 pca2 = prcomp(z_std, scale=TRUE)
 summary(pca2)
 loadings = pca2$rotation
-scores = pca2$z_std
+scores = pca2$x
 # PCA for clustering
 cluster_pca1 = kmeans(scores[,1:3], 7, nstart=25)
 qplot(scores[,1], scores[,2], data=wine, color=factor(cluster_pca1$cluster), xlab='Component 1', ylab='Component 2')
