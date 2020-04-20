@@ -521,6 +521,7 @@ Due to the fact that our dataset isn't balanced regarding wine quality, there is
 Bearing this in mind, we applied the same tools as we did initially, starting by running Kmeans with K=7.
 
 ```{r 3.3.10, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+set.seed(14)
 cluster2 = kmeans(z_std, 7, nstart=25)
 wine$cluster2 = cluster2$cluster
 
@@ -528,7 +529,7 @@ table4 = xtabs(~cluster2$cluster + wine$quality)
 print(table4)
 ```
 
-Above, we see the confusion matrix of our k-means clustering which barely provided any insight. For instance, we observe that both wines of quality 3 and quality 6 maximum observations (7 and 648) are grouped in cluster 3. On the other hand, cluster 3 most frequent observations are from wines with quality 5. Therefore, determining how to classify this cluster would require some degree of arbitrariness. 
+Above, we see the confusion matrix of our k-means clustering which barely provided any insight. For instance, we observe that both wines of quality 3 and quality 6 maximum observations (7 and 645) are grouped in cluster 4. On the other hand, cluster 4 most frequent observations are from wines with quality 5. Therefore, determining how to classify this cluster would require some degree of arbitrariness. 
 ```{r 3.3.11, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 cluster_kpp2 = kmeanspp(z_std, 7, nstart=25)
 
