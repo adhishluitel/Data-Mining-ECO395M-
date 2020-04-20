@@ -405,9 +405,10 @@ This procedure is important because, when trying to measure the causal effect of
 include_graphics(table2_url)
 ```
 
-The researchers also analyzed the geographical patterns of crime in Washington, D.C. Given the fact that most of the potential targets of terrorist attacks, such as the White House and the Congress, are located in the National Mall area, one could argue that, in the presence of a terror alert, the police department would divert resources from other districts and concentrate them in District 1. If this hypothesis was right, we would expect a decrease in crime in District 1, but an increase in crime in the other districts. So, the researchers included an interaction $High Alert \times District1$ to allow for district fixed effects.
+The researchers also analyzed the geographical patterns of crime in Washington, D.C. Given the fact that most of the potential targets of terrorist attacks, such as the White House and the Congress, are located in the National Mall area, one could argue that, in the presence of a terror alert, the police department would divert resources from other districts and concentrate them in District 1. If this hypothesis was right, we would expect a decrease in crime in District 1, but an increase in crime in the other districts. So, the researchers included an interaction $High Alert \times District_1$ to allow for district fixed effects.
 
 Column 1 shows that, holding all else fixed, crime in District 1 decreases by 2.62 crimes per day, while in the other districts the effect is not statistically significant (but also not positive). This result provide evidence that an important part of the decrease in crime associated with the presence of a high terror alert is driven by the decrease in crime in the National Mall area, where the increment of police force tends to be placed.
+
 ```{r setup3, include=FALSE}
 library(tidyverse)
 library(LICORS)
@@ -421,7 +422,8 @@ library(DescTools)
 wine_data <- "https://raw.githubusercontent.com/jgscott/ECO395M/master/data/wine.csv"
 wine <- read.csv(url(wine_data))
 ```
-### Exercise 3.3
+
+## Exercise 3.3
 
 In this question we analyzed a data set on 6,500 different bottles of vinho verde wine from northern Portugal. We had information on 11 chemical properties of these wines, whether they were red or white and the quality of the wine, as judged on a 1-10 scale. Our goal was to assess what dimension reduction clustering technique (k-means or PCA) would be more accurate. We were also tasked to determine if chemical properties could be used as indicators to determine the quality of wines. 
 
@@ -502,40 +504,51 @@ print(table3)
 From the above scatter plot and confusion matrix we could see that our PCA based clustering also did a very good job in terms of dimension reduction with an accuracy rate of 98.3%. Hence, we concluded that in terms of this case, k-means, k-means++ and PCA all seem to be excellent dimension reduction techniques, however k-means and k-means++ outperformed PCA by a mere 0.2%p.
 
 ### Distinguishing quality
-After this we were tasked with answering another key problem; whether this technique also seem capable of sorting the higher from the lower quality wines or not. Due to this we had to distinguish the quality of wine, since all the wines were judged from a scale of 1-10, we had 10 categories. However, inspecting the data set, we found out that a majority of wines were rated 5 or 6 and there were no wines that were scored 1, 2 or 10, that is extremely high or low. Thus, in reality, we only had 7 different qualities of wine. Bearing this in mind, we applied the same tools as we did initially.
+
+After this we were tasked with answering another key problem: whether this technique also seem capable of sorting the higher from the lower quality wines or not. Due to this we had to distinguish the quality of wine, since all the wines were judged from a scale of 1-10, we had 10 categories. However, inspecting the data set, we found out that a majority of wines were rated 5 or 6 and there were no wines that were scored 1, 2 or 10, that is extremely high or low. Thus, in reality, we only had 7 different qualities of wine.
+
 ```{r 3.3.9, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+ggplot(data=wine) +
+  geom_bar(aes(x = quality))+
+  labs(x = "Wine Quality", y = "Frequency")+
+  scale_x_continuous(breaks=c(3:9))+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), panel.grid.major.y = element_line(colour = "grey"))
+
+```
+
+Due to the fact that our dataset isn't balanced regarding wine quality, there is a real possibility that wines with quality 5 and 6 will be the the most frequent values in more than one cluster, which would bring additional difficulties on determining which cluster corresponds to which quality of wine.
+
+Bearing this in mind, we applied the same tools as we did initially, starting by running Kmeans with K=7.
+
+```{r 3.3.10, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 cluster2 = kmeans(z_std, 7, nstart=25)
 wine$cluster2 = cluster2$cluster
-table_wine = wine %>%
-  group_by(cluster2) %>%
-  summarize(quality_3 = sum(quality == 3),
-            quality_4 = sum(quality == 4),
-            quality_5 = sum(quality == 5),
-            quality_6 = sum(quality == 6),
-            quality_7 = sum(quality == 7),
-            quality_8 = sum(quality == 8),
-            quality_9 = sum(quality == 9))
+
 table4 = xtabs(~cluster2$cluster + wine$quality)
 print(table4)
 ```
-Above, we see the confusion matrix of our k-means clustering which barely provided any insight.  
-```{r 3.3.10, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+
+Above, we see the confusion matrix of our k-means clustering which barely provided any insight. For instance, we observe that both wines of quality 3 and quality 6 maximum observations (7 and 648) are grouped in cluster 3. On the other hand, cluster 3 most frequent observations are from wines with quality 5. Therefore, determining how to classify this cluster would require some degree of arbitrariness. 
+```{r 3.3.11, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 cluster_kpp2 = kmeanspp(z_std, 7, nstart=25)
 
 table5 = xtabs(~cluster_kpp2$cluster + wine$quality)
 print(table5)
 ```
+
 Similarly, we conducted k-means++ clustering. Just as the case with k-means clustering, the confusion matrix in this case didn't provide much insights either. 
-```{r 3.3.11, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
+
+```{r 3.3.12, echo= FALSE, warning = FALSE, include = TRUE, cache = TRUE}
 pca2 = prcomp(z_std, scale=TRUE)
 loadings = pca2$rotation
 scores = pca2$x
 cluster_pca1 = kmeans(scores[,1:3], 7, nstart=25)
 qplot(scores[,1], scores[,2], data=wine, color=factor(cluster_pca1$cluster), xlab='Component 1', ylab='Component 2')
 ```
+
 Similarly, we also did a PCA based clustering and noticed that bar few extremes, all the data points are clustered collectively around the center, as we could see in the scatterplot that illustrated all 7 clusters. Based on this we decided to see the absolute quantities of wines that were given their respective scores. 
 
-As seen in the above table, we could see how the quality scores of the wines are distributed and where our problem lied. A majority of wines were rated between 5, 6 and 7. That meant, all 7 clusters would be dominated by wines being rated between 5-7. As a result, wines rated 2, 3 or 9 were heavily under-represented whereas wines rated between 5-7 were heavily over-represented among all 7 clusters. Due to this it was determined to distinguish what chemical property played a role in good or poor quality of wines. Earlier, when we were only distinguishing between red and white wines using k-means 2, we had some overlaps, but this wasn’t much of an issue and our results were still pretty accurate as we had only two categories and two clusters. But as the number of categories and clusters grew, the disparity between categories was more prevalent and we couldn’t succeed in sorting the higher from the lower quality wines.
+As seen in the tables from kmeans and kmeans++, we could see how the quality scores of the wines are distributed and where our problem lied. A majority of wines were rated between 5, 6 and 7. That meant, all 7 clusters ended up being dominated by wines being rated between 5-7. As a result, wines rated 2, 3 or 9 were heavily under-represented whereas wines rated between 5-7 were heavily over-represented among all 7 clusters. Due to this it was determined to distinguish what chemical property played a role in good or poor quality of wines. Earlier, when we were only distinguishing between red and white wines using k-means 2, we had some overlaps, but this wasn’t much of an issue and our results were still pretty accurate as we had only two categories. But as the number of categories and clusters grew, the disparity between categories was more prevalent and we couldn’t succeed in sorting the higher from the lower quality wines.
 
 ## Exercise 3.4
 ```{r setup4, include=FALSE}
