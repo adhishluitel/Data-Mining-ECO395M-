@@ -684,7 +684,7 @@ For the fifth subgroup, we can't find some well defined patterns when comparing 
 
 ### Can we use PCA in this example?
 Now, we try to perform a principal component analysis to find low-dimensional summaries of our data set. Then we'll divide our samples into several clusters hoping that we can make our model simpler and more interpretable.  
-However, the table below shows that it's hard to narrow down the number of variables by using PCA. We need at least 7 principal components to explain more than 50% of data, 13 components for 70%, and 23 components for 90%.  
+However, the table below shows that it's hard to narrow down the number of variables by using PCA. We need at least 7 principal components to explain more than 50% of the variance of the data, 13 components for 70%, and 23 components for 90%.  
 So performing clustering analysis after PCA doesn't seem to be a good idea. However, PCA itself can give us some useful information about our samples in another sense.
 
 ```{r 3.4.11, echo=FALSE}
@@ -696,15 +696,15 @@ loadings= pca$rotation
 scores = pca$x
 ```
 
-The table below is the matrix of variable loadings.  
+The table below is the matrix of variable loadings from PC1 to PC4. We'll see if what we found by PCA can share something in common with our findings by our K-means++ clustering.
 In PC1, we can see 'religion', 'food', and 'parenting' show the largest value, which means the more tweets a user has made in these categories, the more scores (s)he'll get in PC1. And there is no negative value here.  
 In PC2, 'sports_fandom', 'religion', 'parenting' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC2.
 On the other hand, 'cooking','fashion', and 'photo_sharing' show the smallest values, and they are all negative numbers. It means that the more one tweets in these categories, the less scores one will get.
-Lastly, in PC3, 'politics','travel', and 'computers' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC3. On the other hand, 'helath_nutrition', 'personal_fitness', and 'cooking' have the smallest and negative values, which means the more tweets one has made in these categories, the less scores one will get in PC3.
-
+In PC3, 'politics','travel', and 'computers' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC3. On the other hand, 'helath_nutrition', 'personal_fitness', and 'cooking' have the smallest and negative values, which means the more tweets one has made in these categories, the less scores one will get in PC3.  
+Lastly, in PC4, 'health_nutrition','personal_fitness','outdoors' have the largest values, which means the more tweets one has made in these categories, the more scores one will get in PC4. On the other hand, 'college_uni', 'online_gaming', and 'sport_playing' have the smallest and negatieve values, which means the more tweets one has made in these categories, the less scores one will get in PC4.
 
 ```{r 3.4.12, echo=FALSE}
-loadings[,c(1:3)]
+loadings[,c(1:4)]
 ```
 ```{r 3.4.13, echo=FALSE, include=FALSE}
 o1 = order(loadings[,1], decreasing=TRUE)
@@ -716,28 +716,21 @@ colnames(soma_sc)[tail(o2,3)]
 o3 = order(loadings[,3], decreasing=TRUE)
 colnames(soma_sc)[head(o3,3)]
 colnames(soma_sc)[tail(o3,3)]
+o4 = order(loadings[,4], decreasing=TRUE)
+colnames(soma_sc)[head(o4,3)]
+colnames(soma_sc)[tail(o4,3)]
 ```
 
 Now, We plot our samples on two-dimensional space which consist of two axis - PC1 and PC2, and color them by clusters that we showed in Kmeans++. Here, we can find different characteristics depending on clusters.
-For example, cluster3 clearly shows higher PC2 value than cluster2 does on average. We saw that the more tweets one has made in 'sports_fandom', 'religion', 'parenting' categories, the more PC2 scores one will get. So it is probable that users in cluster3 tweeted more in these categories.  
-Recalling the characteristics of cluster3, we can observe 'religion', 'parenting', 'sports_fandom' are its top 3 intersets, which corresponds with our result of PCA analysis.  
+For example, cluster4 clearly shows higher PC2 values than other clusters do on average. We've already seen that users in cluster4 have a high interest in 'sports_fandom' and 'religion.' And as we have shown above, the more tweets one has made in 'sports_fandom' and 'religion', the more scores one will get in PC2. So it is no wonder that cluster4 shows high PC2 values on the graph below.  
 
 ```{r 3.4.14, echo=FALSE}
 qplot(scores[,1], scores[,2], color=factor(clust2$cluster), xlab='Component1', ylab='Component2')
-# cluster1: normal
-# cluster2: low pc2 score -> likes photo sharing, fashion, cooking 
-#           We already saw that this type likes cooking, which corresponds with our clustering result.
-# cluster3: high pc2 score -> likes sports fandom, religion, parenting
-#           We already saw that this type likes religion, parenting and sports fandom, which perfectly corresponds with our clustering result.
-# cluster4: low pc1 score -> likes college and university, online gaming and porn
-#           We don't see these characteristics in our previous clustering analysis.
 ```
 
-We can find the commonality between clustering and PCA in another example. The plot below shows the relationship between PC1 and PC3. One thing we can clearly see here is that cluster1 shows higher PC3 value than cluster2 on average.  
-We already mentioned above that the more tweets one has made in 'politics','travel', and 'computers' categories, the more PC3 scores one will get. And we can recall that 'politics', 'news', 'travel' and 'computers' are the most tweeted categories the users in cluster 1 has made.
-This correspondence fortifies our finding that clustering and PCA can share something in common.
+We can find the commonality between clustering and PCA in another example. The plot below shows the relationship between PC3 and PC4. One thing we can clearly see here is that cluster1 shows higher PC3 value than other clusters on average.  
+We already mentioned above that the more tweets one has made in 'politics','travel', and 'computers' categories, the more PC3 scores one will get. And we can recall that users in cluster1 have a high interest in 'computers', 'travel', and 'politics'. This correspondence fortifies our finding that clustering and PCA can share something in common.
 
 ```{r 3.4.15, echo=FALSE}
-qplot(scores[,1], scores[,3], color=factor(clust2$cluster), xlab='Component1', ylab='Component3')
-
-
+qplot(scores[,3], scores[,4], color=factor(clust2$cluster), xlab='Component3', ylab='Component4')
+```
