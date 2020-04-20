@@ -434,13 +434,16 @@ soma<-soma[(soma$adult_ratio<0.2),]
 soma <- soma[,-c(1,2)]
 ```
 
-In this exercise, we explore the data of followers of the Twitter account of 'NutrientH20', and come up with some interesting insights about the audience by identifying market segments.
+In this exercise, we explored the content of multiple tweets from a sample of followers of NutrientH20's Twitter profile, and come up with some interesting insights about the audience by identifying possible market segments.
 
 ### Data cleaning
-We start with cleaning our data set which is comprised of 7,882 observations and 36 variables.
-First, we deleted all the users whose tweet fell into 'spam' category at least once. It is not likely that someone tweets a spam message unless (s)he's a bot. And we got rid of 'spam' variable out of our data set.  
-Then we also deleted 'chatter' and 'uncategorized' variables because the company can hardly get useful information from these categories.  
-Finally, 'adult' category can be interpreted as spam but sometimes it can become a hobby, too. Considering that normal people don't tweet much porn in public, we deleted users that have more than 20% of their total posts in pornography, regarding them as bots.  
+We started by cleaning our data set, which is originally comprised of 7,882 observations and 36 variables.
+
+First, we deleted all the users whose tweet fell into 'spam' category at least once, due to the high probability of this account being a bot. Naturally, we excluded the 'spam' variable from our data set.
+
+Additionally, we also deleted the variables 'chatter' and 'uncategorized',  since these categories would hardly give some useful insights about the followers.
+
+Finally, even though tweets classified in the 'adult' category can be interpreted as spam, sometimes it can also be a hobby for real followers too. In that sense, considering that normal people don't tweet much porn in public, we deleted users that have more than 20% of their total posts in pornography, regarding them as bots.  
 So we end up with 7,676 observations with 33 variables in our data set.  
   
 ### K-means++ clustering
@@ -482,13 +485,13 @@ plot(k_grid, SSE_grid) #cannot see any elbow here!
 plot(k_grid, CH_grid)# K=2 or 3?
 ```
 
-Finally, we can see our gap statistics diagram of our data below. However, We cannot find any dips here. Unfortunately, it seems that none of these means could help us finding our optimal K.
+Finally, we can see our gap statistics diagram of our data below. However, We cannot find any dips here. Unfortunately, it seems that none of these means could lead us to a conclusive answer for the optimal K.
 
 ```{r 3.4.3, echo= FALSE, warning = FALSE}
 plot(soma_gap)
 ```
 
-It is difficult to find the optimal K by using mathematics, so we'll use our intuition instead. We'll suppose that the company divides market segments into three parts - one to focus on, one to maintain, one to give up. We'll see what happens when K=3, if it doesn't seem to be reasonable, we'll keep going on K=4,5, etc.  
+It is difficult to find the optimal K only by eyeballing the graph, so we decided to run the analysis for different values of K, starting from K=3. We'll see what happens when K=3, and if the results don't seem to be reasonable, we'll keep going on K=4,5, etc.  
 
 We ran a K-means++ with K=3 and nstart=25. When we divided our scaled data into 3 clusters, The sizes of each cluster turned out to be 816, 1997, 4863 respectively, which was pretty unbalanced. 
 
@@ -531,7 +534,6 @@ Now, we set K=4, and divide our sample into 4 clusters using K-means++. The size
 However, each centroid shows a distinguished feature unlike the previous examples when K=3. The numbers below are top 5 values of each cluster's centroid.
 In case of cluster1, we can see that these user types are highly interested in politics, news, travel, computers, and automotive. It seems that these variables share something in common, we may name this group as "Intelligent and Active".
 
-
 ```{r 3.4.3.4, echo=TRUE}
 clust1_cen = sort(clust2$centers[1,], decreasing=TRUE)
 clust1_cen[1:5]
@@ -552,7 +554,7 @@ clust3_cen[1:5]
 ```
 
 At last, people in cluster4 don't seem to be specially interested in anything. The category which shows the largest value is online_gaming, but it is even negative. We can name this type as "Normal".
-Overall, using K=4 seems to be reasonable, so we'll keep doing our analysis when K=4.
+Overall, using K=4 seems to outperform when compared to K=3, so we'll keep doing our analysis when K=4.
 
 ```{r 3.4.3.7, echo=TRUE}
 clust4_cen = sort(clust2$centers[4,], decreasing=TRUE)
@@ -564,11 +566,13 @@ clust4_cen[1:5]
 res <- cor(soma_sc)
 corrplot(res, type = 'lower', method = "color", order = "hclust", hclust.method = "ward.D", tl.cex = 0.5, tl.col="black")
 ```
-blalblablal
+From the correlation plot, we can observe some subgroups of variables that are highly correlated with each other. The variables 'family', 'school', 'food', 'sports_fandom', 'religion' form the first group. 'Computers', 'travel', 'politics', 'news' and 'automotive' form the second. 'Outdoors', 'health_nutrition' and 'personal_fitness' the third. 'Sports_playing', 'online_gaming' and 'college_uni' form the fourth. And 'beauty', 'cooking' and 'fashion' form the fifth.
+
+Therefore, we decided to use K=5.
 
 ```{r 3.4.5, echo= FALSE, warning = FALSE}
 set.seed(12)#set seed in order to get same clusters whenever we try again
-clust2 = kmeanspp(soma_sc, k=4, nstart=25)
+clust2 = kmeanspp(soma_sc, k=5, nstart=25)
 Cluster = factor(clust2$cluster)
 ```
 blblallbalbl
