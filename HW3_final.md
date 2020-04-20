@@ -729,6 +729,161 @@ associated with the presence of a high terror alert is driven by the
 decrease in crime in the National Mall area, where the increment of
 police force tends to be placed.
 
+### Exercise 3.3
+
+In this question we analyzed a data set on 6,500 different bottles of
+vinho verde wine from northern Portugal. We had information on 11
+chemical properties of these wines, whether they were red or white and
+the quality of the wine, as judged on a 1-10 scale. Our goal was to
+assess what dimension reduction clustering technique (k-means or PCA)
+would be more accurate. We were also tasked to determine if chemical
+properties could be used as indicators to determine the quality of
+wines.
+
+### Data cleaning
+
+We started out by cleaning the data first. We centered, scaled and
+normalized the data to mitigate the impacts of extreme data points.
+
+Then we plotted the below shown correlation plot of all 11 chemical
+properties to determine how strongly they are correlated with one
+another. Just by eyeballing the below plot, we could tell that perhaps
+the chemical properties “total sulfur dioxide”, “free sulfur dioxide”
+and “residual sugar” would be the most relevant chemical properties for
+us. ![](HW3_final_files/figure-markdown_strict/3.3.2-1.png) Then we
+started clustering our normalized dataset with k-means 2 as we had 2
+types of wines by color, red or white and with 25 starts. We then
+attempted to find the scaled center of one of the clusters in order to
+find the most prominent variables, judging by their coefficient. When we
+did this for cluster 1, we found out that the chemical properties “total
+sulfur dioxide”, “free sulfur dioxide” and “residual sugar” appeared to
+have the highest coefficients. This implied the other cluster (cluster
+2) would have the lowest coefficient values for these variables, so
+these were the variables could explain the difference between the two
+different wine color clusters very clearly. This further cemented our
+reasoning for picking these variables.
+
+From the below scatter plots and bell curves of these three chemical
+properties we could see that they formed somewhat proper clusters,
+however there were plenty of overlaps. We also needed to determine that
+our two clusters had distinguished wine types, red and white.
+![](HW3_final_files/figure-markdown_strict/3.3.4-1.png) After this we
+attempted to form the clusters as per the colors of the wines. So the
+cluster that mostly had red wines was be the red wine cluster and
+similarly the cluster that mostly had white wines was be the white wine
+cluster.
+
+    ##               wine$color
+    ## wine$color_hat  red white
+    ##          red   1575    68
+    ##          white   24  4830
+
+From the above table we could see that we had clustered our wines pretty
+accurately, with a majority of our red wines being under the
+‘color\_hat’ cluster red and white wines being under the ‘color\_hat’
+cluster white. With a 98.58% accuracy, we concluded that our k-means
+clustering had done a pretty good job in terms of dimension reduction.
+
+    ##                   wine$color
+    ## wine$color_hat_kpp  red white
+    ##              red   1575    68
+    ##              white   24  4830
+
+Next, we did a k -means++ clustering with k-means 2 and 25 starts,
+again. Just like before, we labelled our clusters as ‘color\_hat’
+cluster red and white wines being under the ‘color\_hat’ cluster white.
+As shown above, with a 98.58% accuracy, we found out that our k-means++
+clustering performed just as efficiently as k-means.
+
+    ## Importance of components:
+    ##                           PC1    PC2    PC3     PC4     PC5     PC6     PC7
+    ## Standard deviation     1.7407 1.5792 1.2475 0.98517 0.84845 0.77930 0.72330
+    ## Proportion of Variance 0.2754 0.2267 0.1415 0.08823 0.06544 0.05521 0.04756
+    ## Cumulative Proportion  0.2754 0.5021 0.6436 0.73187 0.79732 0.85253 0.90009
+    ##                            PC8     PC9   PC10    PC11
+    ## Standard deviation     0.70817 0.58054 0.4772 0.18119
+    ## Proportion of Variance 0.04559 0.03064 0.0207 0.00298
+    ## Cumulative Proportion  0.94568 0.97632 0.9970 1.00000
+
+Next, we performed a Principal Component Analysis(PCA). The above table
+showed that the first three principal components (PC1-PC3) combined form
+64.3% of the total variance in the dataset, which is a highly
+significant proportion. Based on this, we used our first three principal
+components to perform our clustering.
+![](HW3_final_files/figure-markdown_strict/3.3.8-1.png)
+
+    ##                    wine$color
+    ## cluster_pca$cluster  red white
+    ##                   1   24  4816
+    ##                   2 1575    82
+
+From the above scatter plot and confusion matrix we could see that our
+PCA based clustering also did a very good job in terms of dimension
+reduction with an accuracy rate of 98.3%. Hence, we concluded that in
+terms of this case, k-means, k-means++ and PCA all seem to be excellent
+dimension reduction techniques, however k-means and k-means++
+outperformed PCA by a mere 0.2%p.
+
+### Distinguishing quality
+
+After this we were tasked with answering another key problem; whether
+this technique also seem capable of sorting the higher from the lower
+quality wines or not. Due to this we had to distinguish the quality of
+wine, since all the wines were judged from a scale of 1-10, we had 10
+categories. However, inspecting the data set, we found out that a
+majority of wines were rated 5 or 6 and there were no wines that were
+scored 1, 2 or 10, that is extremely high or low. Thus, in reality, we
+only had 7 different qualities of wine. Bearing this in mind, we applied
+the same tools as we did initially.
+
+    ##                 wine$quality
+    ## cluster2$cluster   3   4   5   6   7   8   9
+    ##                1   2   2  30  19   2   0   0
+    ##                2   4  14  69 479 435  97   4
+    ##                3   6  63 476 341  41   3   0
+    ##                4   7  24 650 644 122  22   1
+    ##                5   4  14 187 259 138  13   0
+    ##                6   4  63 368 543 165  32   0
+    ##                7   3  36 358 551 176  26   0
+
+Above, we see the confusion matrix of our k-means clustering which
+barely provided any insight.
+
+    ##                     wine$quality
+    ## cluster_kpp2$cluster   3   4   5   6   7   8   9
+    ##                    1   1   2  20   9   1   0   0
+    ##                    2   7  24 655 640 122  22   0
+    ##                    3   5  64 446 549 137  27   1
+    ##                    4   4  15 200 265 141  14   0
+    ##                    5   4  21  77 548 446  97   4
+    ##                    6   7  63 471 350  43   2   0
+    ##                    7   2  27 269 475 189  31   0
+
+Similarly, we conducted k-means++ clustering. Just as the case with
+k-means clustering, the confusion matrix in this case didn't provide
+much insights either.
+![](HW3_final_files/figure-markdown_strict/3.3.11-1.png) Similarly, we
+also did a PCA based clustering and noticed that bar few extremes, all
+the data points are clustered collectively around the center, as we
+could see in the scatterplot that illustrated all 7 clusters. Based on
+this we decided to see the absolute quantities of wines that were given
+their respective scores.
+
+As seen in the above table, we could see how the quality scores of the
+wines are distributed and where our problem lied. A majority of wines
+were rated between 5, 6 and 7. That meant, all 7 clusters would be
+dominated by wines being rated between 5-7. As a result, wines rated 2,
+3 or 9 were heavily under-represented whereas wines rated between 5-7
+were heavily over-represented among all 7 clusters. Due to this it was
+determined to distinguish what chemical property played a role in good
+or poor quality of wines. Earlier, when we were only distinguishing
+between red and white wines using k-means 2, we had some overlaps, but
+this wasn’t much of an issue and our results were still pretty accurate
+as we had only two categories and two clusters. But as the number of
+categories and clusters grew, the disparity between categories was more
+prevalent and we couldn’t succeed in sorting the higher from the lower
+quality wines.
+
 Exercise 3.4
 ------------
 
