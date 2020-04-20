@@ -491,75 +491,7 @@ Finally, we can see our gap statistics diagram of our data below. However, We ca
 plot(soma_gap)
 ```
 
-It is difficult to find the optimal K only by eyeballing the graph, so we decided to run the analysis for different values of K, starting from K=3. We'll see what happens when K=3, and if the results don't seem to be reasonable, we'll keep going on K=4,5, etc.  
-
-We ran a K-means++ with K=3 and nstart=25. When we divided our scaled data into 3 clusters, The sizes of each cluster turned out to be 816, 1997, 4863 respectively, which was pretty unbalanced. 
-
-```{r 3.4.3.1, echo=FALSE, include=FALSE, cache= TRUE}
-set.seed(4)
-clust1 = kmeanspp(soma_sc, k=3, nstart=25)
-
-length(which(clust1$cluster == 1))
-length(which(clust1$cluster == 2))
-length(which(clust1$cluster == 3))
-```
-
-Now, we'll take a close look at each cluster's cetroid. The values below are the top 5 largest values on each cluster's centroid.
-In case of cluster 1, we can see that top 5 largest values are bigger than 1.0. However, there's no value that is bigger than 1.0 in cetroid of cluster2. And in case of cluster3, all the values are negatives.
-
-```{r 3.4.3.2, echo=TRUE}
-clust1_cent = sort(clust1$centers[1,], decreasing=TRUE)
-clust1_cent[1:6]
-clust2_cent = sort(clust1$centers[2,], decreasing=TRUE)
-clust2_cent[1:5]
-clust3_cent = sort(clust1$centers[3,], decreasing=TRUE)
-clust3_cent[1:5]
-```
-
-Therefore, we can say that people in cluster1 are very interested in some categories such as religion, parenting, etc. But people in cluster2 don't seem to be specially interested in something. Moreover, people in cluster3 are not interested in anything.  
-This conclusion doesn't give us any insights on how 'NutrientH20' should react to their customers. So K=3 is not a good suggestion for our analysis here.  
-
-```{r 3.4.3.3, echo=FALSE, cache=TRUE}
-set.seed(12)#set seed in order to get same clusters whenever we try again
-clust2 = kmeanspp(soma_sc, k=4, nstart=25)
-clust2$center
-
-length(which(clust2$cluster == 1))
-length(which(clust2$cluster == 2))
-length(which(clust2$cluster == 3))
-length(which(clust2$cluster == 4))
-```
-
-Now, we set K=4, and divide our sample into 4 clusters using K-means++. The sizes of each cluster are 704, 1375, 794, 4803 respectively, still looks like an unbalanced distribution.  
-However, each centroid shows a distinguished feature unlike the previous examples when K=3. The numbers below are top 5 values of each cluster's centroid.
-In case of cluster1, we can see that these user types are highly interested in politics, news, travel, computers, and automotive. It seems that these variables share something in common, we may name this group as "Intelligent and Active".
-
-```{r 3.4.3.4, echo=TRUE}
-clust1_cen = sort(clust2$centers[1,], decreasing=TRUE)
-clust1_cen[1:5]
-```
-
-People in cluster2 seem to love cooking, health_nutrition, personal_fitness, fashion, and outdoors. We can name this group as "Healthy".
-
-```{r 3.4.3.5, echo=TRUE}
-clust2_cen = sort(clust2$centers[2,], decreasing=TRUE)
-clust2_cen[1:5]
-```
-
-People in cluster3 seem to be fond of religion, parenting, sports_fandom, food, and school. We can name them as "family-oriented"
-
-```{r 3.4.3.6, echo=TRUE}
-clust3_cen = sort(clust2$centers[3,], decreasing=TRUE)
-clust3_cen[1:5]
-```
-
-At last, people in cluster4 don't seem to be specially interested in anything. The category which shows the largest value is online_gaming, but it is even negative. We can name this type as "Normal".
-Overall, using K=4 seems to outperform when compared to K=3, so we'll keep doing our analysis when K=4.
-
-```{r 3.4.3.7, echo=TRUE}
-clust4_cen = sort(clust2$centers[4,], decreasing=TRUE)
-clust4_cen[1:5]
-```
+Since it is difficult to find the optimal K only by eyeballing the graph, we decided to plot a correlogram, and try to identify possible singularities among the variables. 
 
 ```{r 3.4.4, echo= FALSE, warning = FALSE}
 #correlation matrix
@@ -576,46 +508,51 @@ set.seed(12)#set seed in order to get same clusters whenever we try again
 clust2 = kmeanspp(soma_sc, k=5, nstart=25)
 Cluster = factor(clust2$cluster)
 ```
-blblallbalbl
 
 ```{r 3.4.6, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("family","school","food","sports_fandom","religion","parenting")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-        upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+        upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
-blablalbl
+
+For the first subgroup, we can see that followers that belong to "Cluster 4" are those that, in general, have a high interest in 'family', 'school', 'food', 'sports_fandom' and 'religion'.
 
 ```{r 3.4.7, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("computers","travel","politics","news","automotive")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
-blablalbl
+
+For the second subgroup, we can see that followers that belong to "Cluster 1" are those that, in general, have a high interest in 'Computers', 'travel', 'politics', 'news' and 'automotive'.
 
 ```{r 3.4.8, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("outdoors","health_nutrition","personal_fitness")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
-blablalbl
+
+For the third subgroup, we can see that followers that belong to "Cluster 3" are those that, in general, have a high interest in  ‘Outdoors’, ‘health_nutrition’ and ‘personal_fitness’.
 
 ```{r 3.4.9, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("beauty","cooking","fashion")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
-blablalbl
+
+For the fourth subgroup, we can see that followers that belong to "Cluster 5" are those that, in general, have a high interest in  ‘Sports_playing’, ‘online_gaming’ and ‘college_uni’.
 
 ```{r 3.4.10, echo= FALSE, warning = FALSE, cache = TRUE}
 subset(soma, select = c("sports_playing","online_gaming","college_uni")) %>%
   ggpairs(legend = 1, aes(color=Cluster, alpha = 0.6),
-          upper = list(integer = wrap("cor", size=2, alignPercent=0.8))) +
+          upper = list(integer = wrap("cor", size=0.5, alignPercent=0.8))) +
   theme_bw() + theme(legend.position = "bottom", panel.grid = element_blank())
 ```
+
+For the fifth subgroup, we can't find some well defined patterns when comparing within cluster interests in ‘beauty’, ‘cooking’ and ‘fashion’.
 
 ### Can we use PCA in this example?
 Now, we try to perform a principal component analysis to find low-dimensional summaries of our data set. Then we'll divide our samples into several clusters hoping that we can make our model simpler and more interpretable.  

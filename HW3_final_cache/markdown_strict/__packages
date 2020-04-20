@@ -20,3 +20,6 @@ cluster
 corrplot
 GGally
 knitr
+stargazer
+xtable
+tidytable
