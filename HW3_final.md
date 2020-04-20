@@ -11,7 +11,7 @@ Exercise 3.1
 ------------
 
 In this exercise, we analyzed a dataset on green buildings to build the
-best predictive pricing model. We started with cleaning the data. First,
+best predictive pricing model. We started by cleaning the data. First,
 we detected all the null values that were missing and deleted them. As
 we are running a lasso regression, in order to comply with the limits of
 computation, we scaled down 'size' variable from 'square footage' to
@@ -26,7 +26,7 @@ and contributed nothing to our model. We also deleted another variable
 hd\_total07). Lastly, we also deleted the variable 'cluster' from our
 model because it was recognized as a numerical variable though it was a
 categorical one. And in order to reflect the effect of cluster on rent,
-we already have cluster.rent variable which shows the average rent by
+we already had cluster.rent variable which shows the average rent by
 clusters.
 
 Finally, in order to check if a building is a green building, we used
@@ -181,7 +181,7 @@ the lasso regression model, the path plot is shown on the diagram below.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.6-1.png)
 
-When we measure AICcs of all the segments, the 100th segment has the
+When we measured AICcs of all the segments, the 100th segment has the
 lowest AIC value of 34644.64.
 
     min(AICc(grblasso))
@@ -193,8 +193,8 @@ lowest AIC value of 34644.64.
     ## seg100 
     ##    100
 
-Our optimal value of lambda turns out to be -2.17 in log scale, and at
-the optimal lambda, our lasso regression model has 25 variables with an
+Our optimal value of lambda turned out to be -2.17 in log scale, and at
+the optimal lambda, our lasso regression model had 25 variables with an
 intercept. The result below shows the coefficients of grb\_beta, the
 minimum lambda in log scale, and the total number of variables including
 an intercept.
@@ -450,7 +450,7 @@ model('Rent~(.-CS\_PropertyID-LEED-Energystar-total\_dd\_07-cluster')
 for our tree bagging, and excluded all the interaction variables because
 we didn't need them explicitly in tree regressions. The minimum size of
 terminal nodes is 5 which is default setting. We set the number of trees
-to be 300 times and run the regression. It took more than 7 minutes to
+to be 300 times and ran the regression. It took more than 7 minutes to
 compute the whole procedure, however, the RMSE for our bagging model was
 6.47 which was much lower than those of our previous models.
 
@@ -475,11 +475,11 @@ deciding the rent price in our tree bagging model.
 ### Tree - Random Forest Model
 
 Now, we fit a random forest model to predict rent price using our base
-model and also did K-fold cross validation. First, we start with 300
+model and also did K-fold cross validation. First, we started with 300
 trees and it took almost 3 minutes to compute all the procedures,
 however, the plot below shows that the error curve stops decreasing much
-after 50 trees. So, we can reduce our number of trees to 100 and save
-our computational time.
+after 50 trees. So, we could reduce our number of trees to 100 and save
+computational time.
 
 ![](HW3_final_files/figure-markdown_strict/3.1.13.1-1.png)
 
@@ -504,7 +504,7 @@ minute to compute all these procedures.
 
     ## [1] 6.264436
 
-The plot below is the variable importance plot. We can see that
+The plot below is the variable importance plot. We could observe that
 'cluster\_rent' is the most important variable influencing rent price,
 which is the same result as we saw in the bagging model. But it reveals
 a slight difference in that the third influential variable is
@@ -515,7 +515,7 @@ a slight difference in that the third influential variable is
 ### Tree - Boosting
 
 Finally, we fit a boosting model to derive the best predictive model. As
-we've done before, we use our base model to begin with. The result of
+we've done before, we used our base model to begin with. The result of
 our K-fold cross validation shows that the RMSE is 8.28 which is
 slightly higher than that of our random forest model. However, it took
 only 15 seconds to compute all these procedures.
@@ -564,9 +564,9 @@ The randomforest model is superior in terms of computational speed. It
 took less than 1 minute to compute all the procedures, which is very
 efficient compared to the stepwise selection and the bagging. The lasso
 regression and the boosting method didn't take much computational time,
-but their performances are worse than the random forest model.
-Therefore, we can conclude that the random forest model shows the best
-performance.
+but their performances turned out to be worse than the random forest
+model. Therefore, we can conclude that the random forest model shows the
+best performance.
 
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <tbody>
